@@ -1,0 +1,101 @@
+@startuml
+
+interface CommunicationBase
+
+CommunicationBase : void orderMove(MoveDTO)
+CommunicationBase : boolean isItPlayersTurn()
+
+
+
+class CommunicationBaseImpl implements CommunicationBase
+
+CommunicationBaseImpl : Core core
+
+CommunicationBaseImpl : void orderMove(MoveDTO)
+CommunicationBaseImpl : boolean isItPlayersTurn()
+
+
+
+interface Core
+
+' todo
+
+
+
+class CoreImpl implements Core
+
+CoreImpl : BoardStore boardStore
+' todo
+
+' todo
+
+
+
+interface BoardStore
+
+BoardStore : Board getBoard(int)
+BoardStore : void updateBoard(List<Change>)
+
+
+
+class BoardStoreImpl implements BoardStore
+
+BoardStoreImpl : List<Board> boards
+
+BoardStoreImpl : Board getBoard(int)
+BoardStoreImpl : void updateBoard(int, List<Change>)
+
+
+
+interface Board
+
+Board : int getSize()
+
+
+
+class BoardImpl implements Board
+
+BoardImpl : int gameId
+BoardImpl : Occupancy[][] fields
+
+BoardImpl : int getSize()
+
+
+
+enum Occupancy {
+    WHITE
+    BLACK
+    EMPTY
+}
+
+
+
+interface Change
+
+Change : Occupancy getOccupancy()
+Change : int getX()
+Change : int getY()
+
+
+
+class ChangeImpl implements Change
+
+ChangeImpl : Occupancy occupancy
+ChangeImpl : int x
+ChangeImpl : int y
+
+ChangeImpl : Occupancy getOccupancy()
+ChangeImpl : int getX()
+ChangeImpl : int getY()
+
+
+
+
+
+CommunicationBaseImpl "1" o-- "1" Core
+CoreImpl "1" o-- "1" BoardStore
+BoardStoreImpl "1" o-- "0...*" Board
+BoardImpl "1" *-- "*" Occupancy
+ChangeImpl "1" o-- "1" Occupancy
+
+@enduml
