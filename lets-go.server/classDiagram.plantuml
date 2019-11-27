@@ -2,48 +2,68 @@
 
 interface CommunicationBase
 
-CommunicationBase : void orderMove(MoveDTO)
-CommunicationBase : boolean isItPlayersTurn()
+CommunicationBase : ResponseDTO orderMove(MoveDTO)
 
 
 
 class CommunicationBaseImpl implements CommunicationBase
 
-CommunicationBaseImpl : Core core
+CommunicationBaseImpl : core : Core
 
-CommunicationBaseImpl : void orderMove(MoveDTO)
-CommunicationBaseImpl : boolean isItPlayersTurn()
+CommunicationBaseImpl : ResponseDTO orderMove(MoveDTO)
 
 
 
 interface Core
 
-' todo
-
+Core : -isItPlayersTurn(int)
+'todo
 
 
 class CoreImpl implements Core
 
-CoreImpl : BoardStore boardStore
+CoreImpl : gameStore : GameStore
 ' todo
 
+CoreImpl : -isItPlayersTurn(int)
 ' todo
 
 
 
-interface BoardStore
+interface GameStore
 
-BoardStore : Board getBoard(int)
-BoardStore : void updateBoard(List<Change>)
+GameStore : Game getGame(int playerId)
+GameStore : void updateGameBoard(int, List<Change>)
 
 
 
-class BoardStoreImpl implements BoardStore
+class GameStoreImpl implements GameStore
 
-BoardStoreImpl : List<Board> boards
+GameStoreImpl : games : List<Game>
 
-BoardStoreImpl : Board getBoard(int)
-BoardStoreImpl : void updateBoard(int, List<Change>)
+GameStoreImpl : Board getBoard(int)
+GameStoreImpl : void updateBoard(int, List<Change>)
+
+
+
+interface Game
+
+Game : int getId()
+'this method returns array of 3 boards: current and 2 before it
+Game : Board[] getBoards()
+
+
+
+class GameImpl implements Game
+
+GameImpl : gameId : int
+GameImpl : boards : Board[]
+GameImpl : black : Player
+GameImpl : white : Player
+GameImpl : whoseTurn : Color
+
+GameImpl : int getId()
+GameImpl : Board[] getBoards()
 
 
 
@@ -55,14 +75,19 @@ Board : int getSize()
 
 class BoardImpl implements Board
 
-BoardImpl : int gameId
-BoardImpl : Occupancy[][] fields
+BoardImpl : fields : Occupancy[][]
+BoardImpl : boardSize : BoardSize
 
 BoardImpl : int getSize()
 
 
 
-enum Occupancy {
+enum Color {
+    WHITE
+    BLACK
+}
+
+enum Occupancy extends Color {
     WHITE
     BLACK
     EMPTY
@@ -70,32 +95,98 @@ enum Occupancy {
 
 
 
-interface Change
-
-Change : Occupancy getOccupancy()
-Change : int getX()
-Change : int getY()
-
-
-
-class ChangeImpl implements Change
-
-ChangeImpl : Occupancy occupancy
-ChangeImpl : int x
-ChangeImpl : int y
-
-ChangeImpl : Occupancy getOccupancy()
-ChangeImpl : int getX()
-ChangeImpl : int getY()
+enum BoardSize {
+    NINE
+    THIRTEEN
+    NINETEEN
+}
 
 
 
+enum MoveType {
+    MOVE
+    PASS
+}
 
 
+
+enum ResponseStatus {
+    OK
+    INVALID_MOVE
+    UNAUTHORIZED_MOVE
+}
+
+
+
+class Change
+
+Change : +occupancy : Occupancy
+Change : +cords : Coordinates
+
+
+
+class Coordinates
+
+Coordinates : +x : int
+Coordinates : +y : int
+
+
+
+class MoveDTO
+
+MoveDTO : +playerId : int
+MoveDTO : +move : Move
+
+
+
+class Move
+
+Move : +moveType : MoveType
+Move : +cords : Coordinates
+
+
+
+class ResponseDTO
+
+ResponseDTO : +status : ResponseStatus
+ResponseDTO : +changes : List<Change>
+ResponseDTO : +whitesCaptives : int
+ResponseDTO : +blacksCaptives : int
+
+
+
+class Player
+
+Player : +playerId : int
+Player : +amountOfCaptives : int
+
+
+
+'singleton class
+class MoveValidationCenter
+
+MoveValidationCenter : boolean validateMove(Board board, )
+
+
+
+
+
+CommunicationBase --> "receives" MoveDTO
+CommunicationBase --> "sends" ResponseDTO
 CommunicationBaseImpl "1" o-- "1" Core
-CoreImpl "1" o-- "1" BoardStore
-BoardStoreImpl "1" o-- "0...*" Board
+CoreImpl "1" o-- "1" GameStore
+GameStoreImpl "1" o-- "0...*" Game
+GameImpl "1" o-- "1, 2, 3" Board
+GameImpl "1" o-- "2" Player
+GameImpl "1" *-- "1" Color
 BoardImpl "1" *-- "*" Occupancy
-ChangeImpl "1" o-- "1" Occupancy
+BoardImpl "1" *-- "1" BoardSize
+Change "1" *-- "1" Occupancy
+Change "1" o-- "1" Coordinates
+Core --> "uses" MoveValidationCenter
+MoveDTO "1" o-- "1" Move
+Move "1" *-- "1" MoveType
+ResponseDTO "1" *-- "1" ResponseStatus
+ResponseDTO "1" o-- "1...*" Change
 
 @enduml
