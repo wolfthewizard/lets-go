@@ -1,11 +1,85 @@
 @startuml
 
 namespace main{
+    interface CommunicationBase{
 
+        ResponseDTO orderMove(MoveDTO)
+    }
+
+    class CommunicationBaseImpl implements CommunicationBase{
+
+        core : Core
+
+        ResponseDTO orderMove(MoveDTO)
+    }
 }
 
 namespace core{
     namespace model{
+        namespace enums{
+
+            enum Color {
+                WHITE
+                BLACK
+            }
+
+            enum Occupancy extends Color {
+                WHITE
+                BLACK
+                EMPTY
+            }
+
+            enum BoardSize {
+                NINE
+                THIRTEEN
+                NINETEEN
+            }
+
+            enum MoveType {
+                MOVE
+                PASS
+            }
+
+            enum ResponseStatus {
+                OK
+                INVALID_MOVE
+                UNAUTHORIZED_MOVE
+            }
+        }
+
+
+
+        interface Board
+
+        Board : int getSize()
+
+
+        class BoardImpl implements Board
+
+        BoardImpl : fields : Occupancy[][]
+        BoardImpl : boardSize : BoardSize
+
+        BoardImpl : int getSize()
+
+        class GameImpl implements Game
+
+        GameImpl : gameId : int
+        GameImpl : boards : Board[]
+        GameImpl : black : Player
+        GameImpl : white : Player
+        GameImpl : whoseTurn : Color
+
+        GameImpl : int getId()
+        GameImpl : Board[] getBoards()
+
+        interface Game
+
+        Game : int getId()
+        'this method returns array of 3 boards: current and 2 before it
+        Game : Board[] getBoards()
+
+
+
         class Coordinates{
             +x : int
             +y : int
@@ -43,6 +117,11 @@ namespace core{
     namespace Interfaces{
 
     }
+    'singleton class
+    class MoveValidationCenter
+
+    MoveValidationCenter : boolean validateMove(Board board, )
+
     interface Core
 
     Core : -isItPlayersTurn(int)
@@ -72,111 +151,6 @@ namespace infrastructure{
     }
 
 }
-interface CommunicationBase
-
-CommunicationBase : ResponseDTO orderMove(MoveDTO)
-
-
-
-class CommunicationBaseImpl implements CommunicationBase
-
-CommunicationBaseImpl : core : Core
-
-CommunicationBaseImpl : ResponseDTO orderMove(MoveDTO)
-
-
-
-
-
-
-
-
-
-
-interface Game
-
-Game : int getId()
-'this method returns array of 3 boards: current and 2 before it
-Game : Board[] getBoards()
-
-
-
-class GameImpl implements Game
-
-GameImpl : gameId : int
-GameImpl : boards : Board[]
-GameImpl : black : Player
-GameImpl : white : Player
-GameImpl : whoseTurn : Color
-
-GameImpl : int getId()
-GameImpl : Board[] getBoards()
-
-
-
-interface Board
-
-Board : int getSize()
-
-
-
-class BoardImpl implements Board
-
-BoardImpl : fields : Occupancy[][]
-BoardImpl : boardSize : BoardSize
-
-BoardImpl : int getSize()
-
-
-
-enum Color {
-    WHITE
-    BLACK
-}
-
-enum Occupancy extends Color {
-    WHITE
-    BLACK
-    EMPTY
-}
-
-
-
-enum BoardSize {
-    NINE
-    THIRTEEN
-    NINETEEN
-}
-
-
-
-enum MoveType {
-    MOVE
-    PASS
-}
-
-
-
-enum ResponseStatus {
-    OK
-    INVALID_MOVE
-    UNAUTHORIZED_MOVE
-}
-
-
-
-
-
-
-
-
-'singleton class
-class MoveValidationCenter
-
-MoveValidationCenter : boolean validateMove(Board board, )
-
-
-
 
 
 CommunicationBase --> "receives" MoveDTO
