@@ -1,5 +1,77 @@
 @startuml
 
+namespace main{
+
+}
+
+namespace core{
+    namespace model{
+        class Coordinates{
+            +x : int
+            +y : int
+        }
+
+        class MoveDTO{
+            +playerId : int
+            +move : Move
+        }
+
+        class Move{
+            +moveType : MoveType
+            +cords : Coordinates
+        }
+
+        class ResponseDTO{
+            +status : ResponseStatus
+            +changes : List<Change>
+            +whitesCaptives : int
+            +blacksCaptives : int
+        }
+
+
+        class Player{
+            +playerId : int
+            +amountOfCaptives : int
+        }
+
+        class Change{
+            +occupancy : Occupancy
+            +cords : Coordinates
+        }
+    }
+
+    namespace Interfaces{
+
+    }
+    interface Core
+
+    Core : -isItPlayersTurn(int)
+    'todo
+
+
+    class CoreImpl implements Core
+    CoreImpl : gameStore : GameStore
+    ' todo
+
+    CoreImpl : -isItPlayersTurn(int)
+    ' todo
+
+}
+
+namespace infrastructure{
+    interface GameStore{
+        +Game getGame(int playerId)
+        +void updateGameBoard(int, List<Change>)
+    }
+
+    class GameStoreImpl implements GameStore{
+        games : List<Game>
+
+        Board getBoard(int)
+        void updateBoard(int, List<Change>)
+    }
+
+}
 interface CommunicationBase
 
 CommunicationBase : ResponseDTO orderMove(MoveDTO)
@@ -14,35 +86,10 @@ CommunicationBaseImpl : ResponseDTO orderMove(MoveDTO)
 
 
 
-interface Core
-
-Core : -isItPlayersTurn(int)
-'todo
-
-
-class CoreImpl implements Core
-
-CoreImpl : gameStore : GameStore
-' todo
-
-CoreImpl : -isItPlayersTurn(int)
-' todo
 
 
 
-interface GameStore
 
-GameStore : Game getGame(int playerId)
-GameStore : void updateGameBoard(int, List<Change>)
-
-
-
-class GameStoreImpl implements GameStore
-
-GameStoreImpl : games : List<Game>
-
-GameStoreImpl : Board getBoard(int)
-GameStoreImpl : void updateBoard(int, List<Change>)
 
 
 
@@ -118,47 +165,8 @@ enum ResponseStatus {
 
 
 
-class Change
-
-Change : +occupancy : Occupancy
-Change : +cords : Coordinates
 
 
-
-class Coordinates
-
-Coordinates : +x : int
-Coordinates : +y : int
-
-
-
-class MoveDTO
-
-MoveDTO : +playerId : int
-MoveDTO : +move : Move
-
-
-
-class Move
-
-Move : +moveType : MoveType
-Move : +cords : Coordinates
-
-
-
-class ResponseDTO
-
-ResponseDTO : +status : ResponseStatus
-ResponseDTO : +changes : List<Change>
-ResponseDTO : +whitesCaptives : int
-ResponseDTO : +blacksCaptives : int
-
-
-
-class Player
-
-Player : +playerId : int
-Player : +amountOfCaptives : int
 
 
 
