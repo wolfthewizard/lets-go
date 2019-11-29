@@ -170,8 +170,6 @@ namespace core {
         Board "1" *-- "*" core.model.enums.Occupancy
         Board "1" *-- "1" core.model.enums.BoardSize
     }
-
-
 }
 
 namespace infrastructure {
