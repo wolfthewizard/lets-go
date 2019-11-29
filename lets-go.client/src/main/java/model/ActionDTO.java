@@ -13,7 +13,7 @@ public class ActionDTO {
     public ActionDTO(boolean isMultiplayer, BoardSize boardSize){
         actionType = ActionType.STARTGAME;
         this.boardSize = boardSize;
-        this.isMultiplayer=isMultiplayer
+        this.isMultiplayer=isMultiplayer;
     }
 
     public ActionDTO(int playerId, Coordinates coordinates){
