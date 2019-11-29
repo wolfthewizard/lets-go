@@ -131,13 +131,14 @@ namespace core {
             +y : int
         }
 
-        class MoveDTO {
+        class ActionDTO {
             +playerId : int
-            +move : Move
+            +actionType : MoveType
+            +cords : Coordinates
         }
 
         class Move {
-            +moveType : MoveType
+            +player : Color
             +cords : Coordinates
         }
 

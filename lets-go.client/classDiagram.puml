@@ -1,0 +1,39 @@
+@startuml
+
+namespace frontend {
+    class GameSettingsWindow  {
+
+    }
+
+    class BoardWindow {
+
+    }
+
+    class TileButton {
+    }
+}
+
+namespace sender {
+    class ServerMessageSender {
+        public sendOnServer(String message)
+    }
+
+    class JsonParser {
+
+    }
+}
+
+namespace model {
+    class MoveDTO {
+        +playerId : int
+        +move : Move
+    }
+
+    class ResponseDTO {
+        +status : ResponseStatus
+        +changes : List<Change>
+        +whitesCaptives : int
+        +blacksCaptives : int
+    }
+}
+@enduml
