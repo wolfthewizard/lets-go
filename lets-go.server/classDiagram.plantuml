@@ -1,22 +1,82 @@
 @startuml
 
-namespace main{
-    interface CommunicationBase{
+namespace core {
 
-        ResponseDTO orderMove(MoveDTO)
+    namespace interfaces {
+
+        interface ICommandDirector {
+            int CreateNewBotGame()
+            int CreateNewMultiplayerGame()
+            ResponseDTO TryToMove(MoveDTO: move)
+            void CancelGame(int: leftPlayerId)
+        }
+
+        interface IMoveExecutorService {
+            ResponseDTO: executeMove(MoveDTO: moveDTO)
+        }
+
+        interface IGameManagerService {
+            void CreateNewGame(int: firstPlayerId)
+            void CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+            void CancelGame(int: leftPlayerId)
+        }
+
+        interface IMoveValidator {
+            boolean validateSuicide(Board: board, Move: move)
+            boolean validateKO(Board: oldBoard, Board: currentBoard, Move: move)
+            boolean validateVacant(Board: board, Move: move)
+            ' mb more
+        }
+
+        interface IGameRepository {
+            Game getGame(int playerId)
+            void updateGameBoard(int, List<Change>)
+        }
     }
 
-    class CommunicationBaseImpl implements CommunicationBase{
+    namespace services {
 
-        core : Core
+        class MoveExecutorService implements core.interfaces.IMoveExecutorService{
+            -gameRepository : IGameRepository
+            -moveValidator : MoveValidator
 
-        ResponseDTO orderMove(MoveDTO)
+            +ResponseDTO executeMove(MoveDTO: moveDTO)
+        }
+        MoveExecutorService..>core.interfaces.IGameRepository
+        MoveExecutorService..>core.interfaces.IMoveValidator
+
+        class GameManagerService implements core.interfaces.IGameManagerService{
+            -IGameRepository: gameRepository
+
+            +void CreateNewGame(int: firstPlayerId)
+            +void CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+            +void CancelGame(int: leftPlayerId)
+        }
+        GameManagerService..>core.interfaces.IGameRepository
     }
-}
 
-namespace core{
-    namespace model{
-        namespace enums{
+    class CommandDirector implements core.interfaces.ICommandDirector {
+        -moveExecutorService : IMoveExecutorService
+        -gameManagerService : IGameManagerService
+
+        +int CreateNewBotGame()
+        +int CreateNewMultiplayerGame()
+        +ResponseDTO TryToMove(MoveDTO: move)
+        +void CancelGame(int: leftPlayerId)
+    }
+    CommandDirector..>core.interfaces.IMoveExecutorService
+    CommandDirector..>core.interfaces.IGameManagerService
+
+    ' moze zamiast dzielic na 2 metody podzielimy na dwie klasy wtedy dwie referencje w executorze, albo jeszcze jednak klasa ktora to razem sklada taka mini facada
+    class MoveValidator implements core.interfaces.IMoveValidator{
+         +boolean validateSuicide(Board: board, Move: move)
+         +boolean validateKO(Board: oldBoard, Board: currentBoard, Move: move)
+         +boolean validateVacant(Board: board, Move: move)
+        ' mb more
+    }
+
+    namespace model {
+        namespace enums {
 
             enum Color {
                 WHITE
@@ -47,19 +107,15 @@ namespace core{
             }
         }
 
-        interface Board{
+        class Board {
+
+            fields : Occupancy[][]
+            boardSize : BoardSize
 
             int getSize()
         }
-        class BoardImpl implements Board{
 
-            BoardImpl : fields : Occupancy[][]
-            BoardImpl : boardSize : BoardSize
-        }
-
-        BoardImpl : int getSize()
-
-        class GameImpl implements Game{
+        class Game {
             gameId : int
             boards : Board[]
             black : Player
@@ -70,42 +126,34 @@ namespace core{
             +Board[] getBoards()
         }
 
-        interface Game{
-
-            int getId()
-            'this method returns array of 3 boards: current and 2 before it
-            Board[] getBoards()
-        }
-
-        class Coordinates{
+        class Coordinates {
             +x : int
             +y : int
         }
 
-        class MoveDTO{
+        class MoveDTO {
             +playerId : int
             +move : Move
         }
 
-        class Move{
+        class Move {
             +moveType : MoveType
             +cords : Coordinates
         }
 
-        class ResponseDTO{
+        class ResponseDTO {
             +status : ResponseStatus
             +changes : List<Change>
             +whitesCaptives : int
             +blacksCaptives : int
         }
 
-
-        class Player{
+        class Player {
             +playerId : int
             +amountOfCaptives : int
         }
 
-        class Change{
+        class Change {
             +occupancy : Occupancy
             +cords : Coordinates
         }
@@ -116,136 +164,49 @@ namespace core{
         ResponseDTO "1" o-- "1...*" Change
         Change "1" *-- "1" core.model.enums.Occupancy
         Change "1" o-- "1" Coordinates
-        GameImpl "1" o-- "1, 2, 3" BoardImpl
-        GameImpl "1" o-- "2" Player
-        GameImpl "1" *-- "1" core.model.enums.Color
-        BoardImpl "1" *-- "*" core.model.enums.Occupancy
-        BoardImpl "1" *-- "1" core.model.enums.BoardSize
+        Game "1" o-- "1, 2, 3" Board
+        Game "1" o-- "2" Player
+        Game "1" *-- "1" core.model.enums.Color
+        Board "1" *-- "*" core.model.enums.Occupancy
+        Board "1" *-- "1" core.model.enums.BoardSize
     }
-    
 
-        interface ICommandDirector{
-            'pewnie cos innego niz void
-            ' do bota
-            void: CreateNewGame(int: firstPlayerId)
-            ', do multi
-            void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
-
-            ResponseDTO: TryToMove(MoveDTO: move)
-
-            void: CancelGame(int: leftPlayerId)
-        }
-
-        class CommandDirector implements ICommandDirector{
-            -IMoveExecutorService: IMoveExecutorService
-            -IGameManager: gameManager
-
-                    'pewnie cos innego niz void tylko nwm co
-                    ' do bota
-            void: CreateNewGame(int: firstPlayerId)
-                    ', do multi
-            void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
-
-            ResponseDTO: TryToMove(MoveDTO: move)
-
-            void: CancelGame(int: leftPlayerId)
-        }
-        CommandDirector..>IMoveExecutorService
-        CommandDirector..>IGameManager
-
-        'ogarnie to czy gra instenieje ze player nie moze miec dwohc gier na raz
-        interface IGameManager{
-            -IGameRepository: gameRepository
-
-            void: CreateNewGame(int: firstPlayerId)
-                                ', do multi
-            void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
-
-            void: CancelGame(int: leftPlayerId)
-        }
-
-        class GameManager implements IGameManager{
-             -IGameRepository: gameRepository
-
-             void: CreateNewGame(int: firstPlayerId)
-                                        ', do multi
-             void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
-
-             void: CancelGame(int: leftPlayerId)
-        }
-        GameManager..>infrastructure.IGameRepository
-
-        interface IMoveExecutorService{
-            ResponseDTO: executeMove(MoveDTO: moveDTO)
-        }
-
-        class MoveExecutorService implements IMoveExecutorService{
-            -IGameRepository: gameRepository
-            -MoveValidator: moveValidator
-
-            ResponseDTO: executeMove(MoveDTO: moveDTO)
-        }
-        MoveExecutorService..>infrastructure.IGameRepository
-        MoveExecutorService..>IMoveValidator
-
-        ' moze zamiast dzielic na 2 metody podzielimy na dwie klasy wtedy dwie referencje w executorze, albo jeszcze jednak klasa ktora to razem sklada taka mini facada
-        interface IMoveValidator{
-            bool: validateSuicide(Board: board, Move: move)
-            bool: validateKO(Board: board, Move: move)
-            ' mb more
-        }
-
-        class MoveValidator implements IMoveValidator{
-             boolean: validateSuicide(Board: board, Move: move)
-             boolean: validateKO(Board: board, Move: move)
-            ' mb more
-        }
-
-
-    'singleton class
-    class MoveValidationCenter
-
-    MoveValidationCenter : boolean validateMove(Board board, )
-
-    interface Core
-
-    Core : -isItPlayersTurn(int)
-    'todo
-
-
-    class CoreImpl implements Core
-    CoreImpl : gameStore : GameStore
-    ' todo
-
-    CoreImpl : -isItPlayersTurn(int)
-    ' todo
 
 }
 
-namespace infrastructure{
-    interface IGameRepository{
-        +Game getGame(int playerId)
-        +void updateGameBoard(int, List<Change>)
-    }
+namespace infrastructure {
 
     'albo zapis do pliku albo musi byc singleton
-    class GameRepository implements IGameRepository{
-        games : List<Game>
+    class GameRepository implements core.interfaces.IGameRepository {
+        -games : List<Game>
 
-        void cancelGame(int leftPlayerId)
-        boolean playerHasOpenedGame(int playerId)
-        Board getBoard(int)
-        void updateBoard(int, List<Change>)
+        +void cancelGame(int gameId, Color winner)
+        +int createNewGame()
+        +Board getBoard(int)
+        +void updateBoard(int, List<Change>)
     }
-
 }
 
+namespace main {
+    interface ICommunicationBase {
 
-CommunicationBase --> "receives" MoveDTO
-CommunicationBase --> "sends" ResponseDTO
-CommunicationBaseImpl "1" o-- "1" Core
-CoreImpl "1" o-- "1" GameStore
-GameStoreImpl "1" o-- "0...*" Game
+        +ResponseDTO orderMove(MoveDTO)
+    }
+
+    class CommunicationBase implements ICommunicationBase {
+
+        -commandDirector : ICommandDirector
+
+        +ResponseDTO orderMove(MoveDTO)
+    }
+    CommunicationBase ..> core.interfaces.ICommandDirector
+}
+
+'CommunicationBase --> "receives" MoveDTO
+'CommunicationBase --> "sends" ResponseDTO
+'CommunicationBaseImpl "1" o-- "1" Core
+'CoreImpl "1" o-- "1" GameStore
+'GameStoreImpl "1" o-- "0...*" Game
 
 
 
