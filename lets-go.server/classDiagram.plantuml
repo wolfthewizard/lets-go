@@ -110,19 +110,19 @@ namespace core{
             +cords : Coordinates
         }
 
-
+        MoveDTO "1" o-- "1" Move
+        Move "1" *-- "1" core.model.enums.MoveType
+        ResponseDTO "1" *-- "1" core.model.enums.ResponseStatus
+        ResponseDTO "1" o-- "1...*" Change
+        Change "1" *-- "1" core.model.enums.Occupancy
+        Change "1" o-- "1" Coordinates
+        GameImpl "1" o-- "1, 2, 3" BoardImpl
+        GameImpl "1" o-- "2" Player
+        GameImpl "1" *-- "1" core.model.enums.Color
+        BoardImpl "1" *-- "*" core.model.enums.Occupancy
+        BoardImpl "1" *-- "1" core.model.enums.BoardSize
     }
-    core.model.MoveDTO "1" o-- "1" core.model.Move
-    core.model.Move "1" *-- "1" core.model.enums.MoveType
-    core.model.ResponseDTO "1" *-- "1" core.model.enums.ResponseStatus
-    core.model.ResponseDTO "1" o-- "1...*" core.model.Change
-    core.model.Change "1" *-- "1" core.model.enums.Occupancy
-    core.model.Change "1" o-- "1" core.model.Coordinates
-    core.model.GameImpl "1" o-- "1, 2, 3" core.model.BoardImpl
-    core.model.GameImpl "1" o-- "2" core.model.Player
-    core.model.GameImpl "1" *-- "1" core.model.enums.Color
-    core.model.BoardImpl "1" *-- "*" core.model.enums.Occupancy
-    core.model.BoardImpl "1" *-- "1" core.model.enums.BoardSize
+    
 
         interface ICommandDirector{
             'pewnie cos innego niz void
@@ -140,7 +140,7 @@ namespace core{
             -IMoveExecutorService: IMoveExecutorService
             -IGameManager: gameManager
 
-                    'pewnie cos innego niz void
+                    'pewnie cos innego niz void tylko nwm co
                     ' do bota
             void: CreateNewGame(int: firstPlayerId)
                     ', do multi
