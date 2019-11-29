@@ -47,38 +47,35 @@ namespace core{
             }
         }
 
+        interface Board{
 
+            int getSize()
+        }
+        class BoardImpl implements Board{
 
-        interface Board
-
-        Board : int getSize()
-
-
-        class BoardImpl implements Board
-
-        BoardImpl : fields : Occupancy[][]
-        BoardImpl : boardSize : BoardSize
+            BoardImpl : fields : Occupancy[][]
+            BoardImpl : boardSize : BoardSize
+        }
 
         BoardImpl : int getSize()
 
-        class GameImpl implements Game
+        class GameImpl implements Game{
+            gameId : int
+            boards : Board[]
+            black : Player
+            white : Player
+            whoseTurn : Color
 
-        GameImpl : gameId : int
-        GameImpl : boards : Board[]
-        GameImpl : black : Player
-        GameImpl : white : Player
-        GameImpl : whoseTurn : Color
+            +int getId()
+            +Board[] getBoards()
+        }
 
-        GameImpl : int getId()
-        GameImpl : Board[] getBoards()
+        interface Game{
 
-        interface Game
-
-        Game : int getId()
-        'this method returns array of 3 boards: current and 2 before it
-        Game : Board[] getBoards()
-
-
+            int getId()
+            'this method returns array of 3 boards: current and 2 before it
+            Board[] getBoards()
+        }
 
         class Coordinates{
             +x : int
@@ -112,11 +109,99 @@ namespace core{
             +occupancy : Occupancy
             +cords : Coordinates
         }
-    }
 
-    namespace Interfaces{
 
     }
+    core.model.MoveDTO "1" o-- "1" core.model.Move
+            core.model.Move "1" *-- "1" core.model.enums.MoveType
+            core.model.ResponseDTO "1" *-- "1" core.model.enums.ResponseStatus
+            core.model.ResponseDTO "1" o-- "1...*" core.model.Change
+            core.model.Change "1" *-- "1" core.model.enums.Occupancy
+            core.model.Change "1" o-- "1" core.model.Coordinates
+            core.model.GameImpl "1" o-- "1, 2, 3" core.model.Board
+            core.model.GameImpl "1" o-- "2" core.model.Player
+            core.model.GameImpl "1" *-- "1" core.model.enums.Color
+            core.model.BoardImpl "1" *-- "*" core.model.enums.Occupancy
+            core.model.BoardImpl "1" *-- "1" core.model.enums.BoardSize
+
+        interface ICommandDirector{
+            'pewnie cos innego niz void
+            ' do bota
+            void: CreateNewGame(int: firstPlayerId)
+            ', do multi
+            void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+
+            ResponseDTO: TryToMove(MoveDTO: move)
+
+            void: CancelGame(int: leftPlayerId)
+        }
+
+        class CommandDirector implements ICommandDirector{
+            -IMoveExecutorService: IMoveExecutorService
+            -IGameManager: gameManager
+
+                    'pewnie cos innego niz void
+                    ' do bota
+            void: CreateNewGame(int: firstPlayerId)
+                    ', do multi
+            void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+
+            ResponseDTO: TryToMove(MoveDTO: move)
+
+            void: CancelGame(int: leftPlayerId)
+        }
+        CommandDirector..>IMoveExecutorService
+        CommandDirector..>IGameManager
+
+        'ogarnie to czy gra instenieje ze player nie moze miec dwohc gier na raz
+        interface IGameManager{
+            -IGameRepository: gameRepository
+
+            void: CreateNewGame(int: firstPlayerId)
+                                ', do multi
+            void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+
+            void: CancelGame(int: leftPlayerId)
+        }
+
+        class GameManager implements IGameManager{
+             -IGameRepository: gameRepository
+
+             void: CreateNewGame(int: firstPlayerId)
+                                        ', do multi
+             void: CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+
+             void: CancelGame(int: leftPlayerId)
+        }
+        GameManager..>infrastructure.IGameRepository
+
+        interface IMoveExecutorService{
+            ResponseDTO: executeMove(MoveDTO: moveDTO)
+        }
+
+        class MoveExecutorService implements IMoveExecutorService{
+            -IGameRepository: gameRepository
+            -MoveValidator: moveValidator
+
+            ResponseDTO: executeMove(MoveDTO: moveDTO)
+        }
+        MoveExecutorService..>infrastructure.IGameRepository
+        MoveExecutorService..>IMoveValidator
+
+        ' moze zamiast dzielic na 2 metody podzielimy na dwie klasy wtedy dwie referencje w executorze, albo jeszcze jednak klasa ktora to razem sklada taka mini facada
+        interface IMoveValidator{
+            bool: validateSuicide(Board: board, Move: move)
+            bool: validateKO(Board: board, Move: move)
+            ' mb more
+        }
+
+        class MoveValidator implements IMoveValidator{
+             boolean: validateSuicide(Board: board, Move: move)
+             boolean: validateKO(Board: board, Move: move)
+            ' mb more
+        }
+
+
     'singleton class
     class MoveValidationCenter
 
@@ -138,14 +223,17 @@ namespace core{
 }
 
 namespace infrastructure{
-    interface GameStore{
+    interface IGameRepository{
         +Game getGame(int playerId)
         +void updateGameBoard(int, List<Change>)
     }
 
-    class GameStoreImpl implements GameStore{
+    'albo zapis do pliku albo musi byc singleton
+    class GameRepository implements IGameRepository{
         games : List<Game>
 
+        void cancelGame(int leftPlayerId)
+        boolean playerHasOpenedGame(int playerId)
         Board getBoard(int)
         void updateBoard(int, List<Change>)
     }
@@ -158,17 +246,7 @@ CommunicationBase --> "sends" ResponseDTO
 CommunicationBaseImpl "1" o-- "1" Core
 CoreImpl "1" o-- "1" GameStore
 GameStoreImpl "1" o-- "0...*" Game
-GameImpl "1" o-- "1, 2, 3" Board
-GameImpl "1" o-- "2" Player
-GameImpl "1" *-- "1" Color
-BoardImpl "1" *-- "*" Occupancy
-BoardImpl "1" *-- "1" BoardSize
-Change "1" *-- "1" Occupancy
-Change "1" o-- "1" Coordinates
-Core --> "uses" MoveValidationCenter
-MoveDTO "1" o-- "1" Move
-Move "1" *-- "1" MoveType
-ResponseDTO "1" *-- "1" ResponseStatus
-ResponseDTO "1" o-- "1...*" Change
+
+
 
 @enduml
