@@ -9,5 +9,8 @@
         <module name="lets-go.client" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="lets-go.client" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
