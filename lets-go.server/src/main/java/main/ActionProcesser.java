@@ -1,6 +1,5 @@
 package main;
 
-import main.enums.ActionType;
 import main.model.ActionDTO;
 
 public class ActionProcesser implements IActionProcesser{
@@ -14,21 +13,23 @@ public class ActionProcesser implements IActionProcesser{
 
     public String ProcessAction(String message) {
 
+        System.out.println("got:"+message);
         ActionDTO action = jsonParser.parseJsonToAction(message);
 
         switch(action.actionType)//java 7 needed
         {
-            case ActionType.STARTGAME:
+            case STARTGAME:
 
 
-            case ActionType.PASSMOVE:
+            case PASSMOVE:
 
 
-            case ActionType.DOMOVE:
+            case DOMOVE:
 
 
-            case ActionType.LEAVEGAME:
+            case LEAVEGAME:
 
         }
+        return null;
     }
 }

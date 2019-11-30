@@ -1,7 +1,7 @@
 package main.model;
 
 import main.Coordinates;
-import model.enums.ActionType;
+import main.enums.ActionType;
 import model.enums.BoardSize;
 
 public class ActionDTO {
