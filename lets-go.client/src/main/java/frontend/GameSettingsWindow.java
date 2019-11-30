@@ -8,38 +8,55 @@ import java.awt.event.ActionListener;
 public class GameSettingsWindow extends JFrame {
 
     public GameSettingsWindow() {
+
         super("Game settings");
+
         setResizable(false);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setBounds(400, 200, 300, 200);
+        setSize(300, 200);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLabel opponentTypeTitle = new JLabel("Choose oppponent type:");
-        this.add(opponentTypeTitle);
-        ButtonGroup gameTypeRadios = new ButtonGroup();
+        JLabel opponentTypeLabel = new JLabel("Choose oppponent type:");
 
+        ButtonGroup gameTypeRadios = new ButtonGroup();
         JRadioButton playerRadio = new JRadioButton("player");
         JRadioButton botRadio = new JRadioButton("bot");
-
         gameTypeRadios.add(playerRadio);
         gameTypeRadios.add(botRadio);
         playerRadio.setSelected(true);
-        JPanel radios = new JPanel();
-        radios.add(playerRadio);
-        radios.add(botRadio);
-        this.add(radios);
 
-        JLabel boardSizeTitle = new JLabel("Choose board size:");
+        JLabel boardSizeLabel = new JLabel("Choose board size:");
+
         String[] sizes = new String[]{"9x9", "13x13", "19x19"};
-        JComboBox boardSizes = new JComboBox<>(sizes);
-        boardSizes.setSelectedIndex(2);
-
-        this.add(boardSizeTitle);
-        this.add(boardSizes);
-
-        /* #region startSimulationButton Set Up */
+        JComboBox boardSizeCombo = new JComboBox<>(sizes);
+        boardSizeCombo.setSelectedIndex(2);
 
         JButton startGameButton = new JButton("Start game");
+
+        JPanel opponentTypePanel = new JPanel();
+        opponentTypePanel.add(opponentTypeLabel);
+
+        JPanel radioGroupPanel = new JPanel();
+        radioGroupPanel.add(playerRadio);
+        radioGroupPanel.add(botRadio);
+
+        JPanel boardSizePanel = new JPanel();
+        boardSizePanel.add(boardSizeLabel);
+
+        JPanel boardSizeComboPanel = new JPanel();
+        boardSizeComboPanel.add(boardSizeCombo);
+
+        JPanel startGamePanel = new JPanel();
+        startGamePanel.add(startGameButton);
+
+        this.add(opponentTypePanel);
+        this.add(radioGroupPanel);
+        this.add(boardSizePanel);
+        this.add(boardSizeComboPanel);
+        this.add(startGamePanel);
+
+
         startGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -47,7 +64,7 @@ public class GameSettingsWindow extends JFrame {
 
                 BoardSize boardSize;
 
-                switch (String.valueOf(boardSizes.getSelectedItem())) {
+                switch (String.valueOf(boardSizeCombo.getSelectedItem())) {
                     case "9x9":
                         boardSize = BoardSize.NINE;
                         break;
@@ -67,11 +84,6 @@ public class GameSettingsWindow extends JFrame {
                 dispose();
             }
         });
-
-        add(startGameButton);
-        for (Component comp : getComponents()) {
-            ((JComponent) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
-        }
 
         setVisible(true);
     }

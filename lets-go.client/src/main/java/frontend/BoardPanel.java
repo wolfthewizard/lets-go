@@ -9,24 +9,15 @@ public class BoardPanel extends JPanel {
 
     public BoardPanel(BoardSize boardSize) {
 
-        switch(boardSize) {
-            case NINE:
-                tiles = new TileButton[9][9];
-                break;
-            case THIRTEEN:
-                tiles = new TileButton[13][13];
-                break;
-            case NINETEEN:
-                tiles = new TileButton[19][19];
-                break;
-        }
+        super();
 
-        setSize(400, 400);
-        setLayout(new GridLayout(9, 9, 40, 40));
+        tiles = new TileButton[boardSize.getValue()][boardSize.getValue()];
+
+        setLayout(new GridLayout(tiles[0].length, tiles.length, 0, 0));
 
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles[i].length; j++) {
-                tiles[i][j] = new TileButton(i, j);
+                tiles[i][j] = new TileButton(new Coordinates(i, j));
             }
         }
 
@@ -37,4 +28,7 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    public int getDimension() {
+        return tiles[0].length * tiles[0][0].getDimension();
+    }
 }

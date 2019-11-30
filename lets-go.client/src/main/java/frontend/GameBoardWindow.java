@@ -18,37 +18,53 @@ public class GameBoardWindow extends JFrame {
 
         super("Let's Go!");
 
-        //setLayout(new FlowLayout());
-        setResizable(false);
-        setBounds(400, 200, 800, 500);
+        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        whoseMove = new JLabel("It's move");
+
+        whoseMove = new JLabel("It's your turn.");
         opponentsCaptives = new JLabel("Opponent's captives: ");
         playersCaptives = new JLabel("Player's captives: ");
         boardPanel = new BoardPanel(size);
         passButton = new JButton("Pass");
 
+        setSize(boardPanel.getDimension(), boardPanel.getDimension() + 160);
+        setLocationRelativeTo(null);
+
+        JPanel whoseMovePanel = new JPanel();
+        whoseMovePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        whoseMovePanel.add(whoseMove);
+
         JPanel playersCaptivesPanel = new JPanel();
-        playersCaptivesPanel.setLayout(new FlowLayout(FlowLayout.TRAILING));
+        playersCaptivesPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
         playersCaptivesPanel.add(playersCaptives);
 
-        //add(whoseMove);
-        //add(opponentsCaptives);
-        //add(playersCaptivesPanel);
-        add(boardPanel);
-        //add(passButton);
+        JPanel opponentsCaptivesPanel = new JPanel();
+        opponentsCaptivesPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        opponentsCaptivesPanel.add(opponentsCaptives);
+
+        JPanel passButtonPanel = new JPanel();
+        passButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        passButtonPanel.add(passButton);
+
+        JPanel boardPanelPanel = new JPanel();
+        boardPanelPanel.setLayout(new FlowLayout());
+        boardPanelPanel.add(boardPanel);
+
+        add(whoseMovePanel);
+        add(opponentsCaptivesPanel);
+        add(boardPanelPanel);
+        add(playersCaptivesPanel);
+        add(passButtonPanel);
 
         passButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                System.out.println("pass");
                 // todo : send a pass signal to server
             }
         });
-
-        for (Component comp : getComponents()) {
-            ((JComponent) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
-        }
 
         setVisible(true);
     }

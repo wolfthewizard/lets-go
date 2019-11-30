@@ -16,8 +16,8 @@ public class TileButtonActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         TileButton performer = (TileButton) actionEvent.getSource();
-        StringBuilder sb = new StringBuilder();
 
+        System.out.println("My cords are: " + performer.getCoordinates());
         // todo : send a msg to server using the acquired data
     }
 }

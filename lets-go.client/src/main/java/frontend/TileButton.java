@@ -4,31 +4,37 @@ import javax.swing.*;
 
 public class TileButton extends JButton {
 
-    private int x;
-    private int y;
+    private static int ICON_SIZE = 35;
 
-    public TileButton(int x, int y) {
-        super();
-        this.x = x;
-        this.y = y;
-        setSize(35, 35);
-        //this.setIcon(IconFlyweight.getIcon(Occupancy.EMPTY));
-        this.setIcon(new ImageIcon("/home/mateusz/Dokumenty/tp/lets-go/lets-go.client/src/main/java/frontend/images/tileEmpty.png"));   //todo remove absoulte path to non static icon
+    private Coordinates cords;
+
+    public TileButton(Coordinates cords) {
+        super(IconFlyweight.getIcon(Occupancy.EMPTY));
+        this.cords = cords;
+        setSize(ICON_SIZE, ICON_SIZE);
         this.addActionListener(TileButtonActionListener.getInstance());
 
-//        setBorder(BorderFactory.createEmptyBorder());
-//        setContentAreaFilled(false);
+        setBorder(BorderFactory.createEmptyBorder());
+        setContentAreaFilled(false);
     }
 
     public void setImg(Occupancy type) {
         this.setIcon(IconFlyweight.getIcon(type));
     }
 
-    public int getX() {
-        return this.x;
+    public Coordinates getCoordinates() {
+        return cords;
     }
 
-    public int getY() {
-        return this.y;
+    public int getXCoordinate() {
+        return cords.getX();
+    }
+
+    public int getYCoordinate() {
+        return cords.getY();
+    }
+
+    public int getDimension() {
+        return ICON_SIZE;
     }
 }
