@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerCommunicator {
+public class ServerListener {
 
     private ServerSocket server;
     private Socket client;
@@ -17,7 +17,7 @@ public class ServerCommunicator {
     private PrintWriter outputWriter;
     private IActionProcesser actionProcesser;
 
-    public ServerCommunicator(IJsonParser parser, IActionProcesser actionProcesser)
+    public ServerListener(IJsonParser parser, IActionProcesser actionProcesser)
     {
         this.actionProcesser = actionProcesser;
 
@@ -33,6 +33,7 @@ public class ServerCommunicator {
         }
         catch (IOException e)
         {
+            e.printStackTrace();
             closeConnection();
             System.exit(-1);
         }
@@ -42,7 +43,7 @@ public class ServerCommunicator {
         while(true)
         {
             String message = inputReader.readLine();
-
+            System.out.println("received:"+message);
             String response = actionProcesser.ProcessAction(message);
 
             outputWriter.print(response);

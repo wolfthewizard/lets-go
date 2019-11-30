@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import model.ActionDTO;
 import model.ResponseDTO;
 
-public class JsonParser {
+public class JsonParser implements IJsonParser {
 
     Gson jsonParser;
 

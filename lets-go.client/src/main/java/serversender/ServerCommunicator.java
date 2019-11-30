@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class ServerCommunicator {
+public class ServerCommunicator implements IServerCommunicator {
 
     private IJsonParser jsonParser;
     private Socket socket;
@@ -85,6 +85,6 @@ public class ServerCommunicator {
     private void sendMessage(ActionDTO actionDTO) {
         String json = jsonParser.parseActionToJson(actionDTO);
 
-        outputWriter.print(json);
+        outputWriter.println(json);
     }
 }
