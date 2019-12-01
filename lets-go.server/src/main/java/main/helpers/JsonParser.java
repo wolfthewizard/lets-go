@@ -1,9 +1,9 @@
-package main;
+package main.helpers;
 
 import com.google.gson.Gson;
 
-import main.model.ActionDTO;
-import main.model.ResponseDTO;
+import main.contract.ActionDTO;
+import main.contract.ResponseDTO;
 
 public class JsonParser implements IJsonParser {
 

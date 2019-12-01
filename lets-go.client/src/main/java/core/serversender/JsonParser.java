@@ -1,9 +1,9 @@
-package serversender;
+package core.serversender;
 
 import com.google.gson.Gson;
 
-import model.ActionDTO;
-import model.ResponseDTO;
+import core.contract.ActionDTO;
+import core.contract.ResponseDTO;
 
 public class JsonParser implements IJsonParser {
 

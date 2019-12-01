@@ -1,4 +1,4 @@
-package model.enums;
+package main.contract;
 
 public enum BoardSize {
     NINE,

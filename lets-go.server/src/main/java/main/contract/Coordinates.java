@@ -1,4 +1,4 @@
-package main;
+package main.contract;
 
 public class Coordinates {
     public int x;

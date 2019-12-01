@@ -1,7 +1,4 @@
-package main;
-
-import main.enums.ActionType;
-import main.model.ActionDTO;
+package main.helpers;
 
 public interface IActionProcesser {
 

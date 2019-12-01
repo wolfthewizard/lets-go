@@ -1,6 +1,7 @@
 package main;
 
-import main.model.ActionDTO;
+import main.helpers.IActionProcesser;
+import main.helpers.IJsonParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class ServerListener {
             System.out.println("received:"+message);
             String response = actionProcesser.ProcessAction(message);
 
-            outputWriter.print(response);
+            outputWriter.println(response);
         }
     }
 

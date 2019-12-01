@@ -1,8 +1,8 @@
-package main;
+package main.helpers;
 
 
-import main.model.ActionDTO;
-import main.model.ResponseDTO;
+import main.contract.ActionDTO;
+import main.contract.ResponseDTO;
 
 public interface IJsonParser {
 
