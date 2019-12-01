@@ -78,7 +78,7 @@ public class GameSettingsWindow extends JFrame {
                         boardSize = null;
                 }
 
-                GameBoardWindow gbw = new GameBoardWindow(boardSize);
+                new GameAwaitingWindow(boardSize);
 
                 setVisible(false);
                 dispose();
