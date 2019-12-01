@@ -1,0 +1,39 @@
+package main;
+
+import main.helpers.IActionProcesser;
+import main.helpers.IIdGenerator;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+
+public class ServerListener {
+
+    private ServerSocket server;
+    private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
+
+    public ServerListener(IActionProcesser actionProcesser, IIdGenerator idGenerator) throws IOException {
+
+        server = new ServerSocket(1337);
+
+        while (true) {
+            Socket client = server.accept();
+
+            ClientConnectionThread clientConnectionThread = new ClientConnectionThread(client,
+                    actionProcesser, idGenerator.generateId());
+            clients.add(clientConnectionThread);
+
+            clientConnectionThread.start();
+        }
+    }
+
+    private void closeConnection() throws IOException {
+
+        for (ClientConnectionThread thread : clients) {
+            thread.closeConnection();
+        }
+        server.close();
+    }
+}
+
