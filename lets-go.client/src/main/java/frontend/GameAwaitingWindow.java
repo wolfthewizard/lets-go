@@ -1,5 +1,7 @@
 package frontend;
 
+import core.contract.enums.BoardSize;
+
 import javax.swing.*;
 
 public class GameAwaitingWindow extends JFrame {
@@ -21,6 +23,10 @@ public class GameAwaitingWindow extends JFrame {
 
         new GameBoardWindow(boardSize);
 
+        kill();
+    }
+
+    public void kill() {
         setVisible(false);
         dispose();
     }

@@ -1,15 +1,16 @@
 package frontend;
 
+import core.contract.enums.BoardSize;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GameBoardWindow extends JFrame {
 
-    private JLabel whoseMove;
-    private JLabel opponentsCaptives;
-    private JLabel playersCaptives;
+    private JLabel serverResponseLabel;
+    private JLabel whoseMoveLabel;
+    private JLabel opponentsCaptivesLabel;
+    private JLabel playersCaptivesLabel;
 
     private BoardPanel boardPanel;
     private JButton passButton;
@@ -18,31 +19,37 @@ public class GameBoardWindow extends JFrame {
 
         super("Let's Go!");
 
+
+
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-
-        whoseMove = new JLabel("It's your turn.");
-        opponentsCaptives = new JLabel("Opponent's captives: ");
-        playersCaptives = new JLabel("Player's captives: ");
+        serverResponseLabel = new JLabel("This is response from server.");
+        whoseMoveLabel = new JLabel("It's your turn.");
+        opponentsCaptivesLabel = new JLabel("Opponent's captives: 0");
+        playersCaptivesLabel = new JLabel("Player's captives: 0");
         boardPanel = new BoardPanel(size);
         passButton = new JButton("Pass");
 
-        setSize(boardPanel.getDimension(), boardPanel.getDimension() + 160);
+        setSize(boardPanel.getDimension(), boardPanel.getDimension() + 180);
         setLocationRelativeTo(null);
+
+        JPanel serverResponsePanel = new JPanel();
+        serverResponsePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        serverResponsePanel.add(serverResponseLabel);
 
         JPanel whoseMovePanel = new JPanel();
         whoseMovePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        whoseMovePanel.add(whoseMove);
+        whoseMovePanel.add(whoseMoveLabel);
 
         JPanel playersCaptivesPanel = new JPanel();
         playersCaptivesPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        playersCaptivesPanel.add(playersCaptives);
+        playersCaptivesPanel.add(playersCaptivesLabel);
 
         JPanel opponentsCaptivesPanel = new JPanel();
         opponentsCaptivesPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
-        opponentsCaptivesPanel.add(opponentsCaptives);
+        opponentsCaptivesPanel.add(opponentsCaptivesLabel);
 
         JPanel passButtonPanel = new JPanel();
         passButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -52,20 +59,38 @@ public class GameBoardWindow extends JFrame {
         boardPanelPanel.setLayout(new FlowLayout());
         boardPanelPanel.add(boardPanel);
 
+        add(serverResponsePanel);
         add(whoseMovePanel);
         add(opponentsCaptivesPanel);
         add(boardPanelPanel);
         add(playersCaptivesPanel);
         add(passButtonPanel);
 
-        passButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                System.out.println("pass");
-                // todo : send a pass signal to server
-            }
+        passButton.addActionListener(actionEvent -> {
+            System.out.println("pass");
+            // todo : send a pass signal to server
         });
 
         setVisible(true);
+    }
+
+    public void clearServerResponse() {
+        serverResponseLabel.setText(" ");
+    }
+
+    public void setOpponentsCaptives(int nOfCaptives) {
+        opponentsCaptivesLabel.setText("Opponent's captives: " + nOfCaptives);
+    }
+
+    public void setPlayersCaptives(int nOfCaptives) {
+        playersCaptivesLabel.setText("Player's captives: " + nOfCaptives);
+    }
+
+    public void signalPlayersMove() {
+        whoseMoveLabel.setText("It's your turn.");
+    }
+
+    public void signalOpponentsMove() {
+        whoseMoveLabel.setText("It's opponent's turn.");
     }
 }

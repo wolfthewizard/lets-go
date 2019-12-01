@@ -1,5 +1,7 @@
 package frontend;
 
+import core.contract.Coordinates;
+
 import javax.swing.*;
 
 public class TileButton extends JButton {
@@ -24,14 +26,6 @@ public class TileButton extends JButton {
 
     public Coordinates getCoordinates() {
         return cords;
-    }
-
-    public int getXCoordinate() {
-        return cords.getX();
-    }
-
-    public int getYCoordinate() {
-        return cords.getY();
     }
 
     public int getDimension() {

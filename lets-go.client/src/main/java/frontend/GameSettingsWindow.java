@@ -1,7 +1,8 @@
 package frontend;
 
+import core.contract.enums.BoardSize;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -57,32 +58,29 @@ public class GameSettingsWindow extends JFrame {
         this.add(startGamePanel);
 
 
-        startGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // todo : communicate with server
+        startGameButton.addActionListener(e -> {
+            // todo : communicate with server
 
-                BoardSize boardSize;
+            BoardSize boardSize;
 
-                switch (String.valueOf(boardSizeCombo.getSelectedItem())) {
-                    case "9x9":
-                        boardSize = BoardSize.NINE;
-                        break;
-                    case "13x13":
-                        boardSize = BoardSize.THIRTEEN;
-                        break;
-                    case "19x19":
-                        boardSize = BoardSize.NINETEEN;
-                        break;
-                    default:
-                        boardSize = null;
-                }
-
-                new GameAwaitingWindow(boardSize);
-
-                setVisible(false);
-                dispose();
+            switch (String.valueOf(boardSizeCombo.getSelectedItem())) {
+                case "9x9":
+                    boardSize = BoardSize.NINE;
+                    break;
+                case "13x13":
+                    boardSize = BoardSize.THIRTEEN;
+                    break;
+                case "19x19":
+                    boardSize = BoardSize.NINETEEN;
+                    break;
+                default:
+                    boardSize = null;
             }
+
+            new GameAwaitingWindow(boardSize);
+
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);

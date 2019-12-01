@@ -1,5 +1,8 @@
 package frontend;
 
+import core.contract.Coordinates;
+import core.contract.enums.BoardSize;
+
 import javax.swing.*;
 import java.awt.*;
 
