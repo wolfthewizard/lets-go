@@ -5,5 +5,6 @@ public enum ResponseType {
     INVALIDMOVE,
     SUCCESS,
     CANTCREATEGAME,
-    SERVERERROR
+    SERVERERROR,
+    WAITINGFORPLAYER
 }

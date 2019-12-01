@@ -54,13 +54,7 @@ public class ServerCommunicator implements IServerCommunicator {
 
                 sendMessage(action);
 
-                try {
-                    String response = inputReader.readLine();//0 if failed
-                    System.out.println(response);
-                    serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(response));
-                } catch (IOException ex) {
-                    serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVERERROR));
-                }
+                waitAndPassResponse();
             });
 
             serverResponseAwaiter.start();
@@ -77,20 +71,7 @@ public class ServerCommunicator implements IServerCommunicator {
 
                 sendMessage(action);
 
-                try
-                {
-                    String responseJson;
-
-                    responseJson = inputReader.readLine();
-                    serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-
-                    responseJson = inputReader.readLine();
-                    serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-                }
-                catch(IOException ex)
-                {
-                    serverResponseListener.responseReceived(null);
-                }
+                waitAndPassResponse();
             });
 
             serverResponseAwaiter.start();
@@ -103,25 +84,11 @@ public class ServerCommunicator implements IServerCommunicator {
 
         if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
         {
-            serverResponseAwaiter = new Thread(new Runnable() {
-                public void run() {
+            serverResponseAwaiter = new Thread(() -> {
 
-                    sendMessage(action);
+                sendMessage(action);
 
-                    try
-                    {
-                        String responseJson;
-                        responseJson = inputReader.readLine();
-                        serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-
-                        responseJson = inputReader.readLine();
-                        serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-                    }
-                    catch(IOException ex)
-                    {
-                        serverResponseListener.responseReceived(null);
-                    }
-                }
+                waitAndPassResponse();
             });
 
             serverResponseAwaiter.start();
@@ -140,6 +107,27 @@ public class ServerCommunicator implements IServerCommunicator {
         String json = jsonParser.parseActionToJson(actionDTO);
 
         outputWriter.println(json);
+    }
+
+    private void waitAndPassResponse() {
+        try
+        {
+            String responseJson= inputReader.readLine();
+
+            ResponseDTO responseDTO = jsonParser.parseJsonToResponse(responseJson);
+            serverResponseListener.responseReceived(responseDTO);
+
+            if(responseDTO.responseType!=ResponseType.SERVERERROR &&
+                    responseDTO.responseType != ResponseType.INVALIDMOVE) {
+
+                responseJson = inputReader.readLine();
+                serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
+            }
+        }
+        catch(IOException ex)
+        {
+            serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVERERROR));
+        }
     }
 
     public void shutDownConnection() {

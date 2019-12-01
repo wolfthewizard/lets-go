@@ -15,6 +15,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         IJsonParser jsonParser = new JsonParser();
+        IClientsManager clientsManager = new ClientsManager();
         ServerListener serverCommunicator = new ServerListener(new ActionProcesser(jsonParser,
                 new PlayerValidator(), new ICommandDirector() {
             @Override
@@ -36,6 +37,6 @@ public class Main {
             public void CancelGame(MoveIdentity leftIdentity) {
 
             }
-        }), new IdGenerator());
+        }, clientsManager), new IdGenerator(), clientsManager);
     }
 }

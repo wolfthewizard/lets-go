@@ -1,6 +1,6 @@
 package core.model;
 
-import main.Color;
+import main.model.Color;
 
 public class MoveIdentity {
     public Color playerColor;

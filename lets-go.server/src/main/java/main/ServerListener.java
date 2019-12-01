@@ -11,18 +11,21 @@ import java.util.ArrayList;
 public class ServerListener {
 
     private ServerSocket server;
-    private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
+    private IClientsManager clientsManager;
 
-    public ServerListener(IActionProcesser actionProcesser, IIdGenerator idGenerator) throws IOException {
 
+    public ServerListener(IActionProcesser actionProcesser, IIdGenerator idGenerator, IClientsManager clientsManager) throws IOException {
+
+        this.clientsManager = clientsManager;
         server = new ServerSocket(1337);
 
         while (true) {
+
             Socket client = server.accept();
 
             ClientConnectionThread clientConnectionThread = new ClientConnectionThread(client,
                     actionProcesser, idGenerator.generateId());
-            clients.add(clientConnectionThread);
+            clientsManager.addClient(clientConnectionThread);
 
             clientConnectionThread.start();
         }
@@ -30,7 +33,7 @@ public class ServerListener {
 
     private void closeConnection() throws IOException {
 
-        for (ClientConnectionThread thread : clients) {
+        for (ClientConnectionThread thread : clientsManager.getAllClients()) {
             thread.closeConnection();
         }
         server.close();

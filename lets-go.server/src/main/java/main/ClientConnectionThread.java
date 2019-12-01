@@ -15,6 +15,7 @@ public class ClientConnectionThread extends Thread {
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
     private IActionProcesser actionProcesser;
+    private boolean isActionFinished = true;
 
     public ClientConnectionThread(Socket client, IActionProcesser actionProcesser, int id) {
 
@@ -33,10 +34,19 @@ public class ClientConnectionThread extends Thread {
 
         while(true)
         {
+            while (!isActionFinished) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }//to pewnie mozna lepiej zrobic
+
             String message;
             try {
                 message = inputReader.readLine();
             } catch (IOException e) {
+                e.printStackTrace();
                 return;
             }
 
@@ -45,14 +55,33 @@ public class ClientConnectionThread extends Thread {
                 closeConnection();
                 return;
             }
-            String response = actionProcesser.ProcessAction(message, id);
-            if(response == null)
-            {
-                closeConnection();
-            }
-            outputWriter.println(response);
+            isActionFinished=false;
+            actionProcesser.ProcessAction(message, id);
+            //if(response == null)
+            //{
+              //  closeConnection();
+            //}
+            //outputWriter.println(response);
         }
     }
+
+    public boolean isActionFinished() {
+        return isActionFinished;
+    }
+
+    public void beginAction(String firstResponse) {
+        outputWriter.println(firstResponse);
+    }
+
+    public void completeAction(String secondResponse) {
+        isActionFinished = true;
+        outputWriter.println(secondResponse);
+    }
+
+    public int getThreadId() {
+        return id;
+    }
+
 
     public void closeConnection() {
 

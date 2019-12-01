@@ -1,7 +1,8 @@
 package main.helpers;
 
 import core.model.MoveIdentity;
-import main.Color;
+import main.model.Color;
+import main.model.GameInfo;
 import main.model.GameWithPlayers;
 
 import java.util.ArrayList;
@@ -17,17 +18,17 @@ public class PlayerValidator implements IPlayerValidator {
 
     public void removeGame(int gameId) {
 
-        games.removeIf(gameWithPlayers -> gameWithPlayers.gameId == gameId);
+        games.removeIf(gameWithPlayers -> gameWithPlayers.getGameId() == gameId);
     }
 
-    public MoveIdentity getMoveIdentity(int playerId) {
+    public GameInfo getGameInfo(int playerId) {
 
         for (GameWithPlayers game: games) {
-            if(game.blackId==playerId) {
-                return new MoveIdentity(Color.BLACK, game.gameId);
+            if(game.getBlackid()==playerId) {
+                return new GameInfo(new MoveIdentity(Color.BLACK, game.getGameId()), game.getWhiteId());
             }
-            if(game.whiteId==playerId) {
-                return new MoveIdentity(Color.WHITE, game.gameId);
+            if(game.getWhiteId()==playerId) {
+                return new GameInfo(new MoveIdentity(Color.WHITE, game.getGameId()), game.getBlackid());
             }
         }
 
