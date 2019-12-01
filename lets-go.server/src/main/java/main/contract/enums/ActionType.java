@@ -1,4 +1,4 @@
-package main.contract;
+package main.contract.enums;
 
 public enum ActionType {
     STARTMULTIPLAYERGAME,

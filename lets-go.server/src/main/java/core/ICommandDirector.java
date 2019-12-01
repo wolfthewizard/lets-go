@@ -4,7 +4,7 @@ import core.model.Move;
 import core.model.MoveExecution;
 import core.model.MoveIdentity;
 import javafx.util.Pair;
-import main.contract.BoardSize;
+import main.contract.enums.BoardSize;
 
 public interface ICommandDirector {
         Pair<Integer, MoveExecution> CreateNewBotGame(boolean letBotStart, BoardSize boardSize);

@@ -2,5 +2,5 @@ package main.helpers;
 
 public interface IActionProcesser {
 
-    String ProcessAction(String action);
+    String ProcessAction(String action, int id);
 }

@@ -1,8 +1,10 @@
 package core.contract;
 
+import core.contract.enums.ActionType;
+import core.contract.enums.BoardSize;
+
 public class ActionDTO {
     public ActionType actionType;
-    public int playerId;
     public BoardSize boardSize;
     public Coordinates coordinates;
 
@@ -16,16 +18,15 @@ public class ActionDTO {
         this.boardSize = boardSize;
     }
 
-    public ActionDTO(int playerId, Coordinates coordinates){
+    public ActionDTO(Coordinates coordinates){
         actionType=ActionType.DOMOVE;
         this.coordinates=coordinates;
     }
 
-    public ActionDTO(int playerId, ActionType actionType){
+    public ActionDTO(ActionType actionType){
 
         if (actionType==ActionType.LEAVEGAME || actionType==ActionType.PASSMOVE) {
             this.actionType = actionType;
-            this.playerId = playerId;
         }
     }
 }

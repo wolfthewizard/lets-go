@@ -7,6 +7,7 @@ import core.model.MoveIdentity;
 import javafx.util.Pair;
 import main.contract.ActionDTO;
 import main.contract.ResponseDTO;
+import main.contract.enums.ResponseType;
 
 import java.util.Random;
 
@@ -15,19 +16,17 @@ public class ActionProcesser implements IActionProcesser {
     private final IJsonParser jsonParser;
     private final IPlayerValidator playerValidator;
     private final ICommandDirector commandDirector;
-    private final IIdGenerator idGenerator;
     private final Random randomGenerator=new Random();
 
     public ActionProcesser(IJsonParser jsonParser, IPlayerValidator playerValidator,
-                           ICommandDirector commandDirector, IIdGenerator idGenerator) {
+                           ICommandDirector commandDirector) {
 
         this.jsonParser=jsonParser;
         this.playerValidator = playerValidator;
         this.commandDirector = commandDirector;
-        this.idGenerator = idGenerator;
     }
 
-    public String ProcessAction(String message) {
+    public String ProcessAction(String message, int threadId) {
 
         ActionDTO action = jsonParser.parseJsonToAction(message);
 
@@ -38,41 +37,52 @@ public class ActionProcesser implements IActionProcesser {
         {
             case STARTBOTGAME:
 
-                int playerId = idGenerator.generateId();
-
+                if(playerValidator.getMoveIdentity(threadId) != null) {
+                    return jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANTCREATEGAME));
+                }
                 Pair<Integer, MoveExecution> idWithMove;
                 if (randomGenerator.nextBoolean()){
                     idWithMove = commandDirector.CreateNewBotGame(true, action.boardSize);
-                    playerValidator.addNewGame(playerId, 0, idWithMove.getKey());
+                    playerValidator.addNewGame(threadId, 0, idWithMove.getKey());
                 }
                 else {
                     idWithMove = commandDirector.CreateNewBotGame(false, action.boardSize);
-                    playerValidator.addNewGame(0, playerId, idWithMove.getKey());
+                    playerValidator.addNewGame(0, threadId, idWithMove.getKey());
                 }
-                System.out.println(playerId);
-                return jsonParser.parseResponseToJson(new ResponseDTO(playerId));
+                System.out.println(threadId);
+                return jsonParser.parseResponseToJson(new ResponseDTO());
 
             case STARTMULTIPLAYERGAME:
+
+                if(playerValidator.getMoveIdentity(threadId) != null) {
+                    return jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANTCREATEGAME));
+                }
+
                 commandDirector.CreateNewMultiplayerGame();
                 //later
 
 
             case PASSMOVE:
-                moveIdentity =playerValidator.getMoveIdentity(action.playerId);
+
+                moveIdentity =playerValidator.getMoveIdentity(threadId);
 
                  moveExecution= commandDirector.TryToMove(new Move(moveIdentity, null));
 
                 return jsonParser.parseResponseToJson(new ResponseDTO(moveExecution));
+
             case DOMOVE:
-                 moveIdentity=playerValidator.getMoveIdentity(action.playerId);
+                
+                 moveIdentity=playerValidator.getMoveIdentity(threadId);
 
                  moveExecution = commandDirector.TryToMove(new Move(moveIdentity, action.coordinates));
 
                  return jsonParser.parseResponseToJson(new ResponseDTO(moveExecution));
 
             case LEAVEGAME:
-                moveIdentity =playerValidator.getMoveIdentity(action.playerId);
-              //  playerValidator.removeGame(moveIdentity.gameId);
+
+                moveIdentity =playerValidator.getMoveIdentity(threadId);
+
+                playerValidator.removeGame(moveIdentity.gameId);
 
                 commandDirector.CancelGame(moveIdentity);
 

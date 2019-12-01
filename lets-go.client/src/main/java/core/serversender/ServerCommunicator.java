@@ -3,8 +3,9 @@ package core.serversender;
 import core.contract.ActionDTO;
 import core.contract.Coordinates;
 import core.contract.ResponseDTO;
-import core.contract.ActionType;
-import core.contract.BoardSize;
+import core.contract.enums.ActionType;
+import core.contract.enums.BoardSize;
+import core.contract.enums.ResponseType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,11 +20,11 @@ public class ServerCommunicator implements IServerCommunicator {
     private Socket socket;
     private PrintWriter outputWriter;
     private BufferedReader inputReader;
-    private int playerId;
     private OnServerResponseListener serverResponseListener;
     private Thread serverResponseAwaiter;
 
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
+
         this.jsonParser = jsonParser;
         this.serverResponseListener = serverResponseListener;
 
@@ -44,70 +45,66 @@ public class ServerCommunicator implements IServerCommunicator {
     }
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
+
         final ActionDTO action = new ActionDTO(isMultiplayerGame, boardSize);
 
+        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive()) {
 
-        serverResponseAwaiter = new Thread(new Runnable() {
-            public void run()
-            {
+            serverResponseAwaiter = new Thread(() -> {
 
                 sendMessage(action);
 
-                try
-                {
+                try {
                     String response = inputReader.readLine();//0 if failed
                     System.out.println(response);
                     serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(response));
-                }
-                catch(IOException ex)
-                {
-                    serverResponseListener.responseReceived(null);
-                    //server error
-                }
-            }
-        });
-
-        serverResponseAwaiter.start();
-
-    }
-    public void sendMoveMessage(Coordinates coordinates) {
-        final ActionDTO action = new ActionDTO(playerId, coordinates);
-
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
-        {
-            serverResponseAwaiter = new Thread(new Runnable() {
-                public void run()
-                {
-
-                    sendMessage(action);
-
-                    try
-                    {
-                        String responseJson;
-                        responseJson = inputReader.readLine();
-
-                        serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-                    }
-                    catch(IOException ex)
-                    {
-                        serverResponseListener.responseReceived(null);
-                    }
+                } catch (IOException ex) {
+                    serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVERERROR));
                 }
             });
 
             serverResponseAwaiter.start();
         }
+    }
 
+    public void sendMoveMessage(Coordinates coordinates) {
+
+        final ActionDTO action = new ActionDTO(coordinates);
+
+        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
+        {
+            serverResponseAwaiter = new Thread(() -> {
+
+                sendMessage(action);
+
+                try
+                {
+                    String responseJson;
+
+                    responseJson = inputReader.readLine();
+                    serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
+
+                    responseJson = inputReader.readLine();
+                    serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
+                }
+                catch(IOException ex)
+                {
+                    serverResponseListener.responseReceived(null);
+                }
+            });
+
+            serverResponseAwaiter.start();
+        }
     }
 
     public void sendMovePassMessage() {
-        final ActionDTO action = new ActionDTO(playerId, ActionType.PASSMOVE);
+
+        final ActionDTO action = new ActionDTO(ActionType.PASSMOVE);
 
         if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
         {
             serverResponseAwaiter = new Thread(new Runnable() {
-                public void run()
-                {
+                public void run() {
 
                     sendMessage(action);
 
@@ -115,7 +112,9 @@ public class ServerCommunicator implements IServerCommunicator {
                     {
                         String responseJson;
                         responseJson = inputReader.readLine();
+                        serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
 
+                        responseJson = inputReader.readLine();
                         serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
                     }
                     catch(IOException ex)
@@ -130,18 +129,21 @@ public class ServerCommunicator implements IServerCommunicator {
     }
 
     public void sendLeaveGameMessage() {
-        ActionDTO action = new ActionDTO(playerId, ActionType.LEAVEGAME);
+
+        ActionDTO action = new ActionDTO(ActionType.LEAVEGAME);
 
         sendMessage(action);
     }
 
     private void sendMessage(ActionDTO actionDTO) {
+
         String json = jsonParser.parseActionToJson(actionDTO);
 
         outputWriter.println(json);
     }
 
-    public void shutDownConnection(){
+    public void shutDownConnection() {
+
         outputWriter.close();
         try {
             inputReader.close();

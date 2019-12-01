@@ -10,12 +10,15 @@ import java.net.Socket;
 
 public class ClientConnectionThread extends Thread {
 
+    private int id;
     private Socket client;
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
     private IActionProcesser actionProcesser;
 
-    public ClientConnectionThread(Socket client, IActionProcesser actionProcesser) {
+    public ClientConnectionThread(Socket client, IActionProcesser actionProcesser, int id) {
+
+        this.id = id;
         this.client = client;
         this.actionProcesser = actionProcesser;
         try {
@@ -26,11 +29,11 @@ public class ClientConnectionThread extends Thread {
         }
     }
 
-    public void run()
-    {
+    public void run() {
+
         while(true)
         {
-            String message = null;
+            String message;
             try {
                 message = inputReader.readLine();
             } catch (IOException e) {
@@ -39,31 +42,27 @@ public class ClientConnectionThread extends Thread {
 
             System.out.println("received:"+message);
             if(message == null) {
-                try {
-                    closeConnection();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                closeConnection();
                 return;
             }
-            String response = actionProcesser.ProcessAction(message);
+            String response = actionProcesser.ProcessAction(message, id);
             if(response == null)
             {
-                try {
-                    closeConnection();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                closeConnection();
             }
             outputWriter.println(response);
         }
     }
 
-    public void closeConnection() throws IOException {
+    public void closeConnection() {
 
-        outputWriter.close();
-        inputReader.close();
-        client.close();
-        System.out.println("connection closed");
+        try {
+            outputWriter.close();
+            inputReader.close();
+            client.close();
+            System.out.println("connection closed");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

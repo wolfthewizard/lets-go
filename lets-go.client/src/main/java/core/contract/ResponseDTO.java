@@ -1,9 +1,10 @@
 package core.contract;
 
+import core.contract.enums.ResponseType;
+
 public class ResponseDTO {
     public ResponseType responseType;
 //    MoveExecution moveExecution;
-    public int gameId;
 
     //public ResponseDTO(MoveExecution moveExecution) {
       //  responseType = ResponseType.MOVEEXECUTED;
@@ -16,8 +17,7 @@ public class ResponseDTO {
         }
     }
 
-    public ResponseDTO(int gameId) {
+    public ResponseDTO() {
         responseType = ResponseType.SUCCESS;
-        this.gameId = gameId;
     }
 }

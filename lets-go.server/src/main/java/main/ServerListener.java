@@ -1,7 +1,7 @@
 package main;
 
 import main.helpers.IActionProcesser;
-import main.helpers.IJsonParser;
+import main.helpers.IIdGenerator;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,46 +11,29 @@ import java.util.ArrayList;
 public class ServerListener {
 
     private ServerSocket server;
-    ArrayList<ClientConnectionThread> clients = new ArrayList<>();
+    private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
 
-    public ServerListener(IJsonParser parser, IActionProcesser actionProcesser)
-    {
-        try
-        {
-            server = new ServerSocket(1337);
+    public ServerListener(IActionProcesser actionProcesser, IIdGenerator idGenerator) throws IOException {
 
-            while (true) {
-                Socket client = server.accept();
+        server = new ServerSocket(1337);
 
-                ClientConnectionThread clientConnectionThread = new ClientConnectionThread(client, actionProcesser);
-                clients.add(clientConnectionThread);
+        while (true) {
+            Socket client = server.accept();
 
-                clientConnectionThread.start();
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            closeConnection();
-            System.exit(-1);
+            ClientConnectionThread clientConnectionThread = new ClientConnectionThread(client,
+                    actionProcesser, idGenerator.generateId());
+            clients.add(clientConnectionThread);
+
+            clientConnectionThread.start();
         }
     }
 
-    private void closeConnection()
-    {
-        try
-        {
-            for (ClientConnectionThread thread :clients) {
-                thread.closeConnection();
-            }
-            server.close();
+    private void closeConnection() throws IOException {
+
+        for (ClientConnectionThread thread : clients) {
+            thread.closeConnection();
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            System.out.println("Could not close.");
-            System.exit(-1);
-        }
+        server.close();
     }
 }
 

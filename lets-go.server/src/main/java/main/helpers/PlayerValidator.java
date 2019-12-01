@@ -2,7 +2,6 @@ package main.helpers;
 
 import core.model.MoveIdentity;
 import main.Color;
-import main.helpers.IPlayerValidator;
 import main.model.GameWithPlayers;
 
 import java.util.ArrayList;
