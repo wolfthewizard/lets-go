@@ -1,13 +1,17 @@
 package core.model;
 
-import core.model.MoveIdentity;
 import main.contract.Coordinates;
 
 public class Move extends MoveIdentity {
-    Coordinates coordinates;
+    private Coordinates coordinates;
+
     public Move(MoveIdentity moveIdentity, Coordinates coordinates) {
-        super(moveIdentity.playerColor, moveIdentity.gameId);
+        super(moveIdentity.getPlayerColor(), moveIdentity.getGameId());
 
         this.coordinates = coordinates;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 }

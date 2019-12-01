@@ -1,9 +1,8 @@
 package main.helpers;
 
 import core.ICommandDirector;
+import core.model.Change;
 import core.model.Move;
-import core.model.MoveExecution;
-import core.model.MoveIdentity;
 import javafx.util.Pair;
 import main.ClientConnectionThread;
 import main.IClientsManager;
@@ -13,6 +12,7 @@ import main.contract.enums.BoardSize;
 import main.contract.enums.ResponseType;
 import main.model.GameInfo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -39,11 +39,11 @@ public class ActionProcesser implements IActionProcesser {
         ActionDTO action = jsonParser.parseJsonToAction(message);
 
         GameInfo gameInfo;
-        MoveExecution moveExecution;
+        ArrayList<Change> changes;
         String response;
         ClientConnectionThread currentClient;
 
-        switch (action.actionType) {
+        switch (action.getActionType()) {
             case STARTBOTGAME:
 
                 currentClient = clientsManager.getClientWithId(threadId);
@@ -51,13 +51,13 @@ public class ActionProcesser implements IActionProcesser {
                 if (playerValidator.getGameInfo(threadId) != null) {
                     currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANTCREATEGAME)));
                 }
-                Pair<Integer, MoveExecution> idWithMove;
+                Pair<Integer, ArrayList<Change>> idWithMove;
 
                 if (randomGenerator.nextBoolean()) {
-                    idWithMove = commandDirector.CreateNewBotGame(true, action.boardSize);
+                    idWithMove = commandDirector.CreateNewBotGame(true, action.getBoardSize());
                     playerValidator.addNewGame(threadId, 0, idWithMove.getKey());
                 } else {
-                    idWithMove = commandDirector.CreateNewBotGame(false, action.boardSize);
+                    idWithMove = commandDirector.CreateNewBotGame(false, action.getBoardSize());
                     playerValidator.addNewGame(0, threadId, idWithMove.getKey());
                 }
                 System.out.println(threadId);
@@ -72,8 +72,8 @@ public class ActionProcesser implements IActionProcesser {
                     currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANTCREATEGAME)));
                 }
                 currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.WAITINGFORPLAYER)));
-                if(waitingThreads.containsKey(action.boardSize)) {
-                    int waitingThreadId = waitingThreads.get(action.boardSize);
+                if(waitingThreads.containsKey(action.getBoardSize())) {
+                    int waitingThreadId = waitingThreads.get(action.getBoardSize());
                     int gameId =commandDirector.CreateNewMultiplayerGame();
                     if(randomGenerator.nextBoolean()) {
                         playerValidator.addNewGame(threadId, waitingThreadId, gameId);
@@ -85,7 +85,7 @@ public class ActionProcesser implements IActionProcesser {
                     clientsManager.getClientWithId(waitingThreadId).completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
                 }
                 else {
-                    waitingThreads.put(action.boardSize, threadId);
+                    waitingThreads.put(action.getBoardSize(), threadId);
                 }
 
                 break;
@@ -94,11 +94,11 @@ public class ActionProcesser implements IActionProcesser {
 
                 gameInfo = playerValidator.getGameInfo(threadId);
 
-                moveExecution = commandDirector.TryToMove(new Move(gameInfo.moveIdentity, null));
+                changes = commandDirector.TryToMove(new Move(gameInfo.getMoveIdentity(), null));
 
-                response = jsonParser.parseResponseToJson(new ResponseDTO(moveExecution));
+                response = jsonParser.parseResponseToJson(new ResponseDTO(changes));
                 clientsManager.getClientWithId(threadId).beginAction(response);
-                clientsManager.getClientWithId(gameInfo.secondPlayerId).completeAction(response);
+                clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(response);
 
                 break;
 
@@ -106,11 +106,11 @@ public class ActionProcesser implements IActionProcesser {
 
                 gameInfo = playerValidator.getGameInfo(threadId);
 
-                moveExecution = commandDirector.TryToMove(new Move(gameInfo.moveIdentity, action.coordinates));
+                changes = commandDirector.TryToMove(new Move(gameInfo.getMoveIdentity(), action.getCoordinates()));
 
-                response = jsonParser.parseResponseToJson(new ResponseDTO(moveExecution));
+                response = jsonParser.parseResponseToJson(new ResponseDTO(changes));
                 clientsManager.getClientWithId(threadId).beginAction(response);
-                clientsManager.getClientWithId(gameInfo.secondPlayerId).completeAction(response);
+                clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(response);
 
                 break;
 
@@ -118,9 +118,11 @@ public class ActionProcesser implements IActionProcesser {
 
                 gameInfo = playerValidator.getGameInfo(threadId);
 
-                playerValidator.removeGame(gameInfo.moveIdentity.gameId);
+                playerValidator.removeGame(gameInfo.getMoveIdentity().getGameId());
 
-                commandDirector.CancelGame(gameInfo.moveIdentity);
+                commandDirector.CancelGame(gameInfo.getMoveIdentity());
+
+                clientsManager.getClientWithId(threadId).closeConnection();
 
             default:
                 break;

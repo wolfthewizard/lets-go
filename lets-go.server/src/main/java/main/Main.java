@@ -1,14 +1,15 @@
 package main;
 
 import core.ICommandDirector;
+import core.model.Change;
 import core.model.Move;
-import core.model.MoveExecution;
 import core.model.MoveIdentity;
 import javafx.util.Pair;
 import main.contract.enums.BoardSize;
 import main.helpers.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -19,8 +20,8 @@ public class Main {
         ServerListener serverCommunicator = new ServerListener(new ActionProcesser(jsonParser,
                 new PlayerValidator(), new ICommandDirector() {
             @Override
-            public Pair<Integer, MoveExecution> CreateNewBotGame(boolean letBotStart, BoardSize boardSize) {
-                return new Pair<>(11, new MoveExecution());
+            public Pair<Integer, ArrayList<Change>> CreateNewBotGame(boolean letBotStart, BoardSize boardSize) {
+                return new Pair<>(11, new ArrayList<>());
             }
 
             @Override
@@ -29,7 +30,7 @@ public class Main {
             }
 
             @Override
-            public MoveExecution TryToMove(Move move) {
+            public ArrayList<Change> TryToMove(Move move) {
                 return null;
             }
 

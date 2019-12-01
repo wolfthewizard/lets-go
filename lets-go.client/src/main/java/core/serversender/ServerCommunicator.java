@@ -117,8 +117,8 @@ public class ServerCommunicator implements IServerCommunicator {
             ResponseDTO responseDTO = jsonParser.parseJsonToResponse(responseJson);
             serverResponseListener.responseReceived(responseDTO);
 
-            if(responseDTO.responseType!=ResponseType.SERVERERROR &&
-                    responseDTO.responseType != ResponseType.INVALIDMOVE) {
+            if(responseDTO.getResponseType()!=ResponseType.SERVERERROR &&
+                    responseDTO.getResponseType() != ResponseType.INVALIDMOVE) {
 
                 responseJson = inputReader.readLine();
                 serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));

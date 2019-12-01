@@ -46,12 +46,12 @@ public class ClientConnectionThread extends Thread {
             try {
                 message = inputReader.readLine();
             } catch (IOException e) {
-                e.printStackTrace();
                 return;
             }
 
             System.out.println("received:"+message);
             if(message == null) {
+                System.out.println("there shouldnt be this null");
                 closeConnection();
                 return;
             }
@@ -85,6 +85,7 @@ public class ClientConnectionThread extends Thread {
 
     public void closeConnection() {
 
+        isActionFinished = true;
         try {
             outputWriter.close();
             inputReader.close();
