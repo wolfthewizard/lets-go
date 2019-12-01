@@ -49,7 +49,7 @@ public class ActionProcesser implements IActionProcesser {
                     idWithMove = commandDirector.CreateNewBotGame(false, action.boardSize);
                     playerValidator.addNewGame(0, playerId, idWithMove.getKey());
                 }
-
+                System.out.println(playerId);
                 return jsonParser.parseResponseToJson(new ResponseDTO(playerId));
 
             case STARTMULTIPLAYERGAME:
@@ -72,11 +72,10 @@ public class ActionProcesser implements IActionProcesser {
 
             case LEAVEGAME:
                 moveIdentity =playerValidator.getMoveIdentity(action.playerId);
-                playerValidator.removeGame(moveIdentity.gameId);
+              //  playerValidator.removeGame(moveIdentity.gameId);
 
                 commandDirector.CancelGame(moveIdentity);
 
-                return "Success";
             default:
                 return null;
         }

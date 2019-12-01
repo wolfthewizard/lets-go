@@ -140,4 +140,14 @@ public class ServerCommunicator implements IServerCommunicator {
 
         outputWriter.println(json);
     }
+
+    public void shutDownConnection(){
+        outputWriter.close();
+        try {
+            inputReader.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
