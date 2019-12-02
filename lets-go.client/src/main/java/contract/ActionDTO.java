@@ -1,12 +1,13 @@
-package core.contract;
+package contract;
 
-import core.contract.enums.ActionType;
-import core.contract.enums.BoardSize;
+import contract.enums.BoardSize;
+import contract.enums.ActionType;
 
 public class ActionDTO {
     private ActionType actionType;
     private BoardSize boardSize;
     private Coordinates coordinates;
+
 
     public ActionDTO(boolean isMultiplayer, BoardSize boardSize){
         if(isMultiplayer) {
@@ -30,15 +31,16 @@ public class ActionDTO {
         }
     }
 
-    public ActionType getActionType() {
-        return actionType;
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 
     public BoardSize getBoardSize() {
         return boardSize;
     }
 
-    public Coordinates getCoordinates() {
-        return coordinates;
+    public ActionType getActionType() {
+        return actionType;
     }
 }
+

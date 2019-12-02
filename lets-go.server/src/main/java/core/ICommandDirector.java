@@ -1,16 +1,11 @@
 package core;
 
-import core.model.Change;
-import core.model.Move;
-import core.model.MoveIdentity;
-import javafx.util.Pair;
-import main.contract.enums.BoardSize;
-
-import java.util.ArrayList;
+import core.model.*;
+import contract.enums.BoardSize;
 
 public interface ICommandDirector {
-        Pair<Integer, ArrayList<Change>> CreateNewBotGame(boolean letBotStart, BoardSize boardSize);
+        CreateNewBotGameResult CreateNewBotGame(boolean letBotStart, BoardSize boardSize);
         int CreateNewMultiplayerGame();
-        ArrayList<Change> TryToMove(Move move);
+        MoveExecution TryToMove(Move move);
         void CancelGame(MoveIdentity leftIdentity);
 }

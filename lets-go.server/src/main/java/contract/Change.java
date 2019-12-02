@@ -1,13 +1,13 @@
-package core.contract;
+package contract;
 
-import core.contract.enums.Occupation;
+import contract.enums.Occupation;
 
 public class Change {
     private Occupation occupation;
     private Coordinates coordinates;
 
     public Change(Occupation occupation, Coordinates coordinates) {
-           this.occupation = occupation;
+        this.occupation = occupation;
         this.coordinates = coordinates;
     }
 

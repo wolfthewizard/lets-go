@@ -1,30 +1,25 @@
-package main.contract;
+package contract;
 
-import core.model.Change;
-import main.contract.enums.ResponseType;
+import contract.enums.ResponseType;
 
 import java.util.ArrayList;
 
 public class ResponseDTO {
     private ResponseType responseType;
     private ArrayList<Change> changes;
+    private Prisoners prisoners;
 
-    public ResponseDTO(ArrayList<Change> changes) {
+    public ResponseDTO(ArrayList<Change> changes, Prisoners prisoners) {
 
         responseType = ResponseType.MOVE_EXECUTED;
         this.changes = changes;
+        this.prisoners=prisoners;
     }
 
     public ResponseDTO(ResponseType responseType) {
-        if (responseType == ResponseType.INVALID_MOVE || responseType == ResponseType.SERVER_ERROR)
-        {
             this.responseType =responseType;
-        }
     }
 
-    public ResponseDTO() {
-        responseType = ResponseType.SUCCESS;
-    }
 
     public ArrayList<Change> getChanges() {
         return changes;
@@ -32,5 +27,9 @@ public class ResponseDTO {
 
     public ResponseType getResponseType() {
         return responseType;
+    }
+
+    public Prisoners getPrisoners() {
+        return prisoners;
     }
 }

@@ -1,11 +1,11 @@
 package core.serversender;
 
-import core.contract.ActionDTO;
-import core.contract.Coordinates;
-import core.contract.ResponseDTO;
-import core.contract.enums.ActionType;
-import core.contract.enums.BoardSize;
-import core.contract.enums.ResponseType;
+import contract.ActionDTO;
+import contract.Coordinates;
+import contract.ResponseDTO;
+import contract.enums.ActionType;
+import contract.enums.BoardSize;
+import contract.enums.ResponseType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -117,7 +117,7 @@ public class ServerCommunicator implements IServerCommunicator {
             ResponseDTO responseDTO = jsonParser.parseJsonToResponse(responseJson);
             serverResponseListener.responseReceived(responseDTO);
 
-            if(responseDTO.getResponseType()!=ResponseType.SERVER_ERROR &&
+            if(responseDTO.getResponseType()!= ResponseType.SERVER_ERROR &&
                     responseDTO.getResponseType() != ResponseType.INVALID_MOVE) {
 
                 responseJson = inputReader.readLine();
