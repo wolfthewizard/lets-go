@@ -1,13 +1,11 @@
 package frontend;
 
-import core.FrontendManager;
 import core.contract.enums.BoardSize;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
+import core.serversender.ServerResponseListener;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GameSettingsWindow extends JFrame {
 
@@ -33,7 +31,7 @@ public class GameSettingsWindow extends JFrame {
         JLabel boardSizeLabel = new JLabel("Choose board size:");
 
         String[] sizes = new String[]{"9x9", "13x13", "19x19"};
-        JComboBox boardSizeCombo = new JComboBox<>(sizes);
+        JComboBox<String> boardSizeCombo = new JComboBox<>(sizes);
         boardSizeCombo.setSelectedIndex(2);
 
         JButton startGameButton = new JButton("Start game");
@@ -80,7 +78,7 @@ public class GameSettingsWindow extends JFrame {
             }
 
             ServerCommunicator serverCommunicator = new ServerCommunicator(new JsonParser(),
-                    new FrontendManager(new GameBoardWindow(boardSize)));
+                    new ServerResponseListener(new GameBoardWindow(boardSize)));
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             serverCommunicator.sendStartGameMessage(playerRadio.isSelected(), boardSize);

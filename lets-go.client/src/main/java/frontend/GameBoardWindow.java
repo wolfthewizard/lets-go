@@ -13,7 +13,7 @@ import java.util.List;
 
 import static java.lang.System.exit;
 
-public class GameBoardWindow extends JFrame {
+public class GameBoardWindow extends JFrame implements Game{
 
     private JLabel serverResponseLabel;
     private JLabel whoseMoveLabel;
@@ -115,12 +115,12 @@ public class GameBoardWindow extends JFrame {
     }
 
     public void failedToCreateGame() {
-        int i = JOptionPane.showConfirmDialog(null, "Couldn't create game.");
+        JOptionPane.showMessageDialog(null, "Couldn't create game.");
         exit(0);
     }
 
     public void serverFailed() {
-        int i = JOptionPane.showConfirmDialog(null, "Server has crashed.");
+        JOptionPane.showMessageDialog(null, "Server has crashed.");
         exit(0);
     }
 
