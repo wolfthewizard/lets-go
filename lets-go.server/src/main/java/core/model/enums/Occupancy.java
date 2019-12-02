@@ -1,6 +1,6 @@
 package core.model.enums;
 
-public enum Occupation {
+public enum Occupancy {
     WHITE,
     BLACK
 }

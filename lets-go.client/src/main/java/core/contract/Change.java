@@ -1,18 +1,19 @@
 package core.contract;
 
-import core.contract.enums.Occupation;
+import core.contract.enums.Occupancy;
 
 public class Change {
-    private Occupation occupation;
+
+    private Occupancy occupancy;
     private Coordinates coordinates;
 
-    public Change(Occupation occupation, Coordinates coordinates) {
-           this.occupation = occupation;
+    public Change(Occupancy occupancy, Coordinates coordinates) {
+        this.occupancy = occupancy;
         this.coordinates = coordinates;
     }
 
-    public Occupation getOccupation() {
-        return occupation;
+    public Occupancy getOccupancy() {
+        return occupancy;
     }
 
     public Coordinates getCoordinates() {

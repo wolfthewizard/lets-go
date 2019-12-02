@@ -1,10 +1,12 @@
 package frontend;
 
+import core.contract.Change;
 import core.contract.Coordinates;
 import core.contract.enums.BoardSize;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class BoardPanel extends JPanel {
 
@@ -25,13 +27,21 @@ public class BoardPanel extends JPanel {
         }
 
         for (int y = tiles[0].length-1; y >= 0; y--) {
-            for (int x = 0; x < tiles.length; x++) {
-                this.add(tiles[x][y]);
+            for (TileButton[] tile : tiles) {
+                this.add(tile[y]);
             }
         }
     }
 
     public int getDimension() {
         return tiles[0].length * tiles[0][0].getDimension();
+    }
+
+    public void enforceChanges(List<Change> changes) {
+
+        for(Change change : changes) {
+            tiles[change.getCoordinates().getX()][change.getCoordinates().getY()]
+                    .setImg(change.getOccupancy());
+        }
     }
 }

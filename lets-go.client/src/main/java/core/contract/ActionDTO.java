@@ -4,6 +4,7 @@ import core.contract.enums.ActionType;
 import core.contract.enums.BoardSize;
 
 public class ActionDTO {
+
     private ActionType actionType;
     private BoardSize boardSize;
     private Coordinates coordinates;

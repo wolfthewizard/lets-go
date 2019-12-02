@@ -1,9 +1,17 @@
 package frontend;
 
+import core.contract.Change;
 import core.contract.enums.BoardSize;
+import core.serversender.JsonParser;
+import core.serversender.ServerCommunicator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
+
+import static java.lang.System.exit;
 
 public class GameBoardWindow extends JFrame {
 
@@ -13,16 +21,23 @@ public class GameBoardWindow extends JFrame {
     private JLabel playersCaptivesLabel;
 
     private BoardPanel boardPanel;
-    private JButton passButton;
 
     public GameBoardWindow(BoardSize size) {
 
         super("Let's Go!");
 
-
-
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the game?");
+                if (i == 0) {
+                    new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
+                    exit(0);
+                }
+            }
+        });
+
         setResizable(false);
 
         serverResponseLabel = new JLabel("This is response from server.");
@@ -30,7 +45,7 @@ public class GameBoardWindow extends JFrame {
         opponentsCaptivesLabel = new JLabel("Opponent's captives: 0");
         playersCaptivesLabel = new JLabel("Player's captives: 0");
         boardPanel = new BoardPanel(size);
-        passButton = new JButton("Pass");
+        JButton passButton = new JButton("Pass");
 
         setSize(boardPanel.getDimension(), boardPanel.getDimension() + 180);
         setLocationRelativeTo(null);
@@ -66,10 +81,7 @@ public class GameBoardWindow extends JFrame {
         add(playersCaptivesPanel);
         add(passButtonPanel);
 
-        passButton.addActionListener(actionEvent -> {
-            System.out.println("pass");
-            // todo : send a pass signal to server
-        });
+        passButton.addActionListener(PassButtonActionListener.getInstance());
 
         setVisible(true);
     }
@@ -92,5 +104,23 @@ public class GameBoardWindow extends JFrame {
 
     public void signalOpponentsMove() {
         whoseMoveLabel.setText("It's opponent's turn.");
+    }
+
+    public void signalInvalidMove() {
+        serverResponseLabel.setText("Move was invalid.");
+    }
+
+    public void failedToCreateGame() {
+        int i = JOptionPane.showConfirmDialog(null, "Couldn't create game.");
+        exit(0);
+    }
+
+    public void serverFailed() {
+        int i = JOptionPane.showConfirmDialog(null, "Server has crashed.");
+        exit(0);
+    }
+
+    public BoardPanel getBoardPanel() {
+        return boardPanel;
     }
 }

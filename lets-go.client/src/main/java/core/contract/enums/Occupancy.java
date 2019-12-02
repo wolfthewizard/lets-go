@@ -1,6 +1,7 @@
 package core.contract.enums;
 
-public enum Occupation {
+public enum Occupancy {
+
     WHITE,
     BLACK,
     EMPTY
