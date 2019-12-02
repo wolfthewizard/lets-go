@@ -4,9 +4,9 @@ import core.contract.enums.ActionType;
 import core.contract.enums.BoardSize;
 
 public class ActionDTO {
-    public ActionType actionType;
-    public BoardSize boardSize;
-    public Coordinates coordinates;
+    private ActionType actionType;
+    private BoardSize boardSize;
+    private Coordinates coordinates;
 
     public ActionDTO(boolean isMultiplayer, BoardSize boardSize){
         if(isMultiplayer) {
@@ -28,5 +28,17 @@ public class ActionDTO {
         if (actionType==ActionType.LEAVEGAME || actionType==ActionType.PASSMOVE) {
             this.actionType = actionType;
         }
+    }
+
+    public ActionType getActionType() {
+        return actionType;
+    }
+
+    public BoardSize getBoardSize() {
+        return boardSize;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 }

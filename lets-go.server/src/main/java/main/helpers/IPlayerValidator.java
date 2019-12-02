@@ -1,6 +1,7 @@
 package main.helpers;
 
 import core.model.MoveIdentity;
+import main.model.GameInfo;
 
 public interface IPlayerValidator {
 
@@ -8,5 +9,5 @@ public interface IPlayerValidator {
 
     void removeGame(int gameId);
 
-    MoveIdentity getMoveIdentity(int playerId);
+    GameInfo getGameInfo (int playerId);
 }

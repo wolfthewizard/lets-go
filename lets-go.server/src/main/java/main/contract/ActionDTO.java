@@ -4,9 +4,9 @@ import main.contract.enums.ActionType;
 import main.contract.enums.BoardSize;
 
 public class ActionDTO {
-    public ActionType actionType;
-    public BoardSize boardSize;
-    public Coordinates coordinates;
+    private ActionType actionType;
+    private BoardSize boardSize;
+    private Coordinates coordinates;
 
 
     public ActionDTO(boolean isMultiplayer, BoardSize boardSize){
@@ -30,4 +30,17 @@ public class ActionDTO {
             this.actionType = actionType;
         }
     }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public BoardSize getBoardSize() {
+        return boardSize;
+    }
+
+    public ActionType getActionType() {
+        return actionType;
+    }
 }
+
