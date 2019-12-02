@@ -34,6 +34,7 @@ public class GameBoardWindow extends JFrame {
                 if (i == 0) {
                     new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
                     exit(0);
+                    // todo : fix this, clicking cancel still closes window
                 }
             }
         });
@@ -120,7 +121,7 @@ public class GameBoardWindow extends JFrame {
         exit(0);
     }
 
-    public BoardPanel getBoardPanel() {
-        return boardPanel;
+    public void enforceChanges(List<Change> changes) {
+        boardPanel.enforceChanges(changes);
     }
 }

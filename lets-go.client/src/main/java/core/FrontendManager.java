@@ -51,7 +51,7 @@ public class FrontendManager implements OnServerResponseListener {
     private void moveExecuted(List<Change> changes) {
 
         gameBoardWindow.clearServerResponse();
-        gameBoardWindow.getBoardPanel().enforceChanges(changes);
+        gameBoardWindow.enforceChanges(changes);
 
         switchWhoseMove();
     }
