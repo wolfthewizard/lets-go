@@ -40,6 +40,7 @@ public class ActionProcesser implements IActionProcesser {
         GameInfo gameInfo;
         String response;
         ClientConnectionThread currentClient;
+        ResponseDTO responseDTO;
 
         switch (action.getActionType()) {
             case STARTBOTGAME:
@@ -121,7 +122,7 @@ public class ActionProcesser implements IActionProcesser {
                             jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.INVALID_MOVE)));
                 }
 
-                ResponseDTO responseDTO = new ResponseDTO(moveExecution.getChanges(), moveExecution.getPrisoners()));
+                 responseDTO= new ResponseDTO(moveExecution.getChanges(), moveExecution.getPrisoners());
                 response = jsonParser.parseResponseToJson(responseDTO);
 
                 if(gameInfo.getSecondPlayerId() == 0) {
