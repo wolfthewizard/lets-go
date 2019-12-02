@@ -73,18 +73,30 @@ public class ActionProcesser implements IActionProcesser {
                 if (playerValidator.getGameInfo(threadId) != null) {
                     currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
                 }
-                currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.WAITING_FOR_PLAYER)));
+
                 if(waitingThreads.containsKey(action.getBoardSize())) {
                     int waitingThreadId = waitingThreads.get(action.getBoardSize());
+                    waitingThreads.remove(action.getBoardSize());
                     int gameId =commandDirector.CreateNewMultiplayerGame();
+
+                    currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
+
+                    ClientConnectionThread waitingClient = clientsManager.getClientWithId(waitingThreadId);
+                    waitingClient.beginAction(jsonParser
+                            .parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
+
                     if(randomGenerator.nextBoolean()) {
                         playerValidator.addNewGame(threadId, waitingThreadId, gameId);
+
+                        waitingClient.completeAction(jsonParser
+                                .parseResponseToJson(new ResponseDTO(new ArrayList<>())));
                     }
                     else {
                         playerValidator.addNewGame(waitingThreadId, threadId, gameId);
+
+                        currentClient.completeAction(jsonParser
+                                .parseResponseToJson(new ResponseDTO(new ArrayList<>())));
                     }
-                    currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
-                    clientsManager.getClientWithId(waitingThreadId).completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
                 }
                 else {
                     waitingThreads.put(action.getBoardSize(), threadId);

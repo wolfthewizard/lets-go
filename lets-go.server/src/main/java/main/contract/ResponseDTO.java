@@ -16,15 +16,9 @@ public class ResponseDTO {
     }
 
     public ResponseDTO(ResponseType responseType) {
-        if (responseType == ResponseType.INVALID_MOVE || responseType == ResponseType.SERVER_ERROR)
-        {
             this.responseType =responseType;
-        }
     }
 
-    public ResponseDTO() {
-        responseType = ResponseType.SUCCESS;
-    }
 
     public ArrayList<Change> getChanges() {
         return changes;
