@@ -29,20 +29,23 @@ public class GameBoardWindow extends JFrame {
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         this.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
-                int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the game?");
-                if (i == 0) {
+                int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the game?", "Confirm", JOptionPane.YES_NO_OPTION);
+                if (i == JOptionPane.OK_OPTION) {
+                    System.out.println("exit was pressed");
                     new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
-                    exit(0);
-                    // todo : fix this, clicking cancel still closes window
+                    setDefaultCloseOperation(EXIT_ON_CLOSE);
+                } else {
+                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
                 }
             }
         });
 
         setResizable(false);
 
-        serverResponseLabel = new JLabel("This is response from server.");
-        whoseMoveLabel = new JLabel("It's your turn.");
+        serverResponseLabel = new JLabel(" ");
+        whoseMoveLabel = new JLabel("It's opponent's turn.");
         opponentsCaptivesLabel = new JLabel("Opponent's captives: 0");
         playersCaptivesLabel = new JLabel("Player's captives: 0");
         boardPanel = new BoardPanel(size);
