@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="lets-go.client" target="1.5" />
+      <module name="lets-go.client" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

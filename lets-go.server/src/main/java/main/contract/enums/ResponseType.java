@@ -1,10 +1,11 @@
 package main.contract.enums;
 
 public enum ResponseType {
-    MOVEEXECUTED,
-    INVALIDMOVE,
+
+    MOVE_EXECUTED,
+    INVALID_MOVE,
     SUCCESS,
-    CANTCREATEGAME,
-    SERVERERROR,
-    WAITINGFORPLAYER
+    CANT_CREATE_GAME,
+    SERVER_ERROR,
+    WAITING_FOR_PLAYER
 }

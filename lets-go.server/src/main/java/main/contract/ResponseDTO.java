@@ -11,12 +11,12 @@ public class ResponseDTO {
 
     public ResponseDTO(ArrayList<Change> changes) {
 
-        responseType = ResponseType.MOVEEXECUTED;
+        responseType = ResponseType.MOVE_EXECUTED;
         this.changes = changes;
     }
 
     public ResponseDTO(ResponseType responseType) {
-        if (responseType == ResponseType.INVALIDMOVE || responseType == ResponseType.SERVERERROR)
+        if (responseType == ResponseType.INVALID_MOVE || responseType == ResponseType.SERVER_ERROR)
         {
             this.responseType =responseType;
         }

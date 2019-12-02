@@ -49,7 +49,7 @@ public class ActionProcesser implements IActionProcesser {
                 currentClient = clientsManager.getClientWithId(threadId);
 
                 if (playerValidator.getGameInfo(threadId) != null) {
-                    currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANTCREATEGAME)));
+                    currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
                 }
                 Pair<Integer, ArrayList<Change>> idWithMove;
 
@@ -64,14 +64,16 @@ public class ActionProcesser implements IActionProcesser {
                 clientsManager.getClientWithId(threadId).beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
                 clientsManager.getClientWithId(threadId).completeAction(jsonParser.parseResponseToJson(new ResponseDTO(idWithMove.getValue())));
 
+                break;
+
             case STARTMULTIPLAYERGAME:
 
                 currentClient = clientsManager.getClientWithId(threadId);
 
                 if (playerValidator.getGameInfo(threadId) != null) {
-                    currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANTCREATEGAME)));
+                    currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
                 }
-                currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.WAITINGFORPLAYER)));
+                currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.WAITING_FOR_PLAYER)));
                 if(waitingThreads.containsKey(action.getBoardSize())) {
                     int waitingThreadId = waitingThreads.get(action.getBoardSize());
                     int gameId =commandDirector.CreateNewMultiplayerGame();

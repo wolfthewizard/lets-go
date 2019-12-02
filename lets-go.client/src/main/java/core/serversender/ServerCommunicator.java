@@ -117,8 +117,8 @@ public class ServerCommunicator implements IServerCommunicator {
             ResponseDTO responseDTO = jsonParser.parseJsonToResponse(responseJson);
             serverResponseListener.responseReceived(responseDTO);
 
-            if(responseDTO.getResponseType()!=ResponseType.SERVERERROR &&
-                    responseDTO.getResponseType() != ResponseType.INVALIDMOVE) {
+            if(responseDTO.getResponseType()!=ResponseType.SERVER_ERROR &&
+                    responseDTO.getResponseType() != ResponseType.INVALID_MOVE) {
 
                 responseJson = inputReader.readLine();
                 serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
@@ -126,7 +126,7 @@ public class ServerCommunicator implements IServerCommunicator {
         }
         catch(IOException ex)
         {
-            serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVERERROR));
+            serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
         }
     }
 

@@ -10,7 +10,7 @@ public class ResponseDTO {
     private ArrayList<Change> changes;
 
     public ResponseDTO(ArrayList<Change> changes) {
-        responseType = ResponseType.MOVEEXECUTED;
+        responseType = ResponseType.MOVE_EXECUTED;
         this.changes = changes;
     }
 
