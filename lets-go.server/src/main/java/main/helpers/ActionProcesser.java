@@ -121,14 +121,16 @@ public class ActionProcesser implements IActionProcesser {
                             jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.INVALID_MOVE)));
                 }
 
-                response = jsonParser.parseResponseToJson(new ResponseDTO(moveExecution.getChanges(), moveExecution.getPrisoners()));
+                ResponseDTO responseDTO = new ResponseDTO(moveExecution.getChanges(), moveExecution.getPrisoners()));
+                response = jsonParser.parseResponseToJson(responseDTO);
 
                 if(gameInfo.getSecondPlayerId() == 0) {
                     currentClient.beginAction(response);
                     currentClient.completeAction(response);
                 } else {
                     currentClient.beginAction(response);
-                    clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(response);
+                    responseDTO.getPrisoners().swapPrisoners();
+                    clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(jsonParser.parseResponseToJson(responseDTO));
                 }
 
                 break;
