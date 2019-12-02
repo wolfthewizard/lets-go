@@ -1,7 +1,6 @@
-package core.model;
+package contract;
 
-import core.model.enums.Occupation;
-import main.contract.Coordinates;
+import contract.enums.Occupation;
 
 public class Change {
     private Occupation occupation;

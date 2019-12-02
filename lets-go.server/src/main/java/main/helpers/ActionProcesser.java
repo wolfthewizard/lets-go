@@ -1,15 +1,14 @@
 package main.helpers;
 
+import contract.Prisoners;
 import core.ICommandDirector;
-import core.model.Change;
-import core.model.Move;
-import javafx.util.Pair;
+import core.model.*;
 import main.ClientConnectionThread;
 import main.IClientsManager;
-import main.contract.ActionDTO;
-import main.contract.ResponseDTO;
-import main.contract.enums.BoardSize;
-import main.contract.enums.ResponseType;
+import contract.ActionDTO;
+import contract.ResponseDTO;
+import contract.enums.BoardSize;
+import contract.enums.ResponseType;
 import main.model.GameInfo;
 
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ public class ActionProcesser implements IActionProcesser {
         ActionDTO action = jsonParser.parseJsonToAction(message);
 
         GameInfo gameInfo;
-        ArrayList<Change> changes;
         String response;
         ClientConnectionThread currentClient;
 
@@ -51,18 +49,19 @@ public class ActionProcesser implements IActionProcesser {
                 if (playerValidator.getGameInfo(threadId) != null) {
                     currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
                 }
-                Pair<Integer, ArrayList<Change>> idWithMove;
+                CreateNewBotGameResult createNewBotGameResult;
 
                 if (randomGenerator.nextBoolean()) {
-                    idWithMove = commandDirector.CreateNewBotGame(true, action.getBoardSize());
-                    playerValidator.addNewGame(threadId, 0, idWithMove.getKey());
+                    createNewBotGameResult = commandDirector.CreateNewBotGame(true, action.getBoardSize());
+                    playerValidator.addNewGame(threadId, 0, createNewBotGameResult.getGameId());
                 } else {
-                    idWithMove = commandDirector.CreateNewBotGame(false, action.getBoardSize());
-                    playerValidator.addNewGame(0, threadId, idWithMove.getKey());
+                    createNewBotGameResult = commandDirector.CreateNewBotGame(false, action.getBoardSize());
+                    playerValidator.addNewGame(0, threadId, createNewBotGameResult.getGameId());
                 }
-                System.out.println(threadId);
-                clientsManager.getClientWithId(threadId).beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
-                clientsManager.getClientWithId(threadId).completeAction(jsonParser.parseResponseToJson(new ResponseDTO(idWithMove.getValue())));
+
+                currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
+                currentClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(createNewBotGameResult.getChanges(), createNewBotGameResult.getPrisoners())));
 
                 break;
 
@@ -89,13 +88,13 @@ public class ActionProcesser implements IActionProcesser {
                         playerValidator.addNewGame(threadId, waitingThreadId, gameId);
 
                         waitingClient.completeAction(jsonParser
-                                .parseResponseToJson(new ResponseDTO(new ArrayList<>())));
+                                .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0,0))));
                     }
                     else {
                         playerValidator.addNewGame(waitingThreadId, threadId, gameId);
 
                         currentClient.completeAction(jsonParser
-                                .parseResponseToJson(new ResponseDTO(new ArrayList<>())));
+                                .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0,0))));
                     }
                 }
                 else {
@@ -105,26 +104,32 @@ public class ActionProcesser implements IActionProcesser {
                 break;
 
             case PASSMOVE:
-
-                gameInfo = playerValidator.getGameInfo(threadId);
-
-                changes = commandDirector.TryToMove(new Move(gameInfo.getMoveIdentity(), null));
-
-                response = jsonParser.parseResponseToJson(new ResponseDTO(changes));
-                clientsManager.getClientWithId(threadId).beginAction(response);
-                clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(response);
-
-                break;
-
             case DOMOVE:
 
+                currentClient = clientsManager.getClientWithId(threadId);
                 gameInfo = playerValidator.getGameInfo(threadId);
 
-                changes = commandDirector.TryToMove(new Move(gameInfo.getMoveIdentity(), action.getCoordinates()));
+                if(gameInfo == null) {
+                    currentClient.beginAction(
+                            jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SERVER_ERROR)));
+                }
 
-                response = jsonParser.parseResponseToJson(new ResponseDTO(changes));
-                clientsManager.getClientWithId(threadId).beginAction(response);
-                clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(response);
+                MoveExecution moveExecution = commandDirector.TryToMove(new Move(gameInfo.getMoveIdentity(), action.getCoordinates()));
+
+                if (moveExecution == null) {
+                    currentClient.beginAction(
+                            jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.INVALID_MOVE)));
+                }
+
+                response = jsonParser.parseResponseToJson(new ResponseDTO(moveExecution.getChanges(), moveExecution.getPrisoners()));
+
+                if(gameInfo.getSecondPlayerId() == 0) {
+                    currentClient.beginAction(response);
+                    currentClient.completeAction(response);
+                } else {
+                    currentClient.beginAction(response);
+                    clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(response);
+                }
 
                 break;
 

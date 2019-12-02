@@ -1,7 +1,8 @@
 package core.serversender;
 
-import core.contract.ActionDTO;
-import core.contract.ResponseDTO;
+
+import contract.ActionDTO;
+import contract.ResponseDTO;
 
 public interface IJsonParser {
     ResponseDTO parseJsonToResponse(String json);

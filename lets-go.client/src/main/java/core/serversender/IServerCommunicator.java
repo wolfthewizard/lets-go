@@ -1,7 +1,8 @@
 package core.serversender;
 
-import core.contract.Coordinates;
-import core.contract.enums.BoardSize;
+
+import contract.Coordinates;
+import contract.enums.BoardSize;
 
 public interface IServerCommunicator {
 

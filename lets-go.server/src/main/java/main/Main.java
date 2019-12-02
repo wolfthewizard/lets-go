@@ -1,11 +1,9 @@
 package main;
 
+import contract.Prisoners;
 import core.ICommandDirector;
-import core.model.Change;
-import core.model.Move;
-import core.model.MoveIdentity;
-import javafx.util.Pair;
-import main.contract.enums.BoardSize;
+import core.model.*;
+import contract.enums.BoardSize;
 import main.helpers.*;
 
 import java.io.IOException;
@@ -20,8 +18,8 @@ public class Main {
         ServerListener serverCommunicator = new ServerListener(new ActionProcesser(jsonParser,
                 new PlayerValidator(), new ICommandDirector() {
             @Override
-            public Pair<Integer, ArrayList<Change>> CreateNewBotGame(boolean letBotStart, BoardSize boardSize) {
-                return new Pair<>(11, new ArrayList<>());
+            public CreateNewBotGameResult CreateNewBotGame(boolean letBotStart, BoardSize boardSize) {
+                return new CreateNewBotGameResult(11, new ArrayList<>(), new Prisoners(0,0));
             }
 
             @Override
@@ -30,8 +28,8 @@ public class Main {
             }
 
             @Override
-            public ArrayList<Change> TryToMove(Move move) {
-                return null;
+            public MoveExecution TryToMove(Move move) {
+                return new MoveExecution(new ArrayList<>(), new Prisoners(0,0));
             }
 
             @Override

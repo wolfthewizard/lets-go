@@ -1,7 +1,7 @@
-package main.contract;
+package contract;
 
-import main.contract.enums.ActionType;
-import main.contract.enums.BoardSize;
+import contract.enums.BoardSize;
+import contract.enums.ActionType;
 
 public class ActionDTO {
     private ActionType actionType;

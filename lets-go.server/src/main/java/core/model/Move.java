@@ -1,6 +1,6 @@
 package core.model;
 
-import main.contract.Coordinates;
+import contract.Coordinates;
 
 public class Move extends MoveIdentity {
     private Coordinates coordinates;
