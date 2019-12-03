@@ -54,14 +54,14 @@ public class ActionProcesser implements IActionProcesser {
             case STARTMULTIPLAYERGAME:
 
                 actionHandler = new StartMultiplayerGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector, threadId,
-                        action.getBoardSize(), playerValidator, clientsManager.getClientWithId(gameInfo.getSecondPlayerId()), waitingThreads);
+                        action.getBoardSize(), playerValidator, clientsManager, waitingThreads);
                     break;
 
             case PASSMOVE:
             case DOMOVE:
 
                 actionHandler = new MoveExecuteActionHandler(gameInfo, currentClient, jsonParser,
-                        clientsManager.getClientWithId(gameInfo.getSecondPlayerId()), commandDirector, action.getCoordinates());
+                        clientsManager, commandDirector, action.getCoordinates());
 
 
                 break;
@@ -69,7 +69,7 @@ public class ActionProcesser implements IActionProcesser {
             case LEAVEGAME:
 
                 actionHandler = new LeaveGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector,
-                        clientsManager.getClientWithId(gameInfo.getSecondPlayerId()),playerValidator);
+                        clientsManager,playerValidator);
 
 
                 break;

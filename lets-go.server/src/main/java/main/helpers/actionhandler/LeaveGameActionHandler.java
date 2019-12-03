@@ -4,28 +4,35 @@ import contract.ResponseDTO;
 import contract.enums.ResponseType;
 import core.ICommandDirector;
 import main.ClientConnectionThread;
+import main.IClientsManager;
 import main.helpers.IJsonParser;
 import main.helpers.IPlayerValidator;
 import main.model.GameInfo;
 
 public class LeaveGameActionHandler extends AbstractActionHandler {
 
-    private ClientConnectionThread waitingClient;
+    private IClientsManager clientsManager;
     private IPlayerValidator playerValidator;
 
     public LeaveGameActionHandler(GameInfo gameInfo, ClientConnectionThread currentClient, IJsonParser jsonParser,
-                                  ICommandDirector commandDirector, ClientConnectionThread waitingClient,
+                                  ICommandDirector commandDirector, IClientsManager clientsManager,
                                   IPlayerValidator playerValidator) {
         super(gameInfo, currentClient, jsonParser, commandDirector);
 
-        this.waitingClient = waitingClient;
+        this.clientsManager = clientsManager;
         this.playerValidator = playerValidator;
     }
 
     @Override
     protected void handleNullGameInfo() {
+
+        currentClient.closeConnection();
+    }
+
+    @Override
+    protected void handleValidAction() {
         if (gameInfo.getSecondPlayerId() != 0) {
-            waitingClient.completeAction(
+            clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(
                     jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.PLAYER_LEFT)));
         }
 
@@ -33,11 +40,6 @@ public class LeaveGameActionHandler extends AbstractActionHandler {
 
         commandDirector.CancelGame(gameInfo.getMoveIdentity());
 
-        currentClient.closeConnection();
-    }
-
-    @Override
-    protected void handleValidAction() {
         currentClient.closeConnection();
     }
 }

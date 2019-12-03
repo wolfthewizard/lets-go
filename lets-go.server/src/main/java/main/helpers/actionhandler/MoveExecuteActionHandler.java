@@ -7,19 +7,21 @@ import core.ICommandDirector;
 import core.model.Move;
 import core.model.MoveResponse;
 import main.ClientConnectionThread;
+import main.ClientsManager;
+import main.IClientsManager;
 import main.helpers.IJsonParser;
 import main.model.GameInfo;
 
 public class MoveExecuteActionHandler extends AbstractActionHandler {
 
-    private ClientConnectionThread waitingClient;
+    private IClientsManager clientsManager;
     private Coordinates coordinates;
 
     public MoveExecuteActionHandler(GameInfo gameInfo, ClientConnectionThread currentClient, IJsonParser jsonParser,
-                                    ClientConnectionThread waitingClient, ICommandDirector commandDirector, Coordinates coordinates) {
+                                    IClientsManager clientsManager, ICommandDirector commandDirector, Coordinates coordinates) {
         super(gameInfo, currentClient, jsonParser, commandDirector);
 
-        this.waitingClient = waitingClient;
+        this.clientsManager = clientsManager;
         this.coordinates = coordinates;
     }
 
@@ -33,6 +35,8 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
     protected void handleValidAction() {
         MoveResponse moveResponse = commandDirector.TryToMove(
                 new Move(gameInfo.getMoveIdentity(), coordinates));
+
+        ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
 
 
         switch (moveResponse.getMoveResponseType()) {
