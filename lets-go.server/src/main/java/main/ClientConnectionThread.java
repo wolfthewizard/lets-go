@@ -34,13 +34,13 @@ public class ClientConnectionThread extends Thread {
 
         while(true)
         {
-            while (!isActionFinished) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }//to pewnie mozna lepiej zrobic
+//            while (!isActionFinished) {
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }//to pewnie mozna lepiej zrobic
 
             String message;
             try {
@@ -61,7 +61,6 @@ public class ClientConnectionThread extends Thread {
             //{
               //  closeConnection();
             //}
-            //outputWriter.println(response);
         }
     }
 
@@ -94,5 +93,6 @@ public class ClientConnectionThread extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        interrupt();
     }
 }

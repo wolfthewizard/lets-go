@@ -7,5 +7,5 @@ public enum ResponseType {
     SUCCESS,
     CANT_CREATE_GAME,
     SERVER_ERROR,
-    WAITING_FOR_PLAYER
+    PLAYER_LEFT
 }
