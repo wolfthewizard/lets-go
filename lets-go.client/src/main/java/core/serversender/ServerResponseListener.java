@@ -9,8 +9,8 @@ public class ServerResponseListener implements OnServerResponseListener {
 
     private IFrontendManager frontendManager;
 
-    public ServerResponseListener(GameBoardWindow gameBoardWindow) {
-        this.frontendManager = new FrontendManager(gameBoardWindow);
+    public ServerResponseListener(IFrontendManager frontendManager) {
+        this.frontendManager = frontendManager;
     }
 
     @Override

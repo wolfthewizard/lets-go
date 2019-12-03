@@ -1,6 +1,7 @@
 package frontend;
 
 import contract.enums.BoardSize;
+import core.FrontendManager;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
 import core.serversender.ServerResponseListener;
@@ -78,7 +79,7 @@ public class GameSettingsWindow extends JFrame {
             }
 
             ServerCommunicator serverCommunicator = new ServerCommunicator(new JsonParser(),
-                    new ServerResponseListener(new GameBoardWindow(boardSize)));
+                    new ServerResponseListener(new FrontendManager(new GameBoardWindow(boardSize))));
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             serverCommunicator.sendStartGameMessage(playerRadio.isSelected(), boardSize);

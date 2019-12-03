@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ServerCommunicator implements IServerCommunicator {
 
@@ -34,13 +33,9 @@ public class ServerCommunicator implements IServerCommunicator {
             outputWriter = new PrintWriter(socket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
-        catch(UnknownHostException e)
+        catch(Exception e)
         {
-            System.out.println("Unknown host: localhost"); System.exit(1);
-        }
-        catch(IOException e)
-        {
-            System.out.println("No I/O"); System.exit(1);
+            serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
         }
     }
 
