@@ -14,7 +14,13 @@ public interface Game {
     void signalPlayersMove();
     void signalOpponentsMove();
     void signalInvalidMove();
-    void failedToCreateGame();
-    void serverFailed();
+    void signalOpponentsLeave();
+    void signalWin();
+    void signalLose();
+    void openNewGameCreation();
+    void closeGame();
+    void exitApp();
+    void signalFailedToCreateGame();
+    void signalServerFailed();
     void enforceChanges(ArrayList<Change> changes);
 }

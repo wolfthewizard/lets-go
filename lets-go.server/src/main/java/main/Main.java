@@ -6,6 +6,7 @@ import contract.enums.Occupancy;
 import core.ICommandDirector;
 import core.model.*;
 import contract.enums.BoardSize;
+import core.model.enums.MoveResponseType;
 import main.helpers.*;
 import main.model.Color;
 
@@ -31,7 +32,7 @@ public class Main {
             }
 
             @Override
-            public MoveExecution TryToMove(Move move) {
+            public MoveResponse TryToMove(Move move) {
                 ArrayList<Change> changes = new ArrayList<>();
                 if(move.getPlayerColor() == Color.BLACK) {
                     changes.add(new Change(Occupancy.BLACK, move.getCoordinates()));
@@ -39,7 +40,7 @@ public class Main {
                 } else {
                     changes.add(new Change(Occupancy.WHITE, move.getCoordinates()));
                 }
-                return new MoveExecution(changes, new Prisoners(0,0));
+                return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution(changes, new Prisoners(0,0)));
             }
 
             @Override

@@ -23,10 +23,6 @@ public class ServerResponseListener implements OnServerResponseListener {
                 frontendManager.invalidMove();
                 break;
 
-            case WAITING_FOR_PLAYER:
-                frontendManager.waitingForPlayer();
-                break;
-
             case CANT_CREATE_GAME:
                 frontendManager.cantCreateGame();
                 break;
@@ -37,6 +33,18 @@ public class ServerResponseListener implements OnServerResponseListener {
 
             case SERVER_ERROR:
                 frontendManager.serverError();
+                break;
+
+            case GAMEWON:
+                frontendManager.gameWon();
+                break;
+
+            case GAMELOST:
+                frontendManager.gameLost();
+                break;
+
+            case PLAYER_LEFT:
+                frontendManager.playerLeft();
         }
     }
 }
