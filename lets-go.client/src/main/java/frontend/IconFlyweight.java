@@ -4,13 +4,15 @@ package frontend;
 import contract.enums.Occupancy;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class IconFlyweight {
-    //todo specify relative path to them
-    private static ImageIcon emptyTile = new ImageIcon("/home/mateusz/Dokumenty/tp/lets-go/lets-go.client/src/main/java/frontend/images/tileEmpty.png");
-    private static ImageIcon blackTile = new ImageIcon("/home/mateusz/Dokumenty/tp/lets-go/lets-go.client/src/main/java/frontend/images/tileBlack.png");
-    //private static ImageIcon whiteTile = new ImageIcon(IconFlyweight.class.getResource("images/tileWhite.png"));
-    private static ImageIcon whiteTile = new ImageIcon("/home/mateusz/Dokumenty/tp/lets-go/lets-go.client/src/main/java/frontend/images/tileWhite.png");
+
+    private static ImageIcon emptyTile = new ImageIcon(new File("images/tileEmpty.png").getAbsolutePath());
+    private static ImageIcon blackTile = new ImageIcon(new File("images/tileBlack.png").getAbsolutePath());
+    private static ImageIcon whiteTile = new ImageIcon(new File("images/tileWhite.png").getAbsolutePath());
 
     private IconFlyweight(){}
 
