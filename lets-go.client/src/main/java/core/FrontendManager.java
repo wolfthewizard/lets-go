@@ -1,6 +1,7 @@
 package core;
 
 import contract.Change;
+import contract.Prisoners;
 import frontend.Game;
 import frontend.GameBoardWindow;
 import frontend.PassButtonActionListener;
@@ -19,10 +20,12 @@ public class FrontendManager implements IFrontendManager {
         playersTurn = false;
     }
 
-    public void moveExecuted(ArrayList<Change> changes) {
+    public void moveExecuted(ArrayList<Change> changes, Prisoners prisoners) {
 
         gameBoardWindow.clearServerResponse();
         gameBoardWindow.enforceChanges(changes);
+        gameBoardWindow.setPlayersCaptives(prisoners.getYourPrisoners());
+        gameBoardWindow.setOpponentsCaptives(prisoners.getEnemyPrisoners());
 
         switchWhoseMove();
     }
@@ -43,6 +46,8 @@ public class FrontendManager implements IFrontendManager {
 
         gameBoardWindow.clearServerResponse();
         gameBoardWindow.signalOpponentsMove();
+        gameBoardWindow.setOpponentsCaptives(0);
+        gameBoardWindow.setPlayersCaptives(0);
     }
 
     public void serverError() {
@@ -54,13 +59,9 @@ public class FrontendManager implements IFrontendManager {
         if(playersTurn) {
             playersTurn = false;
             gameBoardWindow.signalOpponentsMove();
-            TileButtonActionListener.getInstance().setProcessingAllowed(false);
-            PassButtonActionListener.getInstance().setProcessingAllowed(false);
         } else {
             playersTurn = true;
             gameBoardWindow.signalPlayersMove();
-            TileButtonActionListener.getInstance().setProcessingAllowed(true);
-            PassButtonActionListener.getInstance().setProcessingAllowed(true);
         }
     }
 }

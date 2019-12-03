@@ -1,9 +1,7 @@
 package core.serversender;
 
 import contract.ResponseDTO;
-import core.FrontendManager;
 import core.IFrontendManager;
-import frontend.GameBoardWindow;
 
 public class ServerResponseListener implements OnServerResponseListener {
 
@@ -18,7 +16,7 @@ public class ServerResponseListener implements OnServerResponseListener {
         switch (responseDTO.getResponseType()) {
 
             case MOVE_EXECUTED:
-                frontendManager.moveExecuted(responseDTO.getChanges());
+                frontendManager.moveExecuted(responseDTO.getChanges(), responseDTO.getPrisoners());
                 break;
 
             case INVALID_MOVE:
