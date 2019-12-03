@@ -59,13 +59,9 @@ public class FrontendManager implements IFrontendManager {
         if(playersTurn) {
             playersTurn = false;
             gameBoardWindow.signalOpponentsMove();
-            TileButtonActionListener.getInstance().setProcessingAllowed(false);
-            PassButtonActionListener.getInstance().setProcessingAllowed(false);
         } else {
             playersTurn = true;
             gameBoardWindow.signalPlayersMove();
-            TileButtonActionListener.getInstance().setProcessingAllowed(true);
-            PassButtonActionListener.getInstance().setProcessingAllowed(true);
         }
     }
 }

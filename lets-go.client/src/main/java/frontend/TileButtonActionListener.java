@@ -10,7 +10,6 @@ public class TileButtonActionListener implements ActionListener {
     private static TileButtonActionListener instance = new TileButtonActionListener();
 
     private ServerCommunicator serverCommunicator;
-    private boolean processingAllowed = false;
 
 
     private TileButtonActionListener(){}
@@ -23,16 +22,10 @@ public class TileButtonActionListener implements ActionListener {
         this.serverCommunicator = serverCommunicator;
     }
 
-    public void setProcessingAllowed(boolean processingAllowed) {
-        this.processingAllowed = processingAllowed;
-    }
-
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 
-        if(processingAllowed) {
-            TileButton performer = (TileButton) actionEvent.getSource();
-            serverCommunicator.sendMoveMessage(performer.getCoordinates());
-        }
+        TileButton performer = (TileButton) actionEvent.getSource();
+        serverCommunicator.sendMoveMessage(performer.getCoordinates());
     }
 }

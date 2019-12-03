@@ -10,7 +10,6 @@ public class PassButtonActionListener implements ActionListener {
     private static PassButtonActionListener instance = new PassButtonActionListener();
 
     private ServerCommunicator serverCommunicator;
-    private boolean processingAllowed;
 
     private PassButtonActionListener(){}
 
@@ -22,15 +21,8 @@ public class PassButtonActionListener implements ActionListener {
         this.serverCommunicator = serverCommunicator;
     }
 
-    public void setProcessingAllowed(boolean processingAllowed) {
-        this.processingAllowed = processingAllowed;
-    }
-
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-
-        if(processingAllowed) {
-            serverCommunicator.sendMovePassMessage();
-        }
+        serverCommunicator.sendMovePassMessage();
     }
 }
