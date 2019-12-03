@@ -16,17 +16,13 @@ import java.net.Socket;
 public class ServerCommunicator implements IServerCommunicator {
 
     private IJsonParser jsonParser;
-    private Socket socket;
-    private PrintWriter outputWriter;
-    private BufferedReader inputReader;
+    private static Socket socket;
+    private static PrintWriter outputWriter;
+    private static BufferedReader inputReader;
     private OnServerResponseListener serverResponseListener;
     private Thread serverResponseAwaiter;
 
-    public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
-
-        this.jsonParser = jsonParser;
-        this.serverResponseListener = serverResponseListener;
-
+    static  {
         try
         {
             socket = new Socket("localhost", 1337);
@@ -35,8 +31,13 @@ public class ServerCommunicator implements IServerCommunicator {
         }
         catch(Exception e)
         {
-            serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
+            e.printStackTrace();
         }
+    }
+    public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
+
+        this.jsonParser = jsonParser;
+        this.serverResponseListener = serverResponseListener;
     }
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
