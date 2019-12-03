@@ -35,6 +35,7 @@ public class GameBoardWindow extends JFrame implements Game{
                 if (i == JOptionPane.OK_OPTION) {
                     System.out.println("exit was pressed");
                     new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
+                    new ServerCommunicator(new JsonParser(), null).shutDownConnection();
                     setDefaultCloseOperation(EXIT_ON_CLOSE);
                 } else {
                     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

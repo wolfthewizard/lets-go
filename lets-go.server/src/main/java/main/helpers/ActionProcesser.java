@@ -140,9 +140,17 @@ public class ActionProcesser implements IActionProcesser {
 
                 gameInfo = playerValidator.getGameInfo(threadId);
 
-                playerValidator.removeGame(gameInfo.getMoveIdentity().getGameId());
+                if(gameInfo != null) {
 
-                commandDirector.CancelGame(gameInfo.getMoveIdentity());
+                    if (gameInfo.getSecondPlayerId() != 0) {
+                        clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(
+                                jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.PLAYER_LEFT)));
+                    }
+
+                    playerValidator.removeGame(gameInfo.getMoveIdentity().getGameId());
+
+                    commandDirector.CancelGame(gameInfo.getMoveIdentity());
+                }
 
                 clientsManager.getClientWithId(threadId).closeConnection();
 
