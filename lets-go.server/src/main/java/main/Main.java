@@ -1,10 +1,13 @@
 package main;
 
+import contract.Change;
 import contract.Prisoners;
+import contract.enums.Occupancy;
 import core.ICommandDirector;
 import core.model.*;
 import contract.enums.BoardSize;
 import main.helpers.*;
+import main.model.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +32,14 @@ public class Main {
 
             @Override
             public MoveExecution TryToMove(Move move) {
-                return new MoveExecution(new ArrayList<>(), new Prisoners(0,0));
+                ArrayList<Change> changes = new ArrayList<>();
+                if(move.getPlayerColor() == Color.BLACK) {
+                    changes.add(new Change(Occupancy.BLACK, move.getCoordinates()));
+
+                } else {
+                    changes.add(new Change(Occupancy.WHITE, move.getCoordinates()));
+                }
+                return new MoveExecution(changes, new Prisoners(0,0));
             }
 
             @Override
