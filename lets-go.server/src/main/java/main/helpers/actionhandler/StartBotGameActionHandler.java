@@ -8,7 +8,6 @@ import core.model.CreateNewBotGameResult;
 import main.ClientConnectionThread;
 import main.helpers.IJsonParser;
 import main.helpers.IPlayerValidator;
-import main.helpers.PlayerValidator;
 import main.model.GameInfo;
 
 import java.util.Random;
@@ -33,11 +32,6 @@ public class StartBotGameActionHandler extends AbstractActionHandler {
 
     @Override
     protected void handleNullGameInfo() {
-        currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
-    }
-
-    @Override
-    protected void handleValidAction() {
         CreateNewBotGameResult createNewBotGameResult;
 
         if (randomGenerator.nextBoolean()) {
@@ -51,5 +45,11 @@ public class StartBotGameActionHandler extends AbstractActionHandler {
         currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
         currentClient.completeAction(jsonParser.parseResponseToJson(
                 new ResponseDTO(createNewBotGameResult.getChanges(), createNewBotGameResult.getPrisoners())));
+    }
+
+    @Override
+    protected void handleNotNullGameInfo() {
+
+        currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
     }
 }

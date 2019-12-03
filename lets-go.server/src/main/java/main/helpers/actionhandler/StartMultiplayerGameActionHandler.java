@@ -41,12 +41,6 @@ public class StartMultiplayerGameActionHandler extends AbstractActionHandler {
 
     @Override
     protected void handleNullGameInfo() {
-        currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
-    }
-
-    @Override
-    protected void handleValidAction() {
-
         ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
         if(waitingThreads.containsKey(boardSize)) {
             int waitingThreadId = waitingThreads.get(boardSize);
@@ -74,5 +68,11 @@ public class StartMultiplayerGameActionHandler extends AbstractActionHandler {
         else {
             waitingThreads.put(boardSize, threadId);
         }
+    }
+
+    @Override
+    protected void handleNotNullGameInfo() {
+
+        currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.CANT_CREATE_GAME)));
     }
 }
