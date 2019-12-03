@@ -6,6 +6,8 @@ import contract.enums.BoardSize;
 import contract.enums.ResponseType;
 import core.ICommandDirector;
 import main.ClientConnectionThread;
+import main.ClientsManager;
+import main.IClientsManager;
 import main.helpers.IJsonParser;
 import main.helpers.IPlayerValidator;
 import main.model.GameInfo;
@@ -19,20 +21,20 @@ public class StartMultiplayerGameActionHandler extends AbstractActionHandler {
     private int threadId;
     private BoardSize boardSize;
     private IPlayerValidator playerValidator;
-    private ClientConnectionThread waitingClient;
+    private IClientsManager clientsManager;
     private Random randomGenerator;
     private HashMap<BoardSize, Integer> waitingThreads;
 
     public StartMultiplayerGameActionHandler(GameInfo gameInfo, ClientConnectionThread currentClient,
                                              IJsonParser jsonParser, ICommandDirector commandDirector, int threadId,
-                                             BoardSize boardSize, IPlayerValidator playerValidator, ClientConnectionThread waitingClient,
+                                             BoardSize boardSize, IPlayerValidator playerValidator, IClientsManager clientsManager,
                                              HashMap<BoardSize, Integer> waitingThreads) {
         super(gameInfo, currentClient, jsonParser, commandDirector);
 
         this.playerValidator = playerValidator;
         this.threadId = threadId;
         this.boardSize = boardSize;
-        this.waitingClient = waitingClient;
+        this.clientsManager = clientsManager;
         this.randomGenerator = new Random();
         this.waitingThreads = waitingThreads;
     }
@@ -44,6 +46,8 @@ public class StartMultiplayerGameActionHandler extends AbstractActionHandler {
 
     @Override
     protected void handleValidAction() {
+
+        ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
         if(waitingThreads.containsKey(boardSize)) {
             int waitingThreadId = waitingThreads.get(boardSize);
             waitingThreads.remove(boardSize);
