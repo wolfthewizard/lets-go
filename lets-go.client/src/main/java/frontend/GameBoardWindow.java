@@ -44,10 +44,10 @@ public class GameBoardWindow extends JFrame implements Game{
 
         setResizable(false);
 
-        serverResponseLabel = new JLabel(" ");
-        whoseMoveLabel = new JLabel("It's opponent's turn.");
-        opponentsCaptivesLabel = new JLabel("Opponent's captives: 0");
-        playersCaptivesLabel = new JLabel("Player's captives: 0");
+        serverResponseLabel = new JLabel("Waiting for server response...");
+        whoseMoveLabel = new JLabel(" ");
+        opponentsCaptivesLabel = new JLabel(" ");
+        playersCaptivesLabel = new JLabel(" ");
         boardPanel = new BoardPanel(size);
         JButton passButton = new JButton("Pass");
 
