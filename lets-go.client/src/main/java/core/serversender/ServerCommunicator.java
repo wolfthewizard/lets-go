@@ -12,36 +12,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class ServerCommunicator implements IServerCommunicator {
 
     private IJsonParser jsonParser;
-    private Socket socket;
-    private PrintWriter outputWriter;
-    private BufferedReader inputReader;
+    private static Socket socket;
+    private static PrintWriter outputWriter;
+    private static BufferedReader inputReader;
     private OnServerResponseListener serverResponseListener;
     private Thread serverResponseAwaiter;
 
-    public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
-
-        this.jsonParser = jsonParser;
-        this.serverResponseListener = serverResponseListener;
-
+    static  {
         try
         {
             socket = new Socket("localhost", 1337);
             outputWriter = new PrintWriter(socket.getOutputStream(), true);
             inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         }
-        catch(UnknownHostException e)
+        catch(Exception e)
         {
-            System.out.println("Unknown host: localhost"); System.exit(1);
+            e.printStackTrace();
         }
-        catch(IOException e)
-        {
-            System.out.println("No I/O"); System.exit(1);
-        }
+    }
+    public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
+
+        this.jsonParser = jsonParser;
+        this.serverResponseListener = serverResponseListener;
     }
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
