@@ -40,9 +40,7 @@ public class ActionProcesser implements IActionProcesser {
         ActionDTO action = jsonParser.parseJsonToAction(message);
 
         GameInfo gameInfo = playerValidator.getGameInfo(threadId);
-        String response;
         ClientConnectionThread currentClient = clientsManager.getClientWithId(threadId);
-        ResponseDTO responseDTO;
 
         switch (action.getActionType()) {
             case STARTBOTGAME:
