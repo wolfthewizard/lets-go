@@ -7,5 +7,7 @@ public enum ResponseType {
     SUCCESS,
     CANT_CREATE_GAME,
     SERVER_ERROR,
-    PLAYER_LEFT
+    PLAYER_LEFT,
+    GAMEWON,
+    GAMELOST
 }

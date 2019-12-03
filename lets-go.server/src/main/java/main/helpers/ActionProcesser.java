@@ -115,24 +115,34 @@ public class ActionProcesser implements IActionProcesser {
                             jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SERVER_ERROR)));
                 }
 
-                MoveExecution moveExecution = commandDirector.TryToMove(new Move(gameInfo.getMoveIdentity(), action.getCoordinates()));
+                MoveResponse moveResponse = commandDirector.TryToMove(
+                        new Move(gameInfo.getMoveIdentity(), action.getCoordinates()));
 
-                if (moveExecution == null) {
-                    currentClient.beginAction(
-                            jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.INVALID_MOVE)));
+                switch (moveResponse.getMoveResponseType()) {
+                    case INVALID_MOVE:
+                        currentClient.beginAction(
+                                jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.INVALID_MOVE)));
+                        break;
+
+                    case GAME_GOES_ON:
+                        responseDTO= new ResponseDTO(moveResponse.getChanges(), moveResponse.getPrisoners());
+                        response = jsonParser.parseResponseToJson(responseDTO);
+
+                        if(gameInfo.getSecondPlayerId() == 0) {
+                            currentClient.beginAction(response);
+                            currentClient.completeAction(response);
+                        } else {
+                            currentClient.beginAction(response);
+                            responseDTO.getPrisoners().swapPrisoners();
+                            clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(jsonParser.parseResponseToJson(responseDTO));
+                        }
+                        break;
+                }
+                if (moveResponse == null) {
+
                 }
 
-                 responseDTO= new ResponseDTO(moveExecution.getChanges(), moveExecution.getPrisoners());
-                response = jsonParser.parseResponseToJson(responseDTO);
 
-                if(gameInfo.getSecondPlayerId() == 0) {
-                    currentClient.beginAction(response);
-                    currentClient.completeAction(response);
-                } else {
-                    currentClient.beginAction(response);
-                    responseDTO.getPrisoners().swapPrisoners();
-                    clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(jsonParser.parseResponseToJson(responseDTO));
-                }
 
                 break;
 
