@@ -125,7 +125,8 @@ public class ActionProcesser implements IActionProcesser {
                         break;
 
                     case GAME_GOES_ON:
-                        responseDTO= new ResponseDTO(moveResponse.getChanges(), moveResponse.getPrisoners());
+                        responseDTO= new ResponseDTO(moveResponse.getMoveExecution().getChanges(),
+                                moveResponse.getMoveExecution().getPrisoners());
                         response = jsonParser.parseResponseToJson(responseDTO);
 
                         if(gameInfo.getSecondPlayerId() == 0) {
@@ -137,12 +138,19 @@ public class ActionProcesser implements IActionProcesser {
                             clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(jsonParser.parseResponseToJson(responseDTO));
                         }
                         break;
+                    case CURRENT_PLAYER_WON:
+                        currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
+                        if(gameInfo.getSecondPlayerId() != 0) {
+                            clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
+                        }
+                        break;
+                    case OTHER_PLAYER_WON:
+                        currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
+                        if(gameInfo.getSecondPlayerId() != 0) {
+                            clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
+                        }
+                        break;
                 }
-                if (moveResponse == null) {
-
-                }
-
-
 
                 break;
 
