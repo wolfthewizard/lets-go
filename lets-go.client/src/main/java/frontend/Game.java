@@ -1,8 +1,10 @@
 package frontend;
 
-import core.contract.Change;
 
-import java.util.List;
+import contract.Change;
+
+import java.util.ArrayList;
+
 
 public interface Game {
 
@@ -14,5 +16,5 @@ public interface Game {
     void signalInvalidMove();
     void failedToCreateGame();
     void serverFailed();
-    void enforceChanges(List<Change> changes);
+    void enforceChanges(ArrayList<Change> changes);
 }

@@ -1,7 +1,8 @@
 package frontend;
 
-import core.contract.Coordinates;
-import core.contract.enums.Occupancy;
+
+import contract.Coordinates;
+import contract.enums.Occupancy;
 
 import javax.swing.*;
 

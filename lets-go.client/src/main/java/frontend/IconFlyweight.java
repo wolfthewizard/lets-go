@@ -1,6 +1,7 @@
 package frontend;
 
-import core.contract.enums.Occupancy;
+
+import contract.enums.Occupancy;
 
 import javax.swing.*;
 

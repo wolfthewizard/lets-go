@@ -1,12 +1,14 @@
 package core;
 
-import core.contract.Change;
+import contract.Change;
 import frontend.Game;
 import frontend.GameBoardWindow;
 import frontend.PassButtonActionListener;
 import frontend.TileButtonActionListener;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class FrontendManager implements IFrontendManager {
 
@@ -18,7 +20,7 @@ public class FrontendManager implements IFrontendManager {
         playersTurn = false;
     }
 
-    public void moveExecuted(List<Change> changes) {
+    public void moveExecuted(ArrayList<Change> changes) {
 
         gameBoardWindow.clearServerResponse();
         gameBoardWindow.enforceChanges(changes);

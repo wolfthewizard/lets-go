@@ -1,11 +1,6 @@
 package contract;
 
-<<<<<<< HEAD:lets-go.client/src/main/java/contract/Change.java
-import contract.enums.Occupation;
-=======
-import core.model.enums.Occupancy;
-import main.contract.Coordinates;
->>>>>>> dfe73ce7090a5906f19515da3a8ffb670390130a:lets-go.server/src/main/java/core/model/Change.java
+import contract.enums.Occupancy;
 
 public class Change {
     private Occupancy occupancy;

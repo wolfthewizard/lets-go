@@ -1,6 +1,6 @@
 package frontend;
 
-import core.contract.enums.BoardSize;
+import contract.enums.BoardSize;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
 import core.serversender.ServerResponseListener;

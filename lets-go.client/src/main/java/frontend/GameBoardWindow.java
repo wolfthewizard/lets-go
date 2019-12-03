@@ -1,7 +1,7 @@
 package frontend;
 
-import core.contract.Change;
-import core.contract.enums.BoardSize;
+import contract.Change;
+import contract.enums.BoardSize;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
 
@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.List;
+import java.util.ArrayList;
 
 import static java.lang.System.exit;
 
@@ -124,7 +124,7 @@ public class GameBoardWindow extends JFrame implements Game{
         exit(0);
     }
 
-    public void enforceChanges(List<Change> changes) {
+    public void enforceChanges(ArrayList<Change> changes) {
         boardPanel.enforceChanges(changes);
     }
 }

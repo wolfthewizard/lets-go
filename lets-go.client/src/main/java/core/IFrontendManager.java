@@ -1,12 +1,13 @@
 package core;
 
-import core.contract.Change;
 
-import java.util.List;
+import contract.Change;
+
+import java.util.ArrayList;
 
 public interface IFrontendManager {
 
-    void moveExecuted(List<Change> changes);
+    void moveExecuted(ArrayList<Change> changes);
     void invalidMove();
     void waitingForPlayer();
     void cantCreateGame();

@@ -1,8 +1,8 @@
 package core.serversender;
 
+import contract.ResponseDTO;
 import core.FrontendManager;
 import core.IFrontendManager;
-import core.contract.ResponseDTO;
 import frontend.GameBoardWindow;
 
 public class ServerResponseListener implements OnServerResponseListener {
