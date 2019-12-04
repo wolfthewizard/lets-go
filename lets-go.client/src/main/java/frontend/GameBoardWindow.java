@@ -33,7 +33,6 @@ public class GameBoardWindow extends JFrame implements Game {
             public void windowClosing(WindowEvent e) {
                 int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the game?", "Confirm", JOptionPane.YES_NO_OPTION);
                 if (i == JOptionPane.OK_OPTION) {
-                    System.out.println("exit was pressed");
                     closeGame();
                     setDefaultCloseOperation(EXIT_ON_CLOSE);
                 } else {
