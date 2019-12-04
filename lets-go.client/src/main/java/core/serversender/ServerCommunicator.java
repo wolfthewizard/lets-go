@@ -19,10 +19,15 @@ public class ServerCommunicator implements IServerCommunicator {
     private static Socket socket;
     private static PrintWriter outputWriter;
     private static BufferedReader inputReader;
+    private boolean connectionClosed = false;
     private OnServerResponseListener serverResponseListener;
     private Thread serverResponseAwaiter;
 
     static  {
+        restoreConnection();
+    }
+
+    private static void restoreConnection() {
         try
         {
             socket = new Socket("localhost", 1337);
@@ -36,6 +41,9 @@ public class ServerCommunicator implements IServerCommunicator {
     }
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
 
+        if(connectionClosed) {
+            restoreConnection();
+        }
         this.jsonParser = jsonParser;
         this.serverResponseListener = serverResponseListener;
     }
@@ -128,6 +136,7 @@ public class ServerCommunicator implements IServerCommunicator {
 
     public void shutDownConnection() {
 
+        connectionClosed = true;
         outputWriter.close();
         try {
             inputReader.close();

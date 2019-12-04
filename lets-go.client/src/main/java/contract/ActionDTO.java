@@ -26,9 +26,7 @@ public class ActionDTO {
 
     public ActionDTO(ActionType actionType){
 
-        if (actionType==ActionType.LEAVEGAME || actionType==ActionType.PASSMOVE) {
             this.actionType = actionType;
-        }
     }
 
     public Coordinates getCoordinates() {
