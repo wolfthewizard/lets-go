@@ -50,6 +50,10 @@ package contract {
         + ActionType getActionType()
     }
 
+    ActionDTO --> ActionType
+    ActionDTO --> BoardSize
+    ActionDTO --o Coordinates
+
     class Change {
         - Occupancy occupancy;
         - Coordinates coordinates;
@@ -58,6 +62,9 @@ package contract {
 
         + Coordinates getCoordinates()
     }
+
+    Change --> Occupancy
+    Change o-- Coordinates
 
     class Coordinates {
         - int x;
@@ -91,6 +98,10 @@ package contract {
 
         + Prisoners getPrisoners()
     }
+
+    ResponseDTO --> ResponseType
+    ResponseDTO o-- "0...*" Change
+    ResponseDTO o-- Prisoners
 }
 
 package core {
@@ -116,6 +127,9 @@ package core {
             void shutDownConnection();
         }
 
+        IServerCommunicator *-- IJsonParser
+        IServerCommunicator *-- OnServerResponseListener
+
         class JsonParser implements IJsonParser {
 
             Gson jsonParser;
@@ -129,6 +143,8 @@ package core {
 
             void responseReceived(ResponseDTO responseDTO);
         }
+
+        OnServerResponseListener o-- IFrontendManager
 
         class ServerCommunicator implements IServerCommunicator {
 
@@ -177,6 +193,8 @@ package core {
         void gameLost();
     }
 
+    IFrontendManager o-- Game
+
     class FrontendManager implements IFrontendManager {
 
         - Game gameBoardWindow;
@@ -212,6 +230,8 @@ package frontend {
 
         + void enforceChanges(ArrayList<Change> changes)
     }
+
+    BoardPanel *-- TileButton
 
     interface Game {
 
@@ -323,6 +343,8 @@ package frontend {
 
         + int getDimension()
     }
+
+    TileButton o-- Coordinates
 }
 
 @enduml
