@@ -3,7 +3,6 @@ package main.helpers.actionhandler;
 import core.ICommandDirector;
 import main.ClientConnectionThread;
 import main.helpers.IJsonParser;
-import main.helpers.JsonParser;
 import main.model.GameInfo;
 
 public abstract class AbstractActionHandler {
@@ -30,9 +29,9 @@ public abstract class AbstractActionHandler {
             return;
         }
 
-        handleValidAction();
+        handleNotNullGameInfo();
     }
 
     protected abstract void handleNullGameInfo();
-    protected abstract void handleValidAction();
+    protected abstract void handleNotNullGameInfo();
 }

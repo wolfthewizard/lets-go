@@ -32,7 +32,7 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
     }
 
     @Override
-    protected void handleValidAction() {
+    protected void handleNotNullGameInfo() {
         MoveResponse moveResponse = commandDirector.TryToMove(
                 new Move(gameInfo.getMoveIdentity(), coordinates));
 

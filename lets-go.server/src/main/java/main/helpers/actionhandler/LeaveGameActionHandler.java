@@ -30,7 +30,7 @@ public class LeaveGameActionHandler extends AbstractActionHandler {
     }
 
     @Override
-    protected void handleValidAction() {
+    protected void handleNotNullGameInfo() {
         if (gameInfo.getSecondPlayerId() != 0) {
             clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(
                     jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.PLAYER_LEFT)));
