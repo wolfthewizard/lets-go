@@ -34,11 +34,13 @@ public class Main {
             @Override
             public MoveResponse TryToMove(Move move) {
                 ArrayList<Change> changes = new ArrayList<>();
-                if(move.getPlayerColor() == Color.BLACK) {
-                    changes.add(new Change(Occupancy.BLACK, move.getCoordinates()));
+                if(move.getCoordinates() != null) {
+                    if(move.getPlayerColor() == Color.BLACK) {
+                        changes.add(new Change(Occupancy.BLACK, move.getCoordinates()));
 
-                } else {
-                    changes.add(new Change(Occupancy.WHITE, move.getCoordinates()));
+                    } else {
+                        changes.add(new Change(Occupancy.WHITE, move.getCoordinates()));
+                    }
                 }
                 return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution(changes, new Prisoners(0,0)));
             }
