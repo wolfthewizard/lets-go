@@ -41,9 +41,10 @@ public class StartMultiplayerGameActionHandler extends AbstractActionHandler {
 
     @Override
     protected void handleNullGameInfo() {
-        ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
+
         if(waitingThreads.containsKey(boardSize)) {
             int waitingThreadId = waitingThreads.get(boardSize);
+            ClientConnectionThread waitingClient = clientsManager.getClientWithId(waitingThreadId);
             waitingThreads.remove(boardSize);
             int gameId =commandDirector.CreateNewMultiplayerGame();
 

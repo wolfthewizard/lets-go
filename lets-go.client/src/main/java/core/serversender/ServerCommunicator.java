@@ -130,12 +130,14 @@ public class ServerCommunicator implements IServerCommunicator {
         }
         catch(IOException ex)
         {
-            serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
+            //todo : revert this
+            //serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
         }
     }
 
     public void shutDownConnection() {
 
+        serverResponseAwaiter = null;
         connectionClosed = true;
         outputWriter.close();
         try {

@@ -4,8 +4,6 @@ import contract.Change;
 import contract.Prisoners;
 import frontend.Game;
 import frontend.GameBoardWindow;
-import frontend.PassButtonActionListener;
-import frontend.TileButtonActionListener;
 
 import java.util.ArrayList;
 
@@ -34,12 +32,10 @@ public class FrontendManager implements IFrontendManager {
         gameBoardWindow.signalInvalidMove();
     }
 
-    public void waitingForPlayer() {
-
-    }
-
     public void cantCreateGame() {
-        gameBoardWindow.failedToCreateGame();
+
+        gameBoardWindow.signalFailedToCreateGame();
+        gameBoardWindow.exitApp();
     }
 
     public void success() {
@@ -51,7 +47,30 @@ public class FrontendManager implements IFrontendManager {
     }
 
     public void serverError() {
-        gameBoardWindow.serverFailed();
+
+        gameBoardWindow.signalServerFailed();
+        gameBoardWindow.exitApp();
+    }
+
+    public void playerLeft() {
+
+        gameBoardWindow.signalOpponentsLeave();
+        gameBoardWindow.openNewGameCreation();
+        gameBoardWindow.closeGame();
+    }
+
+    public void gameWon() {
+
+        gameBoardWindow.signalWin();
+        gameBoardWindow.openNewGameCreation();
+        gameBoardWindow.closeGame();
+    }
+
+    public void gameLost() {
+
+        gameBoardWindow.signalLose();
+        gameBoardWindow.openNewGameCreation();
+        gameBoardWindow.closeGame();
     }
 
     private void switchWhoseMove() {

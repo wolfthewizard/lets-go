@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import static java.lang.System.exit;
 
-public class GameBoardWindow extends JFrame implements Game{
+public class GameBoardWindow extends JFrame implements Game {
 
     private JLabel serverResponseLabel;
     private JLabel whoseMoveLabel;
@@ -33,8 +33,7 @@ public class GameBoardWindow extends JFrame implements Game{
             public void windowClosing(WindowEvent e) {
                 int i = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit the game?", "Confirm", JOptionPane.YES_NO_OPTION);
                 if (i == JOptionPane.OK_OPTION) {
-                    new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
-                    new ServerCommunicator(new JsonParser(), null).shutDownConnection();
+                    closeGame();
                     setDefaultCloseOperation(EXIT_ON_CLOSE);
                 } else {
                     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -114,14 +113,39 @@ public class GameBoardWindow extends JFrame implements Game{
         serverResponseLabel.setText("Move was invalid.");
     }
 
-    public void failedToCreateGame() {
-        JOptionPane.showMessageDialog(null, "Couldn't create game.");
+    public void signalOpponentsLeave() {
+        JOptionPane.showMessageDialog(null, "Opponent has left.\nYou win!");
+    }
+
+    public void signalWin() {
+        JOptionPane.showMessageDialog(null, "You win!");
+    }
+
+    public void signalLose() {
+        JOptionPane.showMessageDialog(null, "You lose.");
+    }
+
+    public void openNewGameCreation() {
+        new GameSettingsWindow();
+    }
+
+    public void closeGame() {
+        new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
+        new ServerCommunicator(new JsonParser(), null).shutDownConnection();
+        setVisible(false);
+        dispose();
+    }
+
+    public void exitApp() {
         exit(0);
     }
 
-    public void serverFailed() {
+    public void signalFailedToCreateGame() {
+        JOptionPane.showMessageDialog(null, "Couldn't create game.");
+    }
+
+    public void signalServerFailed() {
         JOptionPane.showMessageDialog(null, "Server has crashed.");
-        exit(0);
     }
 
     public void enforceChanges(ArrayList<Change> changes) {
