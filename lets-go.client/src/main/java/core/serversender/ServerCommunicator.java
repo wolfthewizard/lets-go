@@ -21,7 +21,7 @@ public class ServerCommunicator implements IServerCommunicator {
     private static BufferedReader inputReader;
     private boolean connectionClosed = false;
     private OnServerResponseListener serverResponseListener;
-    private Thread serverResponseAwaiter;
+    private ServerResponseAwaiterThread serverResponseAwaiter;
 
     static  {
         restoreConnection();
@@ -50,16 +50,12 @@ public class ServerCommunicator implements IServerCommunicator {
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
 
-        final ActionDTO action = new ActionDTO(isMultiplayerGame, boardSize);
+        if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
 
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive()) {
+            serverResponseAwaiter.interrupt();
 
-            serverResponseAwaiter = new Thread(() -> {
-
-                sendMessage(action);
-
-                waitAndPassResponse();
-            });
+            serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
+                    new ActionDTO(isMultiplayerGame, boardSize), serverResponseListener);
 
             serverResponseAwaiter.start();
         }
@@ -67,16 +63,12 @@ public class ServerCommunicator implements IServerCommunicator {
 
     public void sendMoveMessage(Coordinates coordinates) {
 
-        final ActionDTO action = new ActionDTO(coordinates);
+        if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
 
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
-        {
-            serverResponseAwaiter = new Thread(() -> {
+            serverResponseAwaiter.interrupt();
 
-                sendMessage(action);
-
-                waitAndPassResponse();
-            });
+            serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
+                    new ActionDTO(coordinates), serverResponseListener);
 
             serverResponseAwaiter.start();
         }
@@ -84,16 +76,12 @@ public class ServerCommunicator implements IServerCommunicator {
 
     public void sendMovePassMessage() {
 
-        final ActionDTO action = new ActionDTO(ActionType.PASSMOVE);
+        if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
 
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
-        {
-            serverResponseAwaiter = new Thread(() -> {
+            serverResponseAwaiter.interrupt();
 
-                sendMessage(action);
-
-                waitAndPassResponse();
-            });
+            serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
+                    new ActionDTO(ActionType.PASSMOVE), serverResponseListener);
 
             serverResponseAwaiter.start();
         }
@@ -113,30 +101,9 @@ public class ServerCommunicator implements IServerCommunicator {
         outputWriter.println(json);
     }
 
-    private void waitAndPassResponse() {
-        try
-        {
-            String responseJson= inputReader.readLine();
-
-            ResponseDTO responseDTO = jsonParser.parseJsonToResponse(responseJson);
-            serverResponseListener.responseReceived(responseDTO);
-
-            if(responseDTO.getResponseType()!= ResponseType.SERVER_ERROR &&
-                    responseDTO.getResponseType() != ResponseType.INVALID_MOVE) {
-
-                responseJson = inputReader.readLine();
-                serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-            }
-        }
-        catch(IOException ex)
-        {
-            //todo : revert this
-            //serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
-        }
-    }
-
     public void shutDownConnection() {
 
+        serverResponseAwaiter.interrupt();
         serverResponseAwaiter = null;
         connectionClosed = true;
         outputWriter.close();
