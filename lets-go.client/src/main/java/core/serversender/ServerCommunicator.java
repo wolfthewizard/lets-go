@@ -2,8 +2,10 @@ package core.serversender;
 
 import contract.ActionDTO;
 import contract.Coordinates;
+import contract.ResponseDTO;
 import contract.enums.ActionType;
 import contract.enums.BoardSize;
+import contract.enums.ResponseType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,28 +24,31 @@ public class ServerCommunicator implements IServerCommunicator {
     private ServerResponseAwaiterThread serverResponseAwaiter;
 
     static {
-        connectionClosed=false;
-        restoreConnection();
-    }
-    private static void restoreConnection() {
+        connectionClosed = false;
 
-        try
-        {
-            socket = new Socket("localhost", 1337);
-            outputWriter = new PrintWriter(socket.getOutputStream(), true);
-            inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        try {
+            restoreConnection();
+        } catch (IOException e) {
+            connectionClosed = true;
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+    }
+
+    private static void restoreConnection() throws IOException {
+
+        socket = new Socket("localhost", 1337);
+        outputWriter = new PrintWriter(socket.getOutputStream(), true);
+        inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
 
-        if(connectionClosed) {
+        if (connectionClosed) {
             connectionClosed = false;
-            restoreConnection();
+            try {
+                restoreConnection();
+            } catch (IOException e) {
+                serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
+            }
         }
 
         this.jsonParser = jsonParser;
@@ -66,9 +71,9 @@ public class ServerCommunicator implements IServerCommunicator {
     }
 
     private void startThread(ActionDTO action) {
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
+        if (serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
 
-            if(!serverResponseAwaiter.isRunning()) {
+            if (!serverResponseAwaiter.isRunning()) {
 
                 serverResponseAwaiter.interrupt();
             }
