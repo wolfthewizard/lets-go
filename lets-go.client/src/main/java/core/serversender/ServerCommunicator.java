@@ -2,10 +2,8 @@ package core.serversender;
 
 import contract.ActionDTO;
 import contract.Coordinates;
-import contract.ResponseDTO;
 import contract.enums.ActionType;
 import contract.enums.BoardSize;
-import contract.enums.ResponseType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,15 +17,16 @@ public class ServerCommunicator implements IServerCommunicator {
     private static Socket socket;
     private static PrintWriter outputWriter;
     private static BufferedReader inputReader;
-    private boolean connectionClosed = false;
+    private static boolean connectionClosed;
     private OnServerResponseListener serverResponseListener;
     private ServerResponseAwaiterThread serverResponseAwaiter;
 
-    static  {
+    static {
+        connectionClosed=false;
         restoreConnection();
     }
-
     private static void restoreConnection() {
+
         try
         {
             socket = new Socket("localhost", 1337);
@@ -39,49 +38,43 @@ public class ServerCommunicator implements IServerCommunicator {
             e.printStackTrace();
         }
     }
+
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
 
         if(connectionClosed) {
+            connectionClosed = false;
             restoreConnection();
         }
+
         this.jsonParser = jsonParser;
         this.serverResponseListener = serverResponseListener;
     }
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
 
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
-
-            serverResponseAwaiter.interrupt();
-
-            serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
-                    new ActionDTO(isMultiplayerGame, boardSize), serverResponseListener);
-
-            serverResponseAwaiter.start();
-        }
+        startThread(new ActionDTO(isMultiplayerGame, boardSize));
     }
 
     public void sendMoveMessage(Coordinates coordinates) {
 
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
-
-            serverResponseAwaiter.interrupt();
-
-            serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
-                    new ActionDTO(coordinates), serverResponseListener);
-
-            serverResponseAwaiter.start();
-        }
+        startThread(new ActionDTO(coordinates));
     }
 
     public void sendMovePassMessage() {
 
+        startThread(new ActionDTO(ActionType.PASSMOVE));
+    }
+
+    private void startThread(ActionDTO action) {
         if(serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
 
-            serverResponseAwaiter.interrupt();
+            if(!serverResponseAwaiter.isRunning()) {
+
+                serverResponseAwaiter.interrupt();
+            }
 
             serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
-                    new ActionDTO(ActionType.PASSMOVE), serverResponseListener);
+                    action, serverResponseListener);
 
             serverResponseAwaiter.start();
         }
