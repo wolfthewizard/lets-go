@@ -34,14 +34,6 @@ public class ClientConnectionThread extends Thread {
 
         while(true)
         {
-//            while (!isActionFinished) {
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }//to pewnie mozna lepiej zrobic
-
             String message;
             try {
                 message = inputReader.readLine();
@@ -57,10 +49,6 @@ public class ClientConnectionThread extends Thread {
             }
             isActionFinished=false;
             actionProcesser.ProcessAction(message, id);
-            //if(response == null)
-            //{
-              //  closeConnection();
-            //}
         }
     }
 

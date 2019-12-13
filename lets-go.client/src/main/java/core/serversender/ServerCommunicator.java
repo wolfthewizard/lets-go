@@ -16,132 +16,79 @@ import java.net.Socket;
 public class ServerCommunicator implements IServerCommunicator {
 
     private IJsonParser jsonParser;
-    private static Socket socket;
     private static PrintWriter outputWriter;
-    private static BufferedReader inputReader;
-    private boolean connectionClosed = false;
-    private OnServerResponseListener serverResponseListener;
-    private Thread serverResponseAwaiter;
+    private static Socket socket;
+    private static boolean connectionClosed;
+    private static ServerResponseRedirector serverResponseRedirector;
 
-    static  {
-        restoreConnection();
-    }
+    static {
+        connectionClosed = false;
 
-    private static void restoreConnection() {
-        try
-        {
-            socket = new Socket("localhost", 1337);
-            outputWriter = new PrintWriter(socket.getOutputStream(), true);
-            inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+        try {
+            restoreConnection();
+        } catch (IOException e) {
+            connectionClosed = true;
         }
     }
+
+    private static void restoreConnection() throws IOException {
+
+        socket = new Socket("localhost", 1337);
+        outputWriter = new PrintWriter(socket.getOutputStream(), true);
+        serverResponseRedirector = new ServerResponseRedirector(
+                new BufferedReader(new InputStreamReader(socket.getInputStream())));
+        serverResponseRedirector.start();
+    }
+
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
 
-        if(connectionClosed) {
-            restoreConnection();
+        if (connectionClosed) {
+            connectionClosed = false;
+            try {
+                restoreConnection();
+            } catch (IOException e) {
+                serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
+            }
         }
+        serverResponseRedirector.setServerResponseListener(serverResponseListener);
+
         this.jsonParser = jsonParser;
-        this.serverResponseListener = serverResponseListener;
     }
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
 
-        final ActionDTO action = new ActionDTO(isMultiplayerGame, boardSize);
-
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive()) {
-
-            serverResponseAwaiter = new Thread(() -> {
-
-                sendMessage(action);
-
-                waitAndPassResponse();
-            });
-
-            serverResponseAwaiter.start();
-        }
+        sendMessage(new ActionDTO(isMultiplayerGame, boardSize), 2);
     }
 
     public void sendMoveMessage(Coordinates coordinates) {
 
-        final ActionDTO action = new ActionDTO(coordinates);
-
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
-        {
-            serverResponseAwaiter = new Thread(() -> {
-
-                sendMessage(action);
-
-                waitAndPassResponse();
-            });
-
-            serverResponseAwaiter.start();
-        }
+        sendMessage(new ActionDTO(coordinates), 2);
     }
 
     public void sendMovePassMessage() {
 
-        final ActionDTO action = new ActionDTO(ActionType.PASSMOVE);
-
-        if(serverResponseAwaiter == null || !serverResponseAwaiter.isAlive())
-        {
-            serverResponseAwaiter = new Thread(() -> {
-
-                sendMessage(action);
-
-                waitAndPassResponse();
-            });
-
-            serverResponseAwaiter.start();
-        }
+        sendMessage(new ActionDTO(ActionType.PASSMOVE), 2);
     }
 
     public void sendLeaveGameMessage() {
 
-        ActionDTO action = new ActionDTO(ActionType.LEAVEGAME);
-
-        sendMessage(action);
+        sendMessage(new ActionDTO(ActionType.LEAVEGAME), 0);
     }
 
-    private void sendMessage(ActionDTO actionDTO) {
+    private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {
 
-        String json = jsonParser.parseActionToJson(actionDTO);
-
-        outputWriter.println(json);
-    }
-
-    private void waitAndPassResponse() {
-        try
-        {
-            String responseJson= inputReader.readLine();
-
-            ResponseDTO responseDTO = jsonParser.parseJsonToResponse(responseJson);
-            serverResponseListener.responseReceived(responseDTO);
-
-            if(responseDTO.getResponseType()!= ResponseType.SERVER_ERROR &&
-                    responseDTO.getResponseType() != ResponseType.INVALID_MOVE) {
-
-                responseJson = inputReader.readLine();
-                serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
-            }
-        }
-        catch(IOException ex)
-        {
-            //todo : revert this
-            //serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
+        if(serverResponseRedirector.getNumberOfResponsesToRead() == 0) {
+            serverResponseRedirector.addNumberOfResponsesToRead(numberOfResposnses);
+            outputWriter.println(jsonParser.parseActionToJson(actionDTO));
         }
     }
 
     public void shutDownConnection() {
 
-        serverResponseAwaiter = null;
+        serverResponseRedirector.stopThread();
         connectionClosed = true;
         outputWriter.close();
         try {
-            inputReader.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
