@@ -16,12 +16,10 @@ import java.net.Socket;
 public class ServerCommunicator implements IServerCommunicator {
 
     private IJsonParser jsonParser;
-    private static Socket socket;
     private static PrintWriter outputWriter;
-    private static BufferedReader inputReader;
+    private static Socket socket;
     private static boolean connectionClosed;
-    private OnServerResponseListener serverResponseListener;
-    private ServerResponseAwaiterThread serverResponseAwaiter;
+    private static ServerResponseRedirector serverResponseRedirector;
 
     static {
         connectionClosed = false;
@@ -37,7 +35,9 @@ public class ServerCommunicator implements IServerCommunicator {
 
         socket = new Socket("localhost", 1337);
         outputWriter = new PrintWriter(socket.getOutputStream(), true);
-        inputReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        serverResponseRedirector = new ServerResponseRedirector(
+                new BufferedReader(new InputStreamReader(socket.getInputStream())));
+        serverResponseRedirector.start();
     }
 
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
@@ -50,63 +50,45 @@ public class ServerCommunicator implements IServerCommunicator {
                 serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
             }
         }
+        serverResponseRedirector.setServerResponseListener(serverResponseListener);
 
         this.jsonParser = jsonParser;
-        this.serverResponseListener = serverResponseListener;
     }
 
     public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
 
-        startThread(new ActionDTO(isMultiplayerGame, boardSize));
+        sendMessage(new ActionDTO(isMultiplayerGame, boardSize), 2);
     }
 
     public void sendMoveMessage(Coordinates coordinates) {
 
-        startThread(new ActionDTO(coordinates));
+        sendMessage(new ActionDTO(coordinates), 2);
     }
 
     public void sendMovePassMessage() {
 
-        startThread(new ActionDTO(ActionType.PASSMOVE));
-    }
-
-    private void startThread(ActionDTO action) {
-        if (serverResponseAwaiter == null || !serverResponseAwaiter.isRunning()) {
-
-            if (!serverResponseAwaiter.isRunning()) {
-
-                serverResponseAwaiter.interrupt();
-            }
-
-            serverResponseAwaiter = new ServerResponseAwaiterThread(outputWriter, inputReader, jsonParser,
-                    action, serverResponseListener);
-
-            serverResponseAwaiter.start();
-        }
+        sendMessage(new ActionDTO(ActionType.PASSMOVE), 2);
     }
 
     public void sendLeaveGameMessage() {
 
-        ActionDTO action = new ActionDTO(ActionType.LEAVEGAME);
-
-        sendMessage(action);
+        sendMessage(new ActionDTO(ActionType.LEAVEGAME), 0);
     }
 
-    private void sendMessage(ActionDTO actionDTO) {
+    private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {
 
-        String json = jsonParser.parseActionToJson(actionDTO);
-
-        outputWriter.println(json);
+        if(serverResponseRedirector.getNumberOfResponsesToRead() == 0) {
+            serverResponseRedirector.addNumberOfResponsesToRead(numberOfResposnses);
+            outputWriter.println(jsonParser.parseActionToJson(actionDTO));
+        }
     }
 
     public void shutDownConnection() {
 
-        serverResponseAwaiter.interrupt();
-        serverResponseAwaiter = null;
+        serverResponseRedirector.stopThread();
         connectionClosed = true;
         outputWriter.close();
         try {
-            inputReader.close();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

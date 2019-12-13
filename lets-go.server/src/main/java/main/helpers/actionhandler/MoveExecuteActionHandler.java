@@ -36,7 +36,11 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
         MoveResponse moveResponse = commandDirector.TryToMove(
                 new Move(gameInfo.getMoveIdentity(), coordinates));
 
-        ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
+        ClientConnectionThread waitingClient = null;
+
+        if(gameInfo.getSecondPlayerId() != 0) {
+            waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
+        }
 
 
         switch (moveResponse.getMoveResponseType()) {
@@ -50,7 +54,7 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
                         moveResponse.getMoveExecution().getPrisoners());
                 String response = jsonParser.parseResponseToJson(responseDTO);
 
-                if(gameInfo.getSecondPlayerId() == 0) {
+                if(waitingClient == null) {
                     currentClient.beginAction(response);
                     currentClient.completeAction(response);
                 } else {
@@ -67,7 +71,7 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
                 break;
             case OTHER_PLAYER_WON:
                 currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
-                if(gameInfo.getSecondPlayerId() != 0) {
+                if(waitingClient != null) {
                     waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
                 }
                 break;
