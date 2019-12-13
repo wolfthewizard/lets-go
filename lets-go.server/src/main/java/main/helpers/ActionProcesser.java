@@ -1,18 +1,13 @@
 package main.helpers;
 
-import contract.Prisoners;
-import core.ICommandDirector;
-import core.model.*;
+import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
 import main.IClientsManager;
 import contract.ActionDTO;
-import contract.ResponseDTO;
 import contract.enums.BoardSize;
-import contract.enums.ResponseType;
 import main.helpers.actionhandler.*;
 import main.model.GameInfo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 

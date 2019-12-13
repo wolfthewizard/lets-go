@@ -1,7 +1,7 @@
 package main.helpers;
 
 import core.model.MoveIdentity;
-import main.model.Color;
+import core.model.Color;
 import main.model.GameInfo;
 import main.model.GameWithPlayers;
 

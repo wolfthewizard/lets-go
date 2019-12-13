@@ -2,7 +2,7 @@ package main.helpers.actionhandler;
 
 import contract.ResponseDTO;
 import contract.enums.ResponseType;
-import core.ICommandDirector;
+import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
 import main.IClientsManager;
 import main.helpers.IJsonParser;

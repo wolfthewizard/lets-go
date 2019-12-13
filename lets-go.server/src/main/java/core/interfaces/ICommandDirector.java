@@ -1,4 +1,4 @@
-package core;
+package core.interfaces;
 
 import core.model.*;
 import contract.enums.BoardSize;

@@ -3,12 +3,12 @@ package main;
 import contract.Change;
 import contract.Prisoners;
 import contract.enums.Occupancy;
-import core.ICommandDirector;
+import core.interfaces.ICommandDirector;
 import core.model.*;
 import contract.enums.BoardSize;
 import core.model.enums.MoveResponseType;
 import main.helpers.*;
-import main.model.Color;
+import core.model.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;

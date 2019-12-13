@@ -1,7 +1,5 @@
 package core.model;
 
-import main.model.Color;
-
 public class MoveIdentity {
     private Color playerColor;
     private int gameId;
