@@ -1,192 +1,212 @@
 @startuml
 
-interface CommunicationBase
+namespace core {
 
-CommunicationBase : ResponseDTO orderMove(MoveDTO)
+    namespace interfaces {
 
+        interface ICommandDirector {
+            int CreateNewBotGame()
+            int CreateNewMultiplayerGame()
+            ResponseDTO TryToMove(MoveDTO: move)
+            void CancelGame(int: leftPlayerId)
+        }
 
+        interface IMoveExecutorService {
+            ResponseDTO: executeMove(MoveDTO: moveDTO)
+        }
 
-class CommunicationBaseImpl implements CommunicationBase
+        interface IGameManagerService {
+            void CreateNewGame(int: firstPlayerId)
+            void CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+            void CancelGame(int: leftPlayerId)
+        }
 
-CommunicationBaseImpl : core : Core
+        interface IMoveValidator {
+            boolean validateSuicide(Board: board, Move: move)
+            boolean validateKO(Board: oldBoard, Board: currentBoard, Move: move)
+            boolean validateVacant(Board: board, Move: move)
+            ' mb more
+        }
 
-CommunicationBaseImpl : ResponseDTO orderMove(MoveDTO)
+        interface IGameRepository {
+            Game getGame(int playerId)
+            void updateGameBoard(int, List<Change>)
+        }
+    }
 
+    namespace services {
 
+        class MoveExecutorService implements core.interfaces.IMoveExecutorService{
+            -gameRepository : IGameRepository
+            -moveValidator : MoveValidator
 
-interface Core
+            +ResponseDTO executeMove(MoveDTO: moveDTO)
+        }
+        MoveExecutorService..>core.interfaces.IGameRepository
+        MoveExecutorService..>core.interfaces.IMoveValidator
 
-Core : -isItPlayersTurn(int)
-'todo
+        class GameManagerService implements core.interfaces.IGameManagerService{
+            -IGameRepository: gameRepository
 
+            +void CreateNewGame(int: firstPlayerId)
+            +void CreateNewGame(int: firstPlayerId, int: secondPlayerId)
+            +void CancelGame(int: leftPlayerId)
+        }
+        GameManagerService..>core.interfaces.IGameRepository
+    }
 
-class CoreImpl implements Core
+    class CommandDirector implements core.interfaces.ICommandDirector {
+        -moveExecutorService : IMoveExecutorService
+        -gameManagerService : IGameManagerService
 
-CoreImpl : gameStore : GameStore
-' todo
+        +int CreateNewBotGame()
+        +int CreateNewMultiplayerGame()
+        +ResponseDTO TryToMove(MoveDTO: move)
+        +void CancelGame(int: leftPlayerId)
+    }
+    CommandDirector..>core.interfaces.IMoveExecutorService
+    CommandDirector..>core.interfaces.IGameManagerService
 
-CoreImpl : -isItPlayersTurn(int)
-' todo
+    ' moze zamiast dzielic na 2 metody podzielimy na dwie klasy wtedy dwie referencje w executorze, albo jeszcze jednak klasa ktora to razem sklada taka mini facada
+    class MoveValidator implements core.interfaces.IMoveValidator{
+         +boolean validateSuicide(Board: board, Move: move)
+         +boolean validateKO(Board: oldBoard, Board: currentBoard, Move: move)
+         +boolean validateVacant(Board: board, Move: move)
+        ' mb more
+    }
 
+    namespace model {
+        namespace enums {
 
+            enum Color {
+                WHITE
+                BLACK
+            }
 
-interface GameStore
+            enum Occupancy extends Color {
+                WHITE
+                BLACK
+                EMPTY
+            }
 
-GameStore : Game getGame(int playerId)
-GameStore : void updateGameBoard(int, List<Change>)
+            enum BoardSize {
+                NINE
+                THIRTEEN
+                NINETEEN
+            }
 
+            enum MoveType {
+                MOVE
+                PASS
+            }
 
+            enum ResponseStatus {
+                OK
+                INVALID_MOVE
+                UNAUTHORIZED_MOVE
+            }
+        }
 
-class GameStoreImpl implements GameStore
+        class Board {
 
-GameStoreImpl : games : List<Game>
+            fields : Occupancy[][]
+            boardSize : BoardSize
 
-GameStoreImpl : Board getBoard(int)
-GameStoreImpl : void updateBoard(int, List<Change>)
+            int getSize()
+        }
 
+        class Game {
+            gameId : int
+            boards : Board[]
+            black : Player
+            white : Player
+            whoseTurn : Color
 
+            +int getId()
+            +Board[] getBoards()
+        }
 
-interface Game
+        class Coordinates {
+            +x : int
+            +y : int
+        }
 
-Game : int getId()
-'this method returns array of 3 boards: current and 2 before it
-Game : Board[] getBoards()
+        class ActionDTO {
+            +playerId : int
+            +actionType : MoveType
+            +cords : Coordinates
+        }
 
+        class Move {
+            +player : Color
+            +cords : Coordinates
+        }
 
+        class ResponseDTO {
+            +status : ResponseStatus
+            +changes : List<Change>
+            +whitesCaptives : int
+            +blacksCaptives : int
+        }
 
-class GameImpl implements Game
+        class Player {
+            +playerId : int
+            +amountOfCaptives : int
+        }
 
-GameImpl : gameId : int
-GameImpl : boards : Board[]
-GameImpl : black : Player
-GameImpl : white : Player
-GameImpl : whoseTurn : Color
+        class Change {
+            +occupancy : Occupancy
+            +cords : Coordinates
+        }
 
-GameImpl : int getId()
-GameImpl : Board[] getBoards()
-
-
-
-interface Board
-
-Board : int getSize()
-
-
-
-class BoardImpl implements Board
-
-BoardImpl : fields : Occupancy[][]
-BoardImpl : boardSize : BoardSize
-
-BoardImpl : int getSize()
-
-
-
-enum Color {
-    WHITE
-    BLACK
+        MoveDTO "1" o-- "1" Move
+        Move "1" *-- "1" core.model.enums.MoveType
+        ResponseDTO "1" *-- "1" core.model.enums.ResponseStatus
+        ResponseDTO "1" o-- "1...*" Change
+        Change "1" *-- "1" core.model.enums.Occupancy
+        Change "1" o-- "1" Coordinates
+        Game "1" o-- "1, 2, 3" Board
+        Game "1" o-- "2" Player
+        Game "1" *-- "1" core.model.enums.Color
+        Board "1" *-- "*" core.model.enums.Occupancy
+        Board "1" *-- "1" core.model.enums.BoardSize
+    }
 }
 
-enum Occupancy extends Color {
-    WHITE
-    BLACK
-    EMPTY
+namespace infrastructure {
+
+    'albo zapis do pliku albo musi byc singleton
+    class GameRepository implements core.interfaces.IGameRepository {
+        -games : List<Game>
+
+        +void cancelGame(int gameId, Color winner)
+        +int createNewGame()
+        +Board getBoard(int)
+        +void updateBoard(int, List<Change>)
+    }
 }
 
+namespace main {
+    interface ICommunicationBase {
 
+        +ResponseDTO orderMove(MoveDTO)
+    }
 
-enum BoardSize {
-    NINE
-    THIRTEEN
-    NINETEEN
+    class CommunicationBase implements ICommunicationBase {
+
+        -commandDirector : ICommandDirector
+
+        +ResponseDTO orderMove(MoveDTO)
+    }
+    CommunicationBase ..> core.interfaces.ICommandDirector
 }
 
+'CommunicationBase --> "receives" MoveDTO
+'CommunicationBase --> "sends" ResponseDTO
+'CommunicationBaseImpl "1" o-- "1" Core
+'CoreImpl "1" o-- "1" GameStore
+'GameStoreImpl "1" o-- "0...*" Game
 
 
-enum MoveType {
-    MOVE
-    PASS
-}
-
-
-
-enum ResponseStatus {
-    OK
-    INVALID_MOVE
-    UNAUTHORIZED_MOVE
-}
-
-
-
-class Change
-
-Change : +occupancy : Occupancy
-Change : +cords : Coordinates
-
-
-
-class Coordinates
-
-Coordinates : +x : int
-Coordinates : +y : int
-
-
-
-class MoveDTO
-
-MoveDTO : +playerId : int
-MoveDTO : +move : Move
-
-
-
-class Move
-
-Move : +moveType : MoveType
-Move : +cords : Coordinates
-
-
-
-class ResponseDTO
-
-ResponseDTO : +status : ResponseStatus
-ResponseDTO : +changes : List<Change>
-ResponseDTO : +whitesCaptives : int
-ResponseDTO : +blacksCaptives : int
-
-
-
-class Player
-
-Player : +playerId : int
-Player : +amountOfCaptives : int
-
-
-
-'singleton class
-class MoveValidationCenter
-
-MoveValidationCenter : boolean validateMove(Board board, )
-
-
-
-
-
-CommunicationBase --> "receives" MoveDTO
-CommunicationBase --> "sends" ResponseDTO
-CommunicationBaseImpl "1" o-- "1" Core
-CoreImpl "1" o-- "1" GameStore
-GameStoreImpl "1" o-- "0...*" Game
-GameImpl "1" o-- "1, 2, 3" Board
-GameImpl "1" o-- "2" Player
-GameImpl "1" *-- "1" Color
-BoardImpl "1" *-- "*" Occupancy
-BoardImpl "1" *-- "1" BoardSize
-Change "1" *-- "1" Occupancy
-Change "1" o-- "1" Coordinates
-Core --> "uses" MoveValidationCenter
-MoveDTO "1" o-- "1" Move
-Move "1" *-- "1" MoveType
-ResponseDTO "1" *-- "1" ResponseStatus
-ResponseDTO "1" o-- "1...*" Change
 
 @enduml
