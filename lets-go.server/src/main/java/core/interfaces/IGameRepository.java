@@ -10,13 +10,9 @@ import java.util.ArrayList;
 
 public interface IGameRepository {
 
-    void CreateBotGame(int id, BoardSize boardSize, Color startingPlayer, Color botPlayer);
-
-    void CreateMultiplayerGame(int id, BoardSize boardSize, Color startingPlayer);
+    void CreateGame(int id, BoardSize boardSize, Color startingPlayer);
 
     Occupancy[][] getGameBoard(int gameId);
 
     void performMove(int gameId, ArrayList<Change> changes);
-
-    Game getGame(int gameId);
 }

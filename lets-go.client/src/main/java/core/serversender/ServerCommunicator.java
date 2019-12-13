@@ -55,9 +55,9 @@ public class ServerCommunicator implements IServerCommunicator {
         this.jsonParser = jsonParser;
     }
 
-    public void sendStartGameMessage(boolean isMultiplayerGame, BoardSize boardSize) {
+    public void sendStartGameMessage(BoardSize boardSize) {
 
-        sendMessage(new ActionDTO(isMultiplayerGame, boardSize), 2);
+        sendMessage(new ActionDTO(boardSize), 2);
     }
 
     public void sendMoveMessage(Coordinates coordinates) {
@@ -72,7 +72,7 @@ public class ServerCommunicator implements IServerCommunicator {
 
     public void sendLeaveGameMessage() {
 
-        sendMessage(new ActionDTO(ActionType.LEAVEGAME), 0);
+        outputWriter.println(jsonParser.parseActionToJson(new ActionDTO(ActionType.LEAVEGAME)));
     }
 
     private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {

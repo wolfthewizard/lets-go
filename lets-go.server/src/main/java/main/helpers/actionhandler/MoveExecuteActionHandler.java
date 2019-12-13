@@ -35,12 +35,7 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
         MoveResponse moveResponse = commandDirector.TryToMove(
                 new Move(gameInfo.getMoveIdentity(), coordinates));
 
-        ClientConnectionThread waitingClient = null;
-
-        if(gameInfo.getSecondPlayerId() != 0) {
-            waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
-        }
-
+        ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());
 
         switch (moveResponse.getMoveResponseType()) {
             case INVALID_MOVE:
@@ -49,34 +44,21 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
                 break;
 
             case GAME_GOES_ON:
-                ResponseDTO responseDTO= new ResponseDTO(moveResponse.getMoveExecution().getChanges(),
+                ResponseDTO responseDTO = new ResponseDTO(moveResponse.getMoveExecution().getChanges(),
                         moveResponse.getMoveExecution().getPrisoners());
                 String response = jsonParser.parseResponseToJson(responseDTO);
 
-                if(waitingClient == null) {
-                    currentClient.beginAction(response);
-                    moveResponse = commandDirector.GetBotMove(gameInfo.getMoveIdentity().getGameId());
-                    responseDTO= new ResponseDTO(moveResponse.getMoveExecution().getChanges(),
-                            moveResponse.getMoveExecution().getPrisoners());
-                    response = jsonParser.parseResponseToJson(responseDTO);
-                    currentClient.completeAction(response);
-                } else {
-                    currentClient.beginAction(response);
-                    responseDTO.getPrisoners().swapPrisoners();
-                    waitingClient.completeAction(jsonParser.parseResponseToJson(responseDTO));
-                }
+                currentClient.beginAction(response);
+                responseDTO.getPrisoners().swapPrisoners();
+                waitingClient.completeAction(jsonParser.parseResponseToJson(responseDTO));
                 break;
             case CURRENT_PLAYER_WON:
                 currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
-                if(gameInfo.getSecondPlayerId() != 0) {
-                    waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
-                }
+                waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
                 break;
             case OTHER_PLAYER_WON:
                 currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
-                if(waitingClient != null) {
-                    waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
-                }
+                waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
                 break;
         }
     }

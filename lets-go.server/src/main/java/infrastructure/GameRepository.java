@@ -12,12 +12,8 @@ import java.util.ArrayList;
 public class GameRepository implements IGameRepository {
     private ArrayList<Game> games;
 
-    public void CreateBotGame(int id, BoardSize boardSize, Color startingPlayer, Color botPlayer){
-        games.add(new Game(id,boardSize, startingPlayer, botPlayer));
-    }
-
-    public void CreateMultiplayerGame(int id, BoardSize boardSize, Color startingPlayer){
-        games.add(new Game(id, boardSize, startingPlayer, null));
+    public void CreateGame(int id, BoardSize boardSize, Color startingPlayer){
+        games.add(new Game(id, boardSize, startingPlayer));
     }
 
     public Occupancy[][] getGameBoard(int gameId){
@@ -41,9 +37,4 @@ public class GameRepository implements IGameRepository {
 
         return null;
     }
-
-
-
-}
-
 }

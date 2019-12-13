@@ -1,8 +1,7 @@
 package contract.enums;
 
 public enum ActionType {
-    STARTMULTIPLAYERGAME,
-    STARTBOTGAME,
+    STARTGAME,
     LEAVEGAME,
     DOMOVE,
     PASSMOVE

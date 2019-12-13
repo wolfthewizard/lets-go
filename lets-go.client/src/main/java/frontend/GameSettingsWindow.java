@@ -82,7 +82,7 @@ public class GameSettingsWindow extends JFrame {
                     new ServerResponseListener(new FrontendManager(new GameBoardWindow(boardSize))));
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
-            serverCommunicator.sendStartGameMessage(playerRadio.isSelected(), boardSize);
+            serverCommunicator.sendStartGameMessage(boardSize);
 
             setVisible(false);
             dispose();

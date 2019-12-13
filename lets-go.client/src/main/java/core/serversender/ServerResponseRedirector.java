@@ -61,6 +61,4 @@ public class ServerResponseRedirector extends Thread {
     public int getNumberOfResponsesToRead() {
         return numberOfResponsesToRead;
     }
-
-
 }
