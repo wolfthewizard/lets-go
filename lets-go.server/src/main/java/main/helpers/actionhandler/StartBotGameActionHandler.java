@@ -3,7 +3,7 @@ package main.helpers.actionhandler;
 import contract.ResponseDTO;
 import contract.enums.BoardSize;
 import contract.enums.ResponseType;
-import core.ICommandDirector;
+import core.interfaces.ICommandDirector;
 import core.model.CreateNewBotGameResult;
 import main.ClientConnectionThread;
 import main.helpers.IJsonParser;

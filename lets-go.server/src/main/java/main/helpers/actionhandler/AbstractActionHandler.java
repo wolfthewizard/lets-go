@@ -1,6 +1,6 @@
 package main.helpers.actionhandler;
 
-import core.ICommandDirector;
+import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
 import main.helpers.IJsonParser;
 import main.model.GameInfo;
