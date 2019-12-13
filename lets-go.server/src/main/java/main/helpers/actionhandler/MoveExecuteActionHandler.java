@@ -56,6 +56,10 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
 
                 if(waitingClient == null) {
                     currentClient.beginAction(response);
+                    moveResponse = commandDirector.GetBotMove(gameInfo.getMoveIdentity().getGameId());
+                    responseDTO= new ResponseDTO(moveResponse.getMoveExecution().getChanges(),
+                            moveResponse.getMoveExecution().getPrisoners());
+                    response = jsonParser.parseResponseToJson(responseDTO);
                     currentClient.completeAction(response);
                 } else {
                     currentClient.beginAction(response);
