@@ -77,6 +77,8 @@ public class MoveExecutorService implements IMoveExecutorService {
         return chain;
     }
 
+
+
     private List<Coordinates> getNeighbouringCords(Coordinates coordinates, Occupancy occupancy) {
 
         List<Coordinates> neighbours = new ArrayList<>();

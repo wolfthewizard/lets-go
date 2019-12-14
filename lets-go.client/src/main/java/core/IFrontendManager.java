@@ -2,13 +2,13 @@ package core;
 
 
 import contract.Change;
-import contract.Prisoners;
+import contract.ResponsePrisoners;
 
 import java.util.ArrayList;
 
 public interface IFrontendManager {
 
-    void moveExecuted(ArrayList<Change> changes, Prisoners prisoners);
+    void moveExecuted(ArrayList<Change> changes, ResponsePrisoners prisoners);
     void invalidMove();
     void cantCreateGame();
     void success();

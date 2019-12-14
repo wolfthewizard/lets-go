@@ -1,5 +1,6 @@
-package contract;
+package core.model;
 
+import contract.ResponsePrisoners;
 import core.model.Color;
 
 public class Prisoners {

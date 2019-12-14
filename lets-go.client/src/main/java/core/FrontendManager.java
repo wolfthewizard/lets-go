@@ -1,7 +1,7 @@
 package core;
 
 import contract.Change;
-import contract.Prisoners;
+import contract.ResponsePrisoners;
 import frontend.Game;
 import frontend.GameBoardWindow;
 
@@ -18,7 +18,7 @@ public class FrontendManager implements IFrontendManager {
         playersTurn = false;
     }
 
-    public void moveExecuted(ArrayList<Change> changes, Prisoners prisoners) {
+    public void moveExecuted(ArrayList<Change> changes, ResponsePrisoners prisoners) {
 
         gameBoardWindow.clearServerResponse();
         gameBoardWindow.enforceChanges(changes);
