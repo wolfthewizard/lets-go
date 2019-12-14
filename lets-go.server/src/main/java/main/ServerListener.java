@@ -22,7 +22,7 @@ public class ServerListener {
             Socket client = server.accept();
 
             ClientConnectionThread clientConnectionThread = new ClientConnectionThread(client,
-                    actionProcesser, clientsManager.getAllClients().size()+1);
+                    actionProcesser, clientsManager.getAllClients().size() + 1);
             clientsManager.addClient(clientConnectionThread);
 
             clientConnectionThread.start();

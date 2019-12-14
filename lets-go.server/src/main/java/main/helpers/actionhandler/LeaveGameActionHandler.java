@@ -38,7 +38,7 @@ public class LeaveGameActionHandler extends AbstractActionHandler {
 
         playerValidator.removeGame(gameInfo.getMoveIdentity().getGameId());
 
-        commandDirector.CancelGame(gameInfo.getMoveIdentity());
+        commandDirector.cancelGame(gameInfo.getMoveIdentity());
 
         currentClient.closeConnection();
     }

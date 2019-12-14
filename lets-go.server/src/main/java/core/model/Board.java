@@ -1,0 +1,55 @@
+package core.model;
+
+import contract.ResponsePrisoners;
+import contract.enums.BoardSize;
+import contract.enums.Occupancy;
+
+public class Board {
+
+    private Occupancy[][] currentState;
+    private Occupancy[][] previousTurnState;
+    private ResponsePrisoners currentPrisoners;
+
+    public Board(BoardSize boardSize) {
+
+        currentState = new Occupancy[boardSize.getValue()][];
+        for (int i = 0; i < boardSize.getValue(); i++) {
+            currentState[i] = new Occupancy[boardSize.getValue()];
+            for (int j = 0; j < boardSize.getValue(); j++) {
+                currentState[i][j] = Occupancy.EMPTY;
+            }
+        }
+
+        previousTurnState = new Occupancy[boardSize.getValue()][];
+        for (int i = 0; i < boardSize.getValue(); i++) {
+            previousTurnState[i] = new Occupancy[boardSize.getValue()];
+            for (int j = 0; j < boardSize.getValue(); j++) {
+                previousTurnState[i][j] = Occupancy.EMPTY;
+            }
+        }
+
+        currentPrisoners = new ResponsePrisoners(0, 0);
+    }
+
+    public Occupancy[][] getCurrentState() {
+        return currentState;
+    }
+
+    public Occupancy[][] getPreviousTurnState() {
+        return previousTurnState;
+    }
+
+    public ResponsePrisoners getCurrentPrisoners() {
+        return currentPrisoners;
+    }
+
+    public void setCurrentPrisoners(ResponsePrisoners currentPrisoners) {
+        this.currentPrisoners = currentPrisoners;
+    }
+
+    public void insertState(Occupancy[][] state) {
+
+        previousTurnState = currentState;
+        currentState = state;
+    }
+}
