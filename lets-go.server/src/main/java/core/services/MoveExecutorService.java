@@ -71,7 +71,13 @@ public class MoveExecutorService implements IMoveExecutorService {
 
     }
 
-    private List<Coordinates> getNeighbouringCords(Coordinates coordinates, Color color) {
+    private List<Coordinates> getChainStartingWithCords(Coordinates startingCords) {
+
+        List<Coordinates> chain = new ArrayList<>();
+        return chain;
+    }
+
+    private List<Coordinates> getNeighbouringCords(Coordinates coordinates, Occupancy occupancy) {
 
         List<Coordinates> neighbours = new ArrayList<>();
 
@@ -80,28 +86,28 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         if (x - 1 >= 0) {
 
-            if (potentialState[x - 1][y] == color.toOccupancy()) {
+            if (potentialState[x - 1][y] == occupancy) {
                 neighbours.add(new Coordinates(x - 1, y));
             }
         }
 
         if (x + 1 < boardSizeValue) {
 
-            if (potentialState[x + 1][y] == color.toOccupancy()) {
+            if (potentialState[x + 1][y] == occupancy) {
                 neighbours.add(new Coordinates(x + 1, y));
             }
         }
 
         if (y - 1 >= 0) {
 
-            if (potentialState[x][y - 1] == color.toOccupancy()) {
+            if (potentialState[x][y - 1] == occupancy) {
                 neighbours.add(new Coordinates(x, y - 1));
             }
         }
 
         if (y + 1 < boardSizeValue) {
 
-            if (potentialState[x][y + 1] == color.toOccupancy()) {
+            if (potentialState[x][y + 1] == occupancy) {
                 neighbours.add(new Coordinates(x, y + 1));
             }
         }
