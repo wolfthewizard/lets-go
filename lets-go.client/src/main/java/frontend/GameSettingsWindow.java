@@ -20,14 +20,14 @@ public class GameSettingsWindow extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLabel opponentTypeLabel = new JLabel("Choose oppponent type:");
+//        JLabel opponentTypeLabel = new JLabel("Choose oppponent type:");
 
-        ButtonGroup gameTypeRadios = new ButtonGroup();
-        JRadioButton playerRadio = new JRadioButton("player");
-        JRadioButton botRadio = new JRadioButton("bot");
-        gameTypeRadios.add(playerRadio);
-        gameTypeRadios.add(botRadio);
-        playerRadio.setSelected(true);
+//        ButtonGroup gameTypeRadios = new ButtonGroup();
+//        JRadioButton playerRadio = new JRadioButton("player");
+//        JRadioButton botRadio = new JRadioButton("bot");
+//        gameTypeRadios.add(playerRadio);
+//        gameTypeRadios.add(botRadio);
+//        playerRadio.setSelected(true);
 
         JLabel boardSizeLabel = new JLabel("Choose board size:");
 
@@ -37,12 +37,12 @@ public class GameSettingsWindow extends JFrame {
 
         JButton startGameButton = new JButton("Start game");
 
-        JPanel opponentTypePanel = new JPanel();
-        opponentTypePanel.add(opponentTypeLabel);
+//        JPanel opponentTypePanel = new JPanel();
+//        opponentTypePanel.add(opponentTypeLabel);
 
-        JPanel radioGroupPanel = new JPanel();
-        radioGroupPanel.add(playerRadio);
-        radioGroupPanel.add(botRadio);
+//        JPanel radioGroupPanel = new JPanel();
+//        radioGroupPanel.add(playerRadio);
+//        radioGroupPanel.add(botRadio);
 
         JPanel boardSizePanel = new JPanel();
         boardSizePanel.add(boardSizeLabel);
@@ -53,8 +53,8 @@ public class GameSettingsWindow extends JFrame {
         JPanel startGamePanel = new JPanel();
         startGamePanel.add(startGameButton);
 
-        this.add(opponentTypePanel);
-        this.add(radioGroupPanel);
+//        this.add(opponentTypePanel);
+//        this.add(radioGroupPanel);
         this.add(boardSizePanel);
         this.add(boardSizeComboPanel);
         this.add(startGamePanel);
