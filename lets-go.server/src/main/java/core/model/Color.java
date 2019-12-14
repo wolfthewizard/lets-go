@@ -18,9 +18,9 @@ public enum Color {
     public Color reverse() {
 
         if (this.equals(Color.BLACK)) {
-            return Color.BLACK;
-        } else {
             return Color.WHITE;
+        } else {
+            return Color.BLACK;
         }
     }
 }
