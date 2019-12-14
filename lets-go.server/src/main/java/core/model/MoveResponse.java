@@ -11,6 +11,11 @@ public class MoveResponse {
         this.moveExecution = moveExecution;
     }
 
+    public MoveResponse(MoveResponseType moveResponseType) {
+        this.moveResponseType = moveResponseType;
+        this.moveExecution = null;
+    }
+
     public MoveResponseType getMoveResponseType() {
         return moveResponseType;
     }

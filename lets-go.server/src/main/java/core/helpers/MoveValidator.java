@@ -16,10 +16,10 @@ public class MoveValidator implements IMoveValidator {
     }
 
     @Override
-    public boolean validateKO(BoardSize boardSize, Occupancy[][] currentBoard, Occupancy[][] boardTwoTurnsAgo) {
+    public boolean validateKO(int boardSizeValue, Occupancy[][] currentBoard, Occupancy[][] boardTwoTurnsAgo) {
 
-        for (int y = 0; y < boardSize.getValue(); y++) {
-            for (int x = 0; x < boardSize.getValue(); x++) {
+        for (int y = 0; y < boardSizeValue; y++) {
+            for (int x = 0; x < boardSizeValue; x++) {
                 if (currentBoard[x][y] != boardTwoTurnsAgo[x][y]) {
                     return true;
                 }
