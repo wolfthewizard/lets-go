@@ -41,8 +41,7 @@ public class Main {
         }
 
         Scanner scanner = new Scanner(System.in);
-        while (scanner.nextLine() != "exit") {
-
+        while (!scanner.nextLine().equals("exit")) {
         }
         serverCommunicator.sendLeaveGameMessage();
     }

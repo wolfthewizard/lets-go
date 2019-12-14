@@ -7,12 +7,12 @@ import javax.imageio.spi.IIOServiceProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class ServerListener extends Thread{
+public class ServerListener extends Thread {
 
     private final BufferedReader inputReader;
     private ICommunicatorListener communicatorListener;
 
-    public ServerListener(BufferedReader inputReader){
+    public ServerListener(BufferedReader inputReader) {
         this.inputReader = inputReader;
     }
 
@@ -21,12 +21,16 @@ public class ServerListener extends Thread{
     }
 
     public void run() {
-        while (true){
+        while (true) {
             String response;
 
             try {
-                response =inputReader.readLine();
-                communicatorListener.responseFetched(response);
+                response = inputReader.readLine();
+                if (response != null) {
+                    communicatorListener.responseFetched(response);
+                } else {
+                    return;
+                }
             } catch (IOException e) {
                 System.out.println("server out");
                 System.exit(0);
