@@ -26,8 +26,8 @@ public class Main {
         switch (args[0]) {
             case "-help":
                 System.out.println("-small to enable a bot for 9x9 board");
-                System.out.println("-small to enable a bot for 13x13 board");
-                System.out.println("-small to enable a bot for 19x19 board");
+                System.out.println("-medium to enable a bot for 13x13 board");
+                System.out.println("-hard to enable a bot for 19x19 board");
                 break;
             case "-small":
                 gameInitializer.StartSmallBoardGame();
