@@ -11,6 +11,7 @@ import core.model.enums.MoveResponseType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MoveExecutorService implements IMoveExecutorService {
 
@@ -36,9 +37,12 @@ public class MoveExecutorService implements IMoveExecutorService {
         if (move.getCoordinates() == null) {
             if (game.isLastTurnPassed()) {
 
+                if (new Random().nextBoolean()) {
+                    return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON, null);
+                } else {
+                    return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON, null);
+                }
                 //todo : handle basically the whole point counting mechanism
-                return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution
-                        (new ArrayList<>(), board.getCurrentPrisoners().toResponsePrisoners(move.getPlayerColor())));
             } else {
 
                 game.setLastTurnPassed(true);
