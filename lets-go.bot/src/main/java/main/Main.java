@@ -36,5 +36,9 @@ public class Main {
                 gameInitializer.StartLargeBoardGame();
                 break;
         }
+
+        while(true){
+
+        }
     }
 }

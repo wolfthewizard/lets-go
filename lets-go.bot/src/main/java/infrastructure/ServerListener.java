@@ -5,6 +5,7 @@ import core.interfaces.IServerResponseReceiver;
 
 import javax.imageio.spi.IIOServiceProvider;
 import java.io.BufferedReader;
+import java.io.IOException;
 
 public class ServerListener extends Thread{
 
@@ -20,6 +21,17 @@ public class ServerListener extends Thread{
     }
 
     public void run() {
+        while (true){
+            String response;
 
+            try {
+                response =inputReader.readLine();
+                communicatorListener.responseFetched(response);
+            } catch (IOException e) {
+                System.out.println("server out");
+                return;
+            }
+
+        }
     }
 }
