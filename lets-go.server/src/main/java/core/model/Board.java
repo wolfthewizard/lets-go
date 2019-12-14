@@ -8,7 +8,7 @@ public class Board {
 
     private Occupancy[][] currentState;
     private Occupancy[][] previousTurnState;
-    private ResponsePrisoners currentPrisoners;
+    private Prisoners currentPrisoners;
 
     public Board(BoardSize boardSize) {
 
@@ -28,7 +28,7 @@ public class Board {
             }
         }
 
-        currentPrisoners = new ResponsePrisoners(0, 0);
+        currentPrisoners = new Prisoners(0, 0);
     }
 
     public Occupancy[][] getCurrentState() {
@@ -39,11 +39,11 @@ public class Board {
         return previousTurnState;
     }
 
-    public ResponsePrisoners getCurrentPrisoners() {
+    public Prisoners getCurrentPrisoners() {
         return currentPrisoners;
     }
 
-    public void setCurrentPrisoners(ResponsePrisoners currentPrisoners) {
+    public void setCurrentPrisoners(Prisoners currentPrisoners) {
         this.currentPrisoners = currentPrisoners;
     }
 

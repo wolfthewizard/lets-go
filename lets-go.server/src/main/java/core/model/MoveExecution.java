@@ -4,17 +4,19 @@ import contract.Change;
 import contract.ResponsePrisoners;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MoveExecution {
-    private ArrayList<Change> changes;
+
+    private List<Change> changes;
     private ResponsePrisoners responsePrisoners;
 
-    public MoveExecution(ArrayList<Change> changes, ResponsePrisoners responsePrisoners) {
+    public MoveExecution(List<Change> changes, ResponsePrisoners responsePrisoners) {
         this.changes = changes;
         this.responsePrisoners = responsePrisoners;
     }
 
-    public ArrayList<Change> getChanges() {
+    public List<Change> getChanges() {
         return changes;
     }
 

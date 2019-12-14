@@ -14,4 +14,13 @@ public enum Color {
             return Occupancy.WHITE;
         }
     }
+
+    public Color reverse() {
+
+        if (this.equals(Color.BLACK)) {
+            return Color.BLACK;
+        } else {
+            return Color.WHITE;
+        }
+    }
 }
