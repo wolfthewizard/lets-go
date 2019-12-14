@@ -45,11 +45,11 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
 
             case GAME_GOES_ON:
                 ResponseDTO responseDTO = new ResponseDTO(moveResponse.getMoveExecution().getChanges(),
-                        moveResponse.getMoveExecution().getPrisoners());
+                        moveResponse.getMoveExecution().getResponsePrisoners());
                 String response = jsonParser.parseResponseToJson(responseDTO);
 
                 currentClient.beginAction(response);
-                responseDTO.getPrisoners().swapPrisoners();
+                responseDTO.getResponsePrisoners().swapPrisoners();
                 waitingClient.completeAction(jsonParser.parseResponseToJson(responseDTO));
                 break;
             case CURRENT_PLAYER_WON:

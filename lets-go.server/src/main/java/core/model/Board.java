@@ -1,6 +1,6 @@
 package core.model;
 
-import contract.Prisoners;
+import contract.ResponsePrisoners;
 import contract.enums.BoardSize;
 import contract.enums.Occupancy;
 
@@ -8,7 +8,7 @@ public class Board {
 
     private Occupancy[][] currentState;
     private Occupancy[][] previousTurnState;
-    private Prisoners currentPrisoners;
+    private ResponsePrisoners currentPrisoners;
 
     public Board(BoardSize boardSize) {
 
@@ -28,7 +28,7 @@ public class Board {
             }
         }
 
-        currentPrisoners = new Prisoners(0, 0);
+        currentPrisoners = new ResponsePrisoners(0, 0);
     }
 
     public Occupancy[][] getCurrentState() {
@@ -39,11 +39,11 @@ public class Board {
         return previousTurnState;
     }
 
-    public Prisoners getCurrentPrisoners() {
+    public ResponsePrisoners getCurrentPrisoners() {
         return currentPrisoners;
     }
 
-    public void setCurrentPrisoners(Prisoners currentPrisoners) {
+    public void setCurrentPrisoners(ResponsePrisoners currentPrisoners) {
         this.currentPrisoners = currentPrisoners;
     }
 

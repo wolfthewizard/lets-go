@@ -1,6 +1,6 @@
 package main.helpers.actionhandler;
 
-import contract.Prisoners;
+import contract.ResponsePrisoners;
 import contract.ResponseDTO;
 import contract.enums.BoardSize;
 import contract.enums.ResponseType;
@@ -52,12 +52,12 @@ public class StartGameActionHandler extends AbstractActionHandler {
                 playerValidator.addNewGame(threadId, waitingThreadId, gameId);
 
                 waitingClient.completeAction(jsonParser
-                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0, 0))));
+                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new ResponsePrisoners(0, 0))));
             } else {
                 playerValidator.addNewGame(waitingThreadId, threadId, gameId);
 
                 currentClient.completeAction(jsonParser
-                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0, 0))));
+                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new ResponsePrisoners(0, 0))));
             }
         } else {
             playerValidator.addWaitingPlayer(boardSize, threadId);

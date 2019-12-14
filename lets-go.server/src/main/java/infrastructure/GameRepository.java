@@ -25,11 +25,7 @@ public class GameRepository implements IGameRepository {
         games.add(game);
     }
 
-    public Board getGameBoard(int gameId) {
-        return getGame(gameId).getBoard();
-    }
-
-    private Game getGame(int gameId) {
+    public Game getGame(int gameId) {
         for (Game game : games) {
             if (game.getId() == gameId) {
                 return game;
