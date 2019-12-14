@@ -1,9 +1,16 @@
 package core.helpers;
 
 import contract.enums.ResponseType;
+import core.interfaces.ICommunicatorSender;
 import core.interfaces.IEndOfGameHandler;
 
 public class EndOfGameHandler implements IEndOfGameHandler {
+
+    private final ICommunicatorSender communicatorSender;
+
+    public EndOfGameHandler(ICommunicatorSender communicatorSender){
+        this.communicatorSender = communicatorSender;
+    }
 
     public void handleGameEnd(ResponseType endType) {
 
@@ -27,5 +34,8 @@ public class EndOfGameHandler implements IEndOfGameHandler {
                 System.out.println("Somthing broke...");
                 break;
         }
+
+        communicatorSender.sendLeaveGameMessage();
+        System.exit(0);
     }
 }

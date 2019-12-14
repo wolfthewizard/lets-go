@@ -40,6 +40,7 @@ public class ServerCommunicator implements ICommunicatorListener, ICommunicatorS
     public void sendLeaveGameMessage() {
 
         sendMessage(new ActionDTO(ActionType.LEAVEGAME));
+        serverConnector.shutDown();
     }
 
     private void sendMessage(ActionDTO actionDTO) {
@@ -51,16 +52,4 @@ public class ServerCommunicator implements ICommunicatorListener, ICommunicatorS
     public void responseFetched(String response) {
         serverResponseReceiver.responseReceived(jsonParser.parseJsonToResponse(response));
     }
-
-    //public void shutDownConnection() {
-
-      //  serverResponseRedirector.stopThread();
-        //connectionClosed = true;
-        //outputWriter.close();
-        //try {
-          //  socket.close();
-        //} catch (IOException e) {
-          //  e.printStackTrace();
-        //}
-    //}
 }

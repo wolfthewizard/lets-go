@@ -35,4 +35,8 @@ public class ServerConnector implements IServerConnector {
     public void sendAction(String action){
         serverSender.sendAction(action);
     }
+
+    public void shutDown(){
+
+    }
 }

@@ -72,7 +72,7 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         game.setLastTurnPassed(false);
 
-        Prisoners prisoners =  board.getCurrentPrisoners();
+        Prisoners prisoners = board.getCurrentPrisoners();
         if (move.getPlayerColor() == Color.BLACK) {
             prisoners.addBlacksPrisoners(newPrisoners);
         } else {
@@ -165,7 +165,7 @@ public class MoveExecutorService implements IMoveExecutorService {
 
     private void chainBuildingRecursive(Coordinates coordinates, Occupancy occupancy, List<Coordinates> chain) {
 
-        if (!chain.contains(coordinates)) {
+        if (!chainContains(chain, coordinates)) {
             chain.add(coordinates);
 
             for (Coordinates cords : getNeighbouringCords(coordinates, occupancy)) {
@@ -216,5 +216,17 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         potentialState[coordinates.getX()][coordinates.getY()] = occupancy;
         changes.add(new Change(occupancy, coordinates));
+    }
+
+    private boolean chainContains(List<Coordinates> chain, Coordinates coordinates) {
+
+        for (Coordinates cords : chain) {
+
+            if (cords.getX() == coordinates.getX() && cords.getY() == cords.getY()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

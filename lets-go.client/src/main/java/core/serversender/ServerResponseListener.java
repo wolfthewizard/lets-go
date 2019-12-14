@@ -16,7 +16,7 @@ public class ServerResponseListener implements OnServerResponseListener {
         switch (responseDTO.getResponseType()) {
 
             case MOVE_EXECUTED:
-                frontendManager.moveExecuted(responseDTO.getChanges(), responseDTO.getPrisoners());
+                frontendManager.moveExecuted(responseDTO.getChanges(), responseDTO.getResponsePrisoners());
                 break;
 
             case INVALID_MOVE:
