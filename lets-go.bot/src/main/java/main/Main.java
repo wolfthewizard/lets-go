@@ -9,18 +9,21 @@ import core.interfaces.IGameInitializer;
 import core.interfaces.ITurnExecutor;
 import infrastructure.ServerConnector;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
 
         ServerCommunicator serverCommunicator = new ServerCommunicator(new ServerConnector(), new JsonParser());
         BoardManager boardManager = new BoardManager();
-        ITurnExecutor turnExecutor =  new TurnExecutor(serverCommunicator, new MovePerformer(), boardManager);
-        ServerResponseReceiver serverResponseReceiver = new ServerResponseReceiver(new MovesParser(boardManager,turnExecutor), new EndOfGameHandler(), turnExecutor);
+        ITurnExecutor turnExecutor = new TurnExecutor(serverCommunicator, new MovePerformer(), boardManager);
+        ServerResponseReceiver serverResponseReceiver = new ServerResponseReceiver(new MovesParser(boardManager, turnExecutor), new EndOfGameHandler(), turnExecutor);
         serverCommunicator.setServerResponseReceiver(serverResponseReceiver);
         IGameInitializer gameInitializer = new GameInitializer(serverCommunicator, boardManager);
 
-        switch (args[0]){
+        switch (args[0]) {
             case "-help":
                 System.out.println("-small to enable a bot for 9x9 board");
                 System.out.println("-small to enable a bot for 13x13 board");
@@ -37,8 +40,10 @@ public class Main {
                 break;
         }
 
-        while(true){
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.nextLine() != "exit") {
 
         }
+        serverCommunicator.sendLeaveGameMessage();
     }
 }

@@ -29,6 +29,7 @@ public class ServerListener extends Thread{
                 communicatorListener.responseFetched(response);
             } catch (IOException e) {
                 System.out.println("server out");
+                System.exit(0);
                 return;
             }
 

@@ -5,4 +5,6 @@ public interface IServerConnector {
     void StartListening(ICommunicatorListener communicatorListener);
 
     void sendAction(String action);
+
+    void shutDown();
 }
