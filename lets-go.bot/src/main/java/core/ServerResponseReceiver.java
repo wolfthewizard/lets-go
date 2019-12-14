@@ -1,24 +1,21 @@
 package core;
 
 import contract.ResponseDTO;
-import core.interfaces.IEndOfGameHandler;
 import core.interfaces.IJsonParser;
-import core.interfaces.IMovesParser;
 import core.interfaces.IServerResponseReceiver;
 
 public class ServerResponseReceiver implements IServerResponseReceiver {
 
-    private final IMovesParser movesParser;
-    private final IEndOfGameHandler endOfGameHandler;
+    private final IJsonParser jsonParser;
 
-    public ServerResponseReceiver(IMovesParser movesParser, IEndOfGameHandler endOfGameHandler) {
-        this.movesParser = movesParser;
-        this.endOfGameHandler = endOfGameHandler;
+    public ServerResponseReceiver(IJsonParser jsonParser) {
+        this.jsonParser = jsonParser;
     }
 
 
     @Override
-    public void responseReceived(ResponseDTO response) {
+    public void responseReceived(String response) {
+        ResponseDTO responseDTO = jsonParser.parseJsonToResponse(response);
 
     }
 }
