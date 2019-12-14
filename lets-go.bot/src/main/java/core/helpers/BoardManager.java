@@ -1,16 +1,19 @@
-package core;
+package core.helpers;
 
 import contract.Change;
 import contract.enums.BoardSize;
 import contract.enums.Occupancy;
+import core.interfaces.IBoardManager;
 
 import java.util.ArrayList;
 
-public class BoardManager {
+public class BoardManager implements IBoardManager {
 
     private Occupancy[][] board;
+    private BoardSize boardSize;
 
-    public BoardManager(BoardSize boardSize) {
+    public void initializeBoard(BoardSize boardSize){
+        this.boardSize = boardSize;
 
         board = new Occupancy[boardSize.getValue()][];
         for (int i = 0; i < boardSize.getValue(); i++) {
@@ -29,5 +32,9 @@ public class BoardManager {
 
     public Occupancy[][] getBoard() {
         return board;
+    }
+
+    public BoardSize getBoardSize() {
+        return boardSize;
     }
 }
