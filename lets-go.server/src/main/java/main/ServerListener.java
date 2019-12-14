@@ -1,7 +1,6 @@
 package main;
 
 import main.helpers.IActionProcesser;
-import main.helpers.IIdGenerator;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +12,7 @@ public class ServerListener {
     private IClientsManager clientsManager;
 
 
-    public ServerListener(IActionProcesser actionProcesser, IIdGenerator idGenerator, IClientsManager clientsManager) throws IOException {
+    public ServerListener(IActionProcesser actionProcesser, IClientsManager clientsManager) throws IOException {
 
         this.clientsManager = clientsManager;
         server = new ServerSocket(1337);
@@ -23,7 +22,7 @@ public class ServerListener {
             Socket client = server.accept();
 
             ClientConnectionThread clientConnectionThread = new ClientConnectionThread(client,
-                    actionProcesser, idGenerator.generateId());
+                    actionProcesser, clientsManager.getAllClients().size()+1);
             clientsManager.addClient(clientConnectionThread);
 
             clientConnectionThread.start();

@@ -15,17 +15,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class StartGameActionHandler extends AbstractActionHandler {
+public class StartMultiplayerGameActionHandler extends AbstractActionHandler {
 
     private int threadId;
     private BoardSize boardSize;
     private IPlayerValidator playerValidator;
     private IClientsManager clientsManager;
     private Random randomGenerator;
+    private HashMap<BoardSize, Integer> waitingThreads;
 
-    public StartGameActionHandler(GameInfo gameInfo, ClientConnectionThread currentClient,
-                                  IJsonParser jsonParser, ICommandDirector commandDirector, int threadId,
-                                  BoardSize boardSize, IPlayerValidator playerValidator, IClientsManager clientsManager) {
+    public StartMultiplayerGameActionHandler(GameInfo gameInfo, ClientConnectionThread currentClient,
+                                             IJsonParser jsonParser, ICommandDirector commandDirector, int threadId,
+                                             BoardSize boardSize, IPlayerValidator playerValidator, IClientsManager clientsManager,
+                                             HashMap<BoardSize, Integer> waitingThreads) {
         super(gameInfo, currentClient, jsonParser, commandDirector);
 
         this.playerValidator = playerValidator;
@@ -33,35 +35,38 @@ public class StartGameActionHandler extends AbstractActionHandler {
         this.boardSize = boardSize;
         this.clientsManager = clientsManager;
         this.randomGenerator = new Random();
+        this.waitingThreads = waitingThreads;
     }
 
     @Override
     protected void handleNullGameInfo() {
 
-        Integer waitingThreadId = playerValidator.getWaitingPlayerId(boardSize);
-
-        if (waitingThreadId != null) {
+        if(waitingThreads.containsKey(boardSize)) {
+            int waitingThreadId = waitingThreads.get(boardSize);
             ClientConnectionThread waitingClient = clientsManager.getClientWithId(waitingThreadId);
-            int gameId = commandDirector.CreateNewGame(boardSize);
+            waitingThreads.remove(boardSize);
+            int gameId =commandDirector.CreateNewMultiplayerGame();
 
             currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
 
             waitingClient.beginAction(jsonParser
                     .parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
 
-            if (randomGenerator.nextBoolean()) {
+            if(randomGenerator.nextBoolean()) {
                 playerValidator.addNewGame(threadId, waitingThreadId, gameId);
 
                 waitingClient.completeAction(jsonParser
-                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0, 0))));
-            } else {
+                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0,0))));
+            }
+            else {
                 playerValidator.addNewGame(waitingThreadId, threadId, gameId);
 
                 currentClient.completeAction(jsonParser
-                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0, 0))));
+                        .parseResponseToJson(new ResponseDTO(new ArrayList<>(), new Prisoners(0,0))));
             }
-        } else {
-            playerValidator.addWaitingPlayer(boardSize, threadId);
+        }
+        else {
+            waitingThreads.put(boardSize, threadId);
         }
     }
 
