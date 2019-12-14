@@ -74,6 +74,7 @@ public class MoveExecutorService implements IMoveExecutorService {
     private List<Coordinates> getChainStartingWithCords(Coordinates startingCords) {
 
         List<Coordinates> chain = new ArrayList<>();
+        return chain;
     }
 
     private List<Coordinates> getNeighbouringCords(Coordinates coordinates, Occupancy occupancy) {
