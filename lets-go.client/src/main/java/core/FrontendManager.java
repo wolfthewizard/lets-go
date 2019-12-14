@@ -2,8 +2,8 @@ package core;
 
 import contract.Change;
 import contract.ResponsePrisoners;
-import frontend.Game;
-import frontend.GameBoardWindow;
+import main.Game;
+import main.GameBoardWindow;
 
 import java.util.ArrayList;
 

@@ -1,23 +1,23 @@
-package core.serversender;
+package infrastructure;
 
 import contract.ActionDTO;
 import contract.ResponseDTO;
 import contract.enums.ResponseType;
+import core.serversender.IJsonParser;
+import core.serversender.JsonParser;
+import core.serversender.OnServerResponseListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
 public class ServerResponseRedirector extends Thread {
 
-    private IJsonParser jsonParser;
     private BufferedReader inputReader;
     private OnServerResponseListener serverResponseListener;
-    private int numberOfResponsesToRead = 0;
 
     public ServerResponseRedirector(BufferedReader bufferedReader) {
 
         inputReader = bufferedReader;
-        this.jsonParser = new JsonParser();
     }
 
     public void setServerResponseListener(OnServerResponseListener serverResponseListener) {
@@ -35,10 +35,8 @@ public class ServerResponseRedirector extends Thread {
                 return;
             }
 
-            numberOfResponsesToRead--;
-
             if(serverResponseListener != null) {
-                serverResponseListener.responseReceived(jsonParser.parseJsonToResponse(responseJson));
+                serverResponseListener.responseReceived(responseJson);
             }
         }
     }
@@ -52,13 +50,5 @@ public class ServerResponseRedirector extends Thread {
             return;
         }
         interrupt();
-    }
-
-    public void addNumberOfResponsesToRead(int numberOfResponsesToRead) {
-        this.numberOfResponsesToRead += numberOfResponsesToRead;
-    }
-
-    public int getNumberOfResponsesToRead() {
-        return numberOfResponsesToRead;
     }
 }

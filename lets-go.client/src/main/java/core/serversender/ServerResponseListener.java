@@ -2,17 +2,34 @@ package core.serversender;
 
 import contract.ResponseDTO;
 import core.IFrontendManager;
+import core.interfaces.IResponseNumberCounter;
 
 public class ServerResponseListener implements OnServerResponseListener {
 
-    private IFrontendManager frontendManager;
+    private final IFrontendManager frontendManager;
+    private final IJsonParser jsonParser;
+    private IResponseNumberCounter responseNumberCounter;
 
-    public ServerResponseListener(IFrontendManager frontendManager) {
+    public void setResponseNumberCounter(IResponseNumberCounter responseNumberCounter) {
+        this.responseNumberCounter = responseNumberCounter;
+    }
+
+    public ServerResponseListener(IFrontendManager frontendManager, IJsonParser jsonParser) {
         this.frontendManager = frontendManager;
+        this.jsonParser = jsonParser;
     }
 
     @Override
-    public void responseReceived(ResponseDTO responseDTO) {
+    public void responseReceived(String response) {
+
+        passResponseDTO(jsonParser.parseJsonToResponse(response));
+    }
+
+    public void passResponseDTO(ResponseDTO responseDTO){
+        if(responseNumberCounter != null){
+            responseNumberCounter.countResponse(responseDTO.getResponseType());
+        }
+
         switch (responseDTO.getResponseType()) {
 
             case MOVE_EXECUTED:
