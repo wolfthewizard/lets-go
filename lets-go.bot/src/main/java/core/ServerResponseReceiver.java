@@ -15,7 +15,6 @@ public class ServerResponseReceiver implements IServerResponseReceiver {
         this.turnExecutor = turnExecutor;
     }
 
-
     @Override
     public void responseReceived(ResponseDTO response) {
         switch (response.getResponseType()){

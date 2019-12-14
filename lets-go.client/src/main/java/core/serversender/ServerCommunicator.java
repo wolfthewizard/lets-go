@@ -9,11 +9,8 @@ import contract.enums.ResponseType;
 import core.interfaces.IResponseNumberCounter;
 import core.interfaces.IServerConnector;
 import infrastructure.ServerConnector;
-import infrastructure.ServerResponseRedirector;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class ServerCommunicator implements IServerCommunicator {
 

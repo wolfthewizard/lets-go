@@ -133,7 +133,7 @@ public class GameBoardWindow extends JFrame implements Game {
         new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
         new ServerCommunicator(new JsonParser(), null).shutDownConnection();
         setVisible(false);
-        dispose();
+        System.exit(0);
     }
 
     public void exitApp() {
