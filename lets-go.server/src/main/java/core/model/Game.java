@@ -38,4 +38,8 @@ public class Game {
     public boolean isLastTurnPassed() {
         return lastTurnPassed;
     }
+
+    public void setLastTurnPassed(boolean passed) {
+        lastTurnPassed = passed;
+    }
 }
