@@ -4,17 +4,20 @@ import contract.ActionDTO;
 import contract.Coordinates;
 import contract.enums.ActionType;
 import contract.enums.BoardSize;
-import core.interfaces.IJsonParser;
-import core.interfaces.IServerSender;
+import core.interfaces.*;
 
-public class ServerCommunicator {
+public class ServerCommunicator implements ICommunicatorListener, ICommunicatorSender {
 
-    private final IServerSender serverSender;
+    private final IServerConnector serverConnector;
     private final IJsonParser jsonParser;
+    private final IServerResponseReceiver serverResponseReceiver;
 
-    public ServerCommunicator(IServerSender serverSender, IJsonParser jsonParser){
-        this.serverSender = serverSender;
+    public ServerCommunicator(IServerConnector serverConnector, IJsonParser jsonParser, IServerResponseReceiver serverResponseReceiver){
+        this.serverConnector = serverConnector;
         this.jsonParser = jsonParser;
+        this.serverResponseReceiver = serverResponseReceiver;
+
+        serverConnector.StartListening(this);
     }
 
     public void sendStartGameMessage(BoardSize boardSize) {
@@ -39,7 +42,12 @@ public class ServerCommunicator {
 
     private void sendMessage(ActionDTO actionDTO) {
 
-        serverSender.sendAction(jsonParser.parseActionToJson(actionDTO));
+        serverConnector.sendAction(jsonParser.parseActionToJson(actionDTO));
+    }
+
+    @Override
+    public void responseFetched(String response) {
+        serverResponseReceiver.responseReceived(jsonParser.parseJsonToResponse(response));
     }
 
     //public void shutDownConnection() {

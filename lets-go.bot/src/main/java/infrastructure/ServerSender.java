@@ -14,20 +14,11 @@ import java.net.Socket;
 public class ServerSender {
 
     private static PrintWriter outputWriter;
-    private static Socket socket;
-    private ServerListener serverListener;
 
-    public ServerSender() {
-        try {
-            socket = new Socket("localhost", 1337);
-            outputWriter = new PrintWriter(socket.getOutputStream(), true);
-            serverListener = new ServerListener(
-                    new BufferedReader(new InputStreamReader(socket.getInputStream())));
-        } catch (IOException e) {
-            System.out.println("Critical server error !");
-        }
 
-        serverListener.start();
+    public ServerSender(PrintWriter outputWriter) {
+        this.outputWriter = outputWriter;
+
     }
 
     public void sendAction(String action){
