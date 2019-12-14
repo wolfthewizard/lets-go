@@ -6,20 +6,21 @@ import contract.ResponseDTO;
 import contract.enums.ActionType;
 import contract.enums.BoardSize;
 import contract.enums.ResponseType;
+import core.interfaces.IResponseNumberCounter;
+import core.interfaces.IServerConnector;
+import infrastructure.ServerConnector;
+import infrastructure.ServerResponseRedirector;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ServerCommunicator implements IServerCommunicator {
 
     private IJsonParser jsonParser;
-    private static PrintWriter outputWriter;
-    private static Socket socket;
     private static boolean connectionClosed;
-    private static ServerResponseRedirector serverResponseRedirector;
+    private static IServerConnector serverConnector;
+    private static IResponseNumberCounter responseNumberCounter;
 
     static {
         connectionClosed = false;
@@ -33,11 +34,7 @@ public class ServerCommunicator implements IServerCommunicator {
 
     private static void restoreConnection() throws IOException {
 
-        socket = new Socket("localhost", 1337);
-        outputWriter = new PrintWriter(socket.getOutputStream(), true);
-        serverResponseRedirector = new ServerResponseRedirector(
-                new BufferedReader(new InputStreamReader(socket.getInputStream())));
-        serverResponseRedirector.start();
+        serverConnector = new ServerConnector();
     }
 
     public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
@@ -47,10 +44,16 @@ public class ServerCommunicator implements IServerCommunicator {
             try {
                 restoreConnection();
             } catch (IOException e) {
-                serverResponseListener.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
+                serverResponseListener.passResponseDTO(new ResponseDTO(ResponseType.SERVER_ERROR));
             }
         }
-        serverResponseRedirector.setServerResponseListener(serverResponseListener);
+
+        if(serverResponseListener != null){
+            responseNumberCounter = new ResponseNumberCounter();
+            serverResponseListener.setResponseNumberCounter(responseNumberCounter);
+
+            serverConnector.setServerResponseListener(serverResponseListener);
+        }
 
         this.jsonParser = jsonParser;
     }
@@ -72,26 +75,20 @@ public class ServerCommunicator implements IServerCommunicator {
 
     public void sendLeaveGameMessage() {
 
-        outputWriter.println(jsonParser.parseActionToJson(new ActionDTO(ActionType.LEAVEGAME)));
+        serverConnector.sendMessage(jsonParser.parseActionToJson(new ActionDTO(ActionType.LEAVEGAME)));
     }
 
     private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {
 
-        if(serverResponseRedirector.getNumberOfResponsesToRead() == 0) {
-            serverResponseRedirector.addNumberOfResponsesToRead(numberOfResposnses);
-            outputWriter.println(jsonParser.parseActionToJson(actionDTO));
+        if(responseNumberCounter.getNumberOfResponsesToRead() == 0) {
+            responseNumberCounter.addNumberOfResponsesToRead(numberOfResposnses);
+            serverConnector.sendMessage(jsonParser.parseActionToJson(actionDTO));
         }
     }
 
     public void shutDownConnection() {
 
-        serverResponseRedirector.stopThread();
         connectionClosed = true;
-        outputWriter.close();
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        serverConnector.shutDown();
     }
 }

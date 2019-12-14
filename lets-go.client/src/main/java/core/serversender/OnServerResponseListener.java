@@ -1,9 +1,13 @@
 package core.serversender;
 
-
 import contract.ResponseDTO;
+import core.interfaces.IResponseNumberCounter;
 
-public interface OnServerResponseListener {//bez I bo to bedzie implementowala klasa ktora ogarnia ten napis na gorze
+public interface OnServerResponseListener {
 
-    void responseReceived(ResponseDTO responseDTO);
+    void responseReceived(String response);
+
+    void setResponseNumberCounter(IResponseNumberCounter responseNumberCounter);
+
+    void passResponseDTO(ResponseDTO responseDTO);
 }

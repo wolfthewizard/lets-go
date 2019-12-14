@@ -1,6 +1,5 @@
 package core.interfaces;
 
-import contract.ResponseDTO;
 import core.model.Move;
 import core.model.MoveResponse;
 

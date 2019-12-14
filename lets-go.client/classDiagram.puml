@@ -220,7 +220,7 @@ package core {
     }
 }
 
-package frontend {
+package main {
 
     class BoardPanel extends JPanel {
 
