@@ -3,17 +3,18 @@ package contract;
 import contract.enums.ResponseType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ResponseDTO {
     private ResponseType responseType;
-    private ArrayList<Change> changes;
-    private Prisoners prisoners;
+    private List<Change> changes;
+    private ResponsePrisoners responsePrisoners;
 
-    public ResponseDTO(ArrayList<Change> changes, Prisoners prisoners) {
+    public ResponseDTO(List<Change> changes, ResponsePrisoners responsePrisoners) {
 
         responseType = ResponseType.MOVE_EXECUTED;
         this.changes = changes;
-        this.prisoners=prisoners;
+        this.responsePrisoners = responsePrisoners;
     }
 
     public ResponseDTO(ResponseType responseType) {
@@ -21,7 +22,7 @@ public class ResponseDTO {
     }
 
 
-    public ArrayList<Change> getChanges() {
+    public List<Change> getChanges() {
         return changes;
     }
 
@@ -29,7 +30,7 @@ public class ResponseDTO {
         return responseType;
     }
 
-    public Prisoners getPrisoners() {
-        return prisoners;
+    public ResponsePrisoners getResponsePrisoners() {
+        return responsePrisoners;
     }
 }

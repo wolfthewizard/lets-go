@@ -4,7 +4,8 @@ import core.model.*;
 import contract.enums.BoardSize;
 
 public interface ICommandDirector {
-        int CreateNewGame();
-        MoveResponse TryToMove(Move move);
-        void CancelGame(MoveIdentity leftIdentity);
+
+        int createNewGame(BoardSize boardSize);
+        MoveResponse tryToMove(Move move);
+        void cancelGame(MoveIdentity leftIdentity);
 }

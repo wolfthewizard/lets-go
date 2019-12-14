@@ -7,9 +7,9 @@ import java.util.ArrayList;
 public class ResponseDTO {
     private ResponseType responseType;
     private ArrayList<Change> changes;
-    private Prisoners prisoners;
+    private ResponsePrisoners prisoners;
 
-    public ResponseDTO(ArrayList<Change> changes, Prisoners prisoners) {
+    public ResponseDTO(ArrayList<Change> changes, ResponsePrisoners prisoners) {
 
         responseType = ResponseType.MOVE_EXECUTED;
         this.changes = changes;
@@ -29,7 +29,7 @@ public class ResponseDTO {
         return responseType;
     }
 
-    public Prisoners getPrisoners() {
+    public ResponsePrisoners getPrisoners() {
         return prisoners;
     }
 }

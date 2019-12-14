@@ -1,11 +1,11 @@
 package contract;
 
-public class Prisoners {
+public class ResponsePrisoners {
 
     private int yourPrisoners;
     private int enemyPrisoners;
 
-    public Prisoners(int yourPrisoners, int enemyPrisoners) {
+    public ResponsePrisoners(int yourPrisoners, int enemyPrisoners) {
         this.yourPrisoners = yourPrisoners;
         this.enemyPrisoners = enemyPrisoners;
     }

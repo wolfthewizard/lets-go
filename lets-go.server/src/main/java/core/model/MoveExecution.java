@@ -1,24 +1,26 @@
 package core.model;
 
 import contract.Change;
-import contract.Prisoners;
+import contract.ResponsePrisoners;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MoveExecution {
-    private ArrayList<Change> changes;
-    private Prisoners prisoners;
 
-    public MoveExecution(ArrayList<Change> changes, Prisoners prisoners) {
+    private List<Change> changes;
+    private ResponsePrisoners responsePrisoners;
+
+    public MoveExecution(List<Change> changes, ResponsePrisoners responsePrisoners) {
         this.changes = changes;
-        this.prisoners = prisoners;
+        this.responsePrisoners = responsePrisoners;
     }
 
-    public ArrayList<Change> getChanges() {
+    public List<Change> getChanges() {
         return changes;
     }
 
-    public Prisoners getPrisoners() {
-        return prisoners;
+    public ResponsePrisoners getResponsePrisoners() {
+        return responsePrisoners;
     }
 }
