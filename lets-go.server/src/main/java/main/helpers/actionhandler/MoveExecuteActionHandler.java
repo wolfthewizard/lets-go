@@ -32,7 +32,7 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
 
     @Override
     protected void handleNotNullGameInfo() {
-        MoveResponse moveResponse = commandDirector.TryToMove(
+        MoveResponse moveResponse = commandDirector.tryToMove(
                 new Move(gameInfo.getMoveIdentity(), coordinates));
 
         ClientConnectionThread waitingClient = clientsManager.getClientWithId(gameInfo.getSecondPlayerId());

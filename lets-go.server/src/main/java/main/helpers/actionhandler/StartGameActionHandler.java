@@ -12,7 +12,6 @@ import main.helpers.IPlayerValidator;
 import main.model.GameInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 public class StartGameActionHandler extends AbstractActionHandler {
@@ -42,7 +41,7 @@ public class StartGameActionHandler extends AbstractActionHandler {
 
         if (waitingThreadId != null) {
             ClientConnectionThread waitingClient = clientsManager.getClientWithId(waitingThreadId);
-            int gameId = commandDirector.CreateNewGame();
+            int gameId = commandDirector.createNewGame();
 
             currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
 

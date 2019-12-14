@@ -1,28 +1,22 @@
 package core.model;
 
-import contract.Prisoners;
 import contract.enums.BoardSize;
-import contract.enums.Occupancy;
 
 public class Game {
+
     private int id;
-    private Occupancy[][] board;
+    private Board board;
     private BoardSize boardSize;
     private Color playersTurn;
-    private Prisoners currentPrisoners;
+    private boolean lastTurnPassed;
 
-    public Game(int id, BoardSize boardSize, Color startingPlayer){
+    public Game(int id, Board board, BoardSize boardSize) {
+
         this.id = id;
         this.boardSize = boardSize;
-        this.playersTurn = startingPlayer;
-        currentPrisoners = new Prisoners(0,0);
-        board = new Occupancy[boardSize.getValue()][];
-        for(int i=0; i< boardSize.getValue();i++) {
-            board[i] = new Occupancy[boardSize.getValue()];
-            for(int j=0;j<boardSize.getValue();j++) {
-                board[i][j] = Occupancy.EMPTY;
-            }
-        }
+        this.playersTurn = Color.BLACK;
+        this.board = board;
+        lastTurnPassed = false;
     }
 
     public int getId() {
@@ -33,7 +27,7 @@ public class Game {
         return playersTurn;
     }
 
-    public Occupancy[][] getBoard() {
+    public Board getBoard() {
         return board;
     }
 
@@ -41,11 +35,7 @@ public class Game {
         return boardSize;
     }
 
-    public Prisoners getCurrentPrisoners() {
-        return currentPrisoners;
-    }
-
-    public void setTile(int x, int y, Occupancy occupancy){
-        board[x][y] = occupancy;
+    public boolean isLastTurnPassed() {
+        return lastTurnPassed;
     }
 }
