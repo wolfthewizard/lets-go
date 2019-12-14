@@ -19,7 +19,7 @@ public class Main {
         ServerCommunicator serverCommunicator = new ServerCommunicator(new ServerConnector(), new JsonParser());
         BoardManager boardManager = new BoardManager();
         ITurnExecutor turnExecutor = new TurnExecutor(serverCommunicator, new MovePerformer(), boardManager);
-        ServerResponseReceiver serverResponseReceiver = new ServerResponseReceiver(new MovesParser(boardManager, turnExecutor), new EndOfGameHandler(), turnExecutor);
+        ServerResponseReceiver serverResponseReceiver = new ServerResponseReceiver(new MovesParser(boardManager, turnExecutor), new EndOfGameHandler(serverCommunicator), turnExecutor);
         serverCommunicator.setServerResponseReceiver(serverResponseReceiver);
         IGameInitializer gameInitializer = new GameInitializer(serverCommunicator, boardManager);
 
