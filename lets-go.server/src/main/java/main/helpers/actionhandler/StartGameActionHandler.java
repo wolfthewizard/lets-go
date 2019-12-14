@@ -41,7 +41,7 @@ public class StartGameActionHandler extends AbstractActionHandler {
 
         if (waitingThreadId != null) {
             ClientConnectionThread waitingClient = clientsManager.getClientWithId(waitingThreadId);
-            int gameId = commandDirector.createNewGame();
+            int gameId = commandDirector.createNewGame(boardSize);
 
             currentClient.beginAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SUCCESS)));
 
