@@ -111,16 +111,11 @@ public class MoveExecutorService implements IMoveExecutorService {
         }
 
         //3rd phase
-        List<Coordinates> friendsSurrounding = getNeighbouringCords(move.getCoordinates(), move.getPlayerColor().toOccupancy());
+        List<Coordinates> chain = getChainStartingWithCords(move.getCoordinates(), move.getPlayerColor().toOccupancy());
 
-        for (Coordinates friend : friendsSurrounding) {
+        if (isChainWithoutBreaths(chain)) {
 
-            List<Coordinates> chain = getChainStartingWithCords(friend, move.getPlayerColor().toOccupancy());
-
-            if (isChainWithoutBreaths(chain)) {
-
-                killedEnemies = -removeChainFromBoard(chain);
-            }
+            killedEnemies = -removeChainFromBoard(chain);
         }
 
         return killedEnemies;
@@ -222,7 +217,7 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         for (Coordinates cords : chain) {
 
-            if (cords.getX() == coordinates.getX() && cords.getY() == cords.getY()) {
+            if (cords.getX() == coordinates.getX() && cords.getY() == coordinates.getY()) {
                 return true;
             }
         }
