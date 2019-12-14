@@ -13,12 +13,10 @@ import java.util.Random;
 
 public class ActionProcesser implements IActionProcesser {
 
-    private final HashMap<BoardSize, Integer> waitingThreads = new HashMap<>();
     private final IJsonParser jsonParser;
     private final IPlayerValidator playerValidator;
     private final ICommandDirector commandDirector;
     private final IClientsManager clientsManager;
-    private final Random randomGenerator = new Random();
     private AbstractActionHandler actionHandler;
 
     public ActionProcesser(IJsonParser jsonParser, IPlayerValidator playerValidator,
@@ -38,33 +36,23 @@ public class ActionProcesser implements IActionProcesser {
         ClientConnectionThread currentClient = clientsManager.getClientWithId(threadId);
 
         switch (action.getActionType()) {
-            case STARTBOTGAME:
+            case STARTGAME:
 
-                actionHandler = new StartBotGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector, playerValidator
-                , threadId, action.getBoardSize());
+                actionHandler = new StartGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector, threadId,
+                        action.getBoardSize(), playerValidator, clientsManager);
                 break;
-
-            case STARTMULTIPLAYERGAME:
-
-                actionHandler = new StartMultiplayerGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector, threadId,
-                        action.getBoardSize(), playerValidator, clientsManager, waitingThreads);
-                    break;
 
             case PASSMOVE:
             case DOMOVE:
 
                 actionHandler = new MoveExecuteActionHandler(gameInfo, currentClient, jsonParser,
                         clientsManager, commandDirector, action.getCoordinates());
-
-
                 break;
 
             case LEAVEGAME:
 
                 actionHandler = new LeaveGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector,
-                        clientsManager,playerValidator);
-
-
+                        clientsManager, playerValidator);
                 break;
         }
 

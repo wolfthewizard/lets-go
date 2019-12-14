@@ -9,14 +9,12 @@ public class Game {
     private Occupancy[][] board;
     private BoardSize boardSize;
     private Color playersTurn;
-    private Color botColor;
     private Prisoners currentPrisoners;
 
-    public Game(int id, BoardSize boardSize, Color startingPlayer, Color botColor){
+    public Game(int id, BoardSize boardSize, Color startingPlayer){
         this.id = id;
         this.boardSize = boardSize;
         this.playersTurn = startingPlayer;
-        this.botColor = botColor;
         currentPrisoners = new Prisoners(0,0);
         board = new Occupancy[boardSize.getValue()][];
         for(int i=0; i< boardSize.getValue();i++) {
@@ -29,10 +27,6 @@ public class Game {
 
     public int getId() {
         return id;
-    }
-
-    public Color getBotColor() {
-        return botColor;
     }
 
     public Color getPlayersTurn() {

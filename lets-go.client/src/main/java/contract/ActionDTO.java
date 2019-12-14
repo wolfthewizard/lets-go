@@ -9,13 +9,8 @@ public class ActionDTO {
     private Coordinates coordinates;
 
 
-    public ActionDTO(boolean isMultiplayer, BoardSize boardSize){
-        if(isMultiplayer) {
-            actionType = ActionType.STARTMULTIPLAYERGAME;
-        }
-        else {
-            actionType = ActionType.STARTBOTGAME;
-        }
+    public ActionDTO(BoardSize boardSize){
+        actionType = ActionType.STARTGAME;
         this.boardSize = boardSize;
     }
 

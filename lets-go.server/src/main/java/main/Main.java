@@ -21,13 +21,9 @@ public class Main {
         IClientsManager clientsManager = new ClientsManager();
         ServerListener serverCommunicator = new ServerListener(new ActionProcesser(jsonParser,
                 new PlayerValidator(), new ICommandDirector() {
-            @Override
-            public CreateNewBotGameResult CreateNewBotGame(boolean letBotStart, BoardSize boardSize) {
-                return new CreateNewBotGameResult(11, new ArrayList<>(), new Prisoners(0,0));
-            }
 
             @Override
-            public int CreateNewMultiplayerGame() {
+            public int CreateNewGame() {
                 return 5;
             }
 
