@@ -34,50 +34,44 @@ public class MoveExecutorService implements IMoveExecutorService {
         Game game = gameRepository.getGame(move.getGameId());
         Board board = game.getBoard();
 
-        if (move.getCoordinates() == null) {
+        Coordinates moveCoordinates = move.getCoordinates();
+        Color playerColor = move.getPlayerColor();
+        boardSizeValue = game.getBoardSize().getValue();
+        Prisoners prisoners = board.getCurrentPrisoners();
+
+        if (moveCoordinates == null) {
+
             if (game.isLastTurnPassed()) {
 
-                if (new Random().nextBoolean()) {
-                    return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON, null);
-                } else {
-                    return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON, null);
-                }
                 //todo : handle basically the whole point counting mechanism
+                if (new Random().nextBoolean()) {
+                    return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON);
+                } else {
+                    return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON);
+                }
             } else {
 
                 game.setLastTurnPassed(true);
-                return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution
-                        (new ArrayList<>(), board.getCurrentPrisoners().toResponsePrisoners(move.getPlayerColor())));
+                return new MoveResponse(MoveResponseType.GAME_GOES_ON,
+                        new MoveExecution(prisoners.toResponsePrisoners(playerColor)));
             }
         }
 
-        if (!moveValidator.validateVacancy(board.getCurrentState(), move.getCoordinates())) {
-            return new MoveResponse(MoveResponseType.INVALID_MOVE, null);
+        if (!preMoveValidation(board.getCurrentState(), moveCoordinates)) {
+            return new MoveResponse(MoveResponseType.INVALID_MOVE);
         }
 
-        changes = new ArrayList<>();
+        initializePotentialData(board);
 
-        potentialState = new Occupancy[game.getBoardSize().getValue()][];
-        for (int i = 0; i < game.getBoardSize().getValue(); i++) {
-            potentialState[i] = board.getCurrentState()[i].clone();
-        }
+        int newPrisoners = doMove(moveCoordinates, playerColor);
 
-        boardSizeValue = game.getBoardSize().getValue();
-
-        int newPrisoners = doMove(move);
-
-        if (!moveValidator.validateKO(game.getBoardSize(), potentialState, board.getPreviousTurnState())) {
-            return new MoveResponse(MoveResponseType.INVALID_MOVE, null);
-        }
-
-        if (!moveValidator.validateSuicide(changes)) {
-            return new MoveResponse(MoveResponseType.INVALID_MOVE, null);
+        if (!postMoveValidation(boardSizeValue, potentialState, board.getPreviousTurnState(), changes)) {
+            return new MoveResponse(MoveResponseType.INVALID_MOVE);
         }
 
         game.setLastTurnPassed(false);
 
-        Prisoners prisoners = board.getCurrentPrisoners();
-        if (move.getPlayerColor() == Color.BLACK) {
+        if (playerColor == Color.BLACK) {
             prisoners.addBlacksPrisoners(newPrisoners);
         } else {
             prisoners.addWhitesPrisoners(newPrisoners);
@@ -86,22 +80,41 @@ public class MoveExecutorService implements IMoveExecutorService {
         board.insertState(potentialState);
 
         return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution
-                (changes, board.getCurrentPrisoners().toResponsePrisoners(move.getPlayerColor())));
+                (changes, prisoners.toResponsePrisoners(playerColor)));
     }
 
-    private int doMove(Move move) {
+    private void initializePotentialData(Board board) {
+        changes = new ArrayList<>();
+
+        potentialState = new Occupancy[boardSizeValue][];
+        for (int i = 0; i < boardSizeValue; i++) {
+            potentialState[i] = board.getCurrentState()[i].clone();
+        }
+    }
+
+    private boolean preMoveValidation(Occupancy[][] board, Coordinates move) {
+        return moveValidator.validateVacancy(board, move);
+    }
+
+    private boolean postMoveValidation(int boardSizeValue, Occupancy[][] potentialState,
+                                       Occupancy[][] previousTurnState, List<Change> changes) {
+        return moveValidator.validateKO(boardSizeValue, potentialState, previousTurnState)
+                && moveValidator.validateSuicide(changes);
+    }
+
+    private int doMove(Coordinates moveCoordinates, Color playerColor) {
 
         int killedEnemies = 0;
 
         //1st phase
-        changeBoard(move.getCoordinates(), move.getPlayerColor().toOccupancy());
+        changeBoard(moveCoordinates, playerColor.toOccupancy());
 
         //2nd phase
-        List<Coordinates> enemiesSurrounding = getNeighbouringCords(move.getCoordinates(), move.getPlayerColor().reverse().toOccupancy());
+        List<Coordinates> enemiesSurrounding = getNeighbouringCords(moveCoordinates, playerColor.reverse().toOccupancy());
 
         for (Coordinates enemy : enemiesSurrounding) {
 
-            List<Coordinates> chain = getChainStartingWithCords(enemy, move.getPlayerColor().reverse().toOccupancy());
+            List<Coordinates> chain = getChainStartingWithCords(enemy, playerColor.reverse().toOccupancy());
 
             if (isChainWithoutBreaths(chain)) {
 
@@ -115,7 +128,7 @@ public class MoveExecutorService implements IMoveExecutorService {
         }
 
         //3rd phase
-        List<Coordinates> chain = getChainStartingWithCords(move.getCoordinates(), move.getPlayerColor().toOccupancy());
+        List<Coordinates> chain = getChainStartingWithCords(moveCoordinates, playerColor.toOccupancy());
 
         if (isChainWithoutBreaths(chain)) {
 
@@ -149,6 +162,15 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         return true;
     }
+
+    /**
+     * This method clumps all tiles of a given occupancy to one chain.
+     * It requires Occupancy instead of Color because it will be used to group empty tiles together in the future.
+     * It requires this parameter because it is called on tiles with incompatible Occupancies.
+     * @param startingCords Coordinates from which it should start grouping chain
+     * @param occupancy Occupancy type it's gonna group together
+     * @return List of Coordinates, which represents one chain
+     */
 
     private List<Coordinates> getChainStartingWithCords(Coordinates startingCords, Occupancy occupancy) {
 

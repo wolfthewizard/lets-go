@@ -11,6 +11,6 @@ import java.util.List;
 public interface IMoveValidator {
 
     boolean validateVacancy(Occupancy[][] board, Coordinates coordinates);
-    boolean validateKO(BoardSize boardSize, Occupancy[][] currentBoard, Occupancy[][] boardTwoTurnsAgo);
+    boolean validateKO(int boardSizeValue, Occupancy[][] currentBoard, Occupancy[][] boardTwoTurnsAgo);
     boolean validateSuicide(List<Change> changes);
 }

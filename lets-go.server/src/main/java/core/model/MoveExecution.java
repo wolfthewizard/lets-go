@@ -16,6 +16,11 @@ public class MoveExecution {
         this.responsePrisoners = responsePrisoners;
     }
 
+    public MoveExecution(ResponsePrisoners responsePrisoners) {
+        this.changes = new ArrayList<>();
+        this.responsePrisoners = responsePrisoners;
+    }
+
     public List<Change> getChanges() {
         return changes;
     }
