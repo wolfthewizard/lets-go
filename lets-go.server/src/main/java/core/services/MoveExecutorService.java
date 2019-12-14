@@ -78,52 +78,31 @@ public class MoveExecutorService implements IMoveExecutorService {
         int x = coordinates.getX();
         int y = coordinates.getY();
 
-        int deltaX;
-        int deltaY;
+        if (x - 1 >= 0) {
 
-        deltaX = -1;
-
-        if (x + deltaX >= 0) {
-
-            deltaY = -1;
-
-            if (y + deltaY >= 0) {
-
-                if (potentialState[x + deltaX][y + deltaY] == color.toOccupancy()) {
-                    neighbours.add(new Coordinates(x + deltaX, y + deltaY));
-                }
-            }
-
-            deltaY = 1;
-
-            if (y + deltaY < boardSizeValue) {
-
-                if (potentialState[x + deltaX][y + deltaY] == color.toOccupancy()) {
-                    neighbours.add(new Coordinates(x + deltaX, y + deltaY));
-                }
+            if (potentialState[x - 1][y] == color.toOccupancy()) {
+                neighbours.add(new Coordinates(x - 1, y));
             }
         }
 
-        deltaX = 1;
+        if (x + 1 < boardSizeValue) {
 
-        if (x + deltaX < boardSizeValue) {
-
-            deltaY = -1;
-
-            if (y + deltaY >= 0) {
-
-                if (potentialState[x + deltaX][y + deltaY] == color.toOccupancy()) {
-                    neighbours.add(new Coordinates(x + deltaX, y + deltaY));
-                }
+            if (potentialState[x + 1][y] == color.toOccupancy()) {
+                neighbours.add(new Coordinates(x + 1, y));
             }
+        }
 
-            deltaY = 1;
+        if (y - 1 >= 0) {
 
-            if (y + deltaY < boardSizeValue) {
+            if (potentialState[x][y - 1] == color.toOccupancy()) {
+                neighbours.add(new Coordinates(x, y - 1));
+            }
+        }
 
-                if (potentialState[x + deltaX][y + deltaY] == color.toOccupancy()) {
-                    neighbours.add(new Coordinates(x + deltaX, y + deltaY));
-                }
+        if (y + 1 < boardSizeValue) {
+
+            if (potentialState[x][y + 1] == color.toOccupancy()) {
+                neighbours.add(new Coordinates(x, y + 1));
             }
         }
 

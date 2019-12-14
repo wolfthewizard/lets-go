@@ -18,7 +18,6 @@ public class Main {
         GameRepository gameRepository = new GameRepository();
         ServerListener serverCommunicator = new ServerListener(new ActionProcesser(jsonParser,
                 new PlayerValidator(),
-                new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(gameRepository, new MoveValidator())), clientsManager),
-                new IdGenerator(), clientsManager);
+                new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(gameRepository, new MoveValidator())), clientsManager), clientsManager);
     }
 }
