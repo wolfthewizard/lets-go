@@ -27,7 +27,6 @@ public class CommandDirector implements ICommandDirector {
 
     @Override
     public MoveResponse tryToMove(Move move) {
-
         return moveExecutorService.executeMove(move);
     }
 
