@@ -45,6 +45,6 @@ public class Main {
             public void CancelGame(MoveIdentity leftIdentity) {
 
             }
-        }, clientsManager), new IdGenerator(), clientsManager);
+        }, clientsManager), clientsManager);
     }
 }
