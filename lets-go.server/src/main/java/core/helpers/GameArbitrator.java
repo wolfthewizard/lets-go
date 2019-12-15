@@ -4,6 +4,9 @@ import contract.Coordinates;
 import contract.enums.Occupancy;
 import core.interfaces.IGameArbitrator;
 import core.interfaces.IMoveHelper;
+import core.model.Color;
+import core.model.MoveResponse;
+import core.model.enums.MoveResponseType;
 import core.model.enums.Winner;
 
 import java.util.ArrayList;
@@ -61,6 +64,26 @@ public class GameArbitrator implements IGameArbitrator {
             return Winner.WHITE;
         } else {
             return Winner.TIE;
+        }
+    }
+
+    @Override
+    public MoveResponseType toMoveResponseType(Winner winner, Color playerColor) {
+
+        if (winner == Winner.TIE) {
+            return MoveResponseType.TIE;
+        } else if (winner == Winner.BLACK) {
+            if (playerColor == Color.BLACK) {
+                return MoveResponseType.CURRENT_PLAYER_WON;
+            } else {
+                return MoveResponseType.OTHER_PLAYER_WON;
+            }
+        } else {
+            if (playerColor == Color.BLACK) {
+                return MoveResponseType.OTHER_PLAYER_WON;
+            } else {
+                return MoveResponseType.CURRENT_PLAYER_WON;
+            }
         }
     }
 }

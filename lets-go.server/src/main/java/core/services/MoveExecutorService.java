@@ -48,22 +48,7 @@ public class MoveExecutorService implements IMoveExecutorService {
             if (game.isLastTurnPassed()) {
 
                 Winner winner = gameArbitrator.determineWinner(potentialState, boardSizeValue);
-
-                if (winner == Winner.TIE) {
-                    return new MoveResponse(MoveResponseType.TIE);
-                } else if (winner == Winner.BLACK) {
-                    if (playerColor == Color.BLACK) {
-                        return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON);
-                    } else {
-                        return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON);
-                    }
-                } else {
-                    if (playerColor == Color.BLACK) {
-                        return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON);
-                    } else {
-                        return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON);
-                    }
-                }
+                return new MoveResponse(gameArbitrator.toMoveResponseType(winner, playerColor));
             } else {
 
                 game.setLastTurnPassed(true);
@@ -97,6 +82,7 @@ public class MoveExecutorService implements IMoveExecutorService {
     }
 
     private void initializePotentialData(Board board) {
+
         changes = new ArrayList<>();
 
         potentialState = new Occupancy[boardSizeValue][];
