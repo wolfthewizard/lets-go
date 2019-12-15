@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public interface IGameRepository {
 
     void createGame(Game game);
+    void removeGame(int gameId);
 
     Game getGame(int gameId);
 

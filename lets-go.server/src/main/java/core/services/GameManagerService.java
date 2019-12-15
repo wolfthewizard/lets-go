@@ -23,7 +23,7 @@ public class GameManagerService implements IGameManagerService {
     }
 
     @Override
-    public void cancelGame(int leftPlayerId) {
-
+    public void cancelGame(int gameId) {
+        gameRepository.removeGame(gameId);
     }
 }
