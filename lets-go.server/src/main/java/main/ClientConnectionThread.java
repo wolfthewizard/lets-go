@@ -1,6 +1,6 @@
 package main;
 
-import main.helpers.IActionProcesser;
+import main.helpers.actionprocesser.IActionProcesser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,9 +1,9 @@
-package core.serversender;
+package core.interfaces;
 
 import contract.ResponseDTO;
 import core.interfaces.IResponseNumberCounter;
 
-public interface OnServerResponseListener {
+public interface IServerResponseListener {
 
     void responseReceived(String response);
 

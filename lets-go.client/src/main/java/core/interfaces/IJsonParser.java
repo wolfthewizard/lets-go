@@ -1,4 +1,4 @@
-package core.serversender;
+package core.interfaces;
 
 
 import contract.ActionDTO;

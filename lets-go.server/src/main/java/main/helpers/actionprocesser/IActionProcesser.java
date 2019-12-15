@@ -1,4 +1,4 @@
-package main.helpers;
+package main.helpers.actionprocesser;
 
 public interface IActionProcesser {
 

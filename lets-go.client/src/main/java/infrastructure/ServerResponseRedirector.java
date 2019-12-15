@@ -1,11 +1,6 @@
 package infrastructure;
 
-import contract.ActionDTO;
-import contract.ResponseDTO;
-import contract.enums.ResponseType;
-import core.serversender.IJsonParser;
-import core.serversender.JsonParser;
-import core.serversender.OnServerResponseListener;
+import core.interfaces.IServerResponseListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,14 +8,14 @@ import java.io.IOException;
 public class ServerResponseRedirector extends Thread {
 
     private BufferedReader inputReader;
-    private OnServerResponseListener serverResponseListener;
+    private IServerResponseListener serverResponseListener;
 
     public ServerResponseRedirector(BufferedReader bufferedReader) {
 
         inputReader = bufferedReader;
     }
 
-    public void setServerResponseListener(OnServerResponseListener serverResponseListener) {
+    public void setServerResponseListener(IServerResponseListener serverResponseListener) {
 
         this.serverResponseListener = serverResponseListener;
     }

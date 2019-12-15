@@ -1,4 +1,4 @@
-package main.helpers.actionhandler;
+package main.helpers.actionhandlers;
 
 import contract.Coordinates;
 import contract.ResponseDTO;
@@ -8,7 +8,7 @@ import core.model.Move;
 import core.model.MoveResponse;
 import main.ClientConnectionThread;
 import main.IClientsManager;
-import main.helpers.IJsonParser;
+import main.helpers.jsonparser.IJsonParser;
 import main.model.GameInfo;
 
 public class MoveExecuteActionHandler extends AbstractActionHandler {

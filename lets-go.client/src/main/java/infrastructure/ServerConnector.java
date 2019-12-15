@@ -1,7 +1,7 @@
 package infrastructure;
 
 import core.interfaces.IServerConnector;
-import core.serversender.OnServerResponseListener;
+import core.interfaces.IServerResponseListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class ServerConnector implements IServerConnector {
         serverResponseRedirector.start();
     }
 
-    public void setServerResponseListener(OnServerResponseListener serverResponseListener) {
+    public void setServerResponseListener(IServerResponseListener serverResponseListener) {
         serverResponseRedirector.setServerResponseListener(serverResponseListener);
     }
 

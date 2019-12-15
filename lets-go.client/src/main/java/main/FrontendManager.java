@@ -1,9 +1,8 @@
-package core;
+package main;
 
 import contract.Change;
 import contract.ResponsePrisoners;
-import main.Game;
-import main.GameBoardWindow;
+import core.interfaces.IFrontendManager;
 
 import java.util.ArrayList;
 

@@ -6,8 +6,7 @@ import contract.ResponseDTO;
 import contract.enums.ActionType;
 import contract.enums.BoardSize;
 import contract.enums.ResponseType;
-import core.interfaces.IResponseNumberCounter;
-import core.interfaces.IServerConnector;
+import core.interfaces.*;
 import infrastructure.ServerConnector;
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class ServerCommunicator implements IServerCommunicator {
         serverConnector = new ServerConnector();
     }
 
-    public ServerCommunicator(IJsonParser jsonParser, OnServerResponseListener serverResponseListener) {
+    public ServerCommunicator(IJsonParser jsonParser, IServerResponseListener serverResponseListener) {
 
         if (connectionClosed) {
             connectionClosed = false;
