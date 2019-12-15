@@ -135,9 +135,7 @@ public class GameBoardWindow extends JFrame implements Game {
 
     public void closeGame() {
         new ServerCommunicator(new JsonParser(), null).sendLeaveGameMessage();
-        new ServerCommunicator(new JsonParser(), null).shutDownConnection();
         setVisible(false);
-        System.exit(0);
     }
 
     public void exitApp() {

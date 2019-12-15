@@ -30,7 +30,11 @@ public class ServerResponseRedirector extends Thread {
                 return;
             }
 
-            if(serverResponseListener != null) {
+            if (responseJson == null) {
+                return;
+            }
+
+            if (serverResponseListener != null) {
                 serverResponseListener.responseReceived(responseJson);
             }
         }
@@ -38,12 +42,11 @@ public class ServerResponseRedirector extends Thread {
 
     public void stopThread() {
 
+        interrupt();
         try {
             inputReader.close();
-            interrupt();
         } catch (IOException e) {
-            return;
+            e.printStackTrace();
         }
-        interrupt();
     }
 }

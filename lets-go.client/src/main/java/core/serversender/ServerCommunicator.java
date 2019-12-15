@@ -72,6 +72,7 @@ public class ServerCommunicator implements IServerCommunicator {
     public void sendLeaveGameMessage() {
 
         serverConnector.sendMessage(jsonParser.parseActionToJson(new ActionDTO(ActionType.LEAVEGAME)));
+        shutDownConnection();
     }
 
     private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {
