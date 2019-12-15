@@ -1,13 +1,11 @@
 package core.helpers;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import contract.Coordinates;
 import contract.enums.Occupancy;
 import core.interfaces.IMoveHelper;
-import core.model.MoveResponse;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
 import core.model.enums.Winner;
