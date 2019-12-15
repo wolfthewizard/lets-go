@@ -1,7 +1,11 @@
 package main;
 
 import core.CommandDirector;
+import core.helpers.GameArbitrator;
+import core.helpers.MoveHelper;
 import core.helpers.MoveValidator;
+import core.interfaces.IGameRepository;
+import core.interfaces.IMoveHelper;
 import core.services.GameManagerService;
 import core.services.MoveExecutorService;
 import infrastructure.GameRepository;
@@ -18,9 +22,11 @@ public class Main {
 
         IJsonParser jsonParser = new JsonParser();
         IClientsManager clientsManager = new ClientsManager();
-        GameRepository gameRepository = new GameRepository();
+        IGameRepository gameRepository = new GameRepository();
+        IMoveHelper moveHelper = new MoveHelper();
         ServerListener serverCommunicator = new ServerListener(new ActionProcesser(jsonParser,
                 new PlayerValidator(),
-                new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(gameRepository, new MoveValidator())), clientsManager), clientsManager);
+                new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(
+                        gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), moveHelper)), clientsManager), clientsManager);
     }
 }

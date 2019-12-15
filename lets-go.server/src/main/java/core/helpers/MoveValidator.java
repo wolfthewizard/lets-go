@@ -2,7 +2,6 @@ package core.helpers;
 
 import contract.Change;
 import contract.Coordinates;
-import contract.enums.BoardSize;
 import contract.enums.Occupancy;
 import core.interfaces.IMoveValidator;
 
