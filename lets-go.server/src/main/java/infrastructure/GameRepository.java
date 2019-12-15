@@ -25,6 +25,15 @@ public class GameRepository implements IGameRepository {
         games.add(game);
     }
 
+    public void removeGame(int gameId) {
+
+        Game game = getGame(gameId);
+
+        if (game != null) {
+            games.remove(game);
+        }
+    }
+
     public Game getGame(int gameId) {
         for (Game game : games) {
             if (game.getId() == gameId) {

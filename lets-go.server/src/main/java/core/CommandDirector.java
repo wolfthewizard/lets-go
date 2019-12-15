@@ -32,6 +32,6 @@ public class CommandDirector implements ICommandDirector {
 
     @Override
     public void cancelGame(MoveIdentity leftIdentity) {
-
+        gameManagerService.cancelGame(leftIdentity.getGameId());
     }
 }

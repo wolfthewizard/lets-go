@@ -5,5 +5,5 @@ import contract.enums.BoardSize;
 public interface IGameManagerService {
 
     int createNewGame(BoardSize boardSize);
-    void cancelGame(int leftPlayerId);
+    void cancelGame(int gameId);
 }
