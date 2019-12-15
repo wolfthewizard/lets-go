@@ -12,7 +12,8 @@ public class BoardManager implements IBoardManager {
     private Occupancy[][] board;
     private BoardSize boardSize;
 
-    public void initializeBoard(BoardSize boardSize){
+    @Override
+    public void initializeBoard(BoardSize boardSize) {
         this.boardSize = boardSize;
 
         board = new Occupancy[boardSize.getValue()][];
@@ -24,16 +25,19 @@ public class BoardManager implements IBoardManager {
         }
     }
 
+    @Override
     public void saveMoves(ArrayList<Change> changes) {
         for (Change change : changes) {
             board[change.getCoordinates().getX()][change.getCoordinates().getY()] = change.getOccupancy();
         }
     }
 
+    @Override
     public Occupancy[][] getBoard() {
         return board;
     }
 
+    @Override
     public BoardSize getBoardSize() {
         return boardSize;
     }

@@ -31,7 +31,7 @@ public class PlayerValidator implements IPlayerValidator {
         games.removeIf(gameWithPlayers -> gameWithPlayers.getGameId() == gameId);
     }
 
-    public void playerLeft(int playerId){
+    public void playerLeft(int playerId) {
         for (BoardSize boardSize : waitingPlayers.keySet()) {
             if (waitingPlayers.get(boardSize) == playerId) {
                 waitingPlayers.remove(boardSize);
@@ -43,11 +43,11 @@ public class PlayerValidator implements IPlayerValidator {
     public GameInfo getGameInfo(int playerId) {
 
         for (GameWithPlayers game : games) {
-            if (game.getBlackid() == playerId) {
+            if (game.getBlackId() == playerId) {
                 return new GameInfo(new MoveIdentity(Color.BLACK, game.getGameId()), game.getWhiteId());
             }
             if (game.getWhiteId() == playerId) {
-                return new GameInfo(new MoveIdentity(Color.WHITE, game.getGameId()), game.getBlackid());
+                return new GameInfo(new MoveIdentity(Color.WHITE, game.getGameId()), game.getBlackId());
             }
         }
 

@@ -1,9 +1,6 @@
 package main;
 
-import contract.ResponseDTO;
-import contract.enums.ResponseType;
 import main.helpers.actionprocesser.IActionProcesser;
-import main.helpers.jsonparser.JsonParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;

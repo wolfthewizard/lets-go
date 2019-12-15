@@ -10,7 +10,9 @@ import java.util.Random;
 
 public class MovePerformer implements IMovePerformer {
 
-    Random random = new Random();
+    private Random random = new Random();
+
+    @Override
     public Coordinates performMove(Occupancy[][] board, BoardSize boardSize, Color colorOfMovingPlayer) {
 
         return new Coordinates(random.nextInt(boardSize.getValue()), random.nextInt(boardSize.getValue()));

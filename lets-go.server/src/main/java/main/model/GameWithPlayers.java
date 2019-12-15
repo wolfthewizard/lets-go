@@ -15,7 +15,7 @@ public class GameWithPlayers {
         return whiteId;
     }
 
-    public int getBlackid() {
+    public int getBlackId() {
         return blackId;
     }
 
