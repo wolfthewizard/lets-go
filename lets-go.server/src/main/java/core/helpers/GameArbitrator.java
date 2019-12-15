@@ -4,8 +4,7 @@ import contract.Coordinates;
 import contract.enums.Occupancy;
 import core.interfaces.IGameArbitrator;
 import core.interfaces.IMoveHelper;
-import core.model.Color;
-import core.model.MoveResponse;
+import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
 import core.model.enums.Winner;
 

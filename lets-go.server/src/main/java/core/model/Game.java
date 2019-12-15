@@ -1,6 +1,7 @@
 package core.model;
 
 import contract.enums.BoardSize;
+import core.model.enums.Color;
 
 public class Game {
 

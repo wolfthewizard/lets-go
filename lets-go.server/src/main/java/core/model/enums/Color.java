@@ -1,4 +1,4 @@
-package core.model;
+package core.model.enums;
 
 import contract.enums.Occupancy;
 
