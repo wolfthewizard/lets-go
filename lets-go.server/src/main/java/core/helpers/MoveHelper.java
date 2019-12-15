@@ -13,11 +13,12 @@ public class MoveHelper implements IMoveHelper {
     public List<Coordinates> getChainStartingWithCords(Occupancy[][] board, int boardSizeValue, Coordinates startingCords, Occupancy occupancy) {
 
         List<Coordinates> chain = new ArrayList<>();
-        chain.add(startingCords);
 
-        if (chain.isEmpty()) {
+        if (board[startingCords.getX()][startingCords.getY()] != occupancy) {
             return chain;
         }
+
+        chain.add(startingCords);
 
         for (Coordinates cords : getNeighbouringCords(board, boardSizeValue, startingCords, occupancy)) {
             chainBuildingRecursive(board, boardSizeValue, cords, occupancy, chain);
