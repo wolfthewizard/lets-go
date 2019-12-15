@@ -1,9 +1,7 @@
 package infrastructure;
 
 import core.interfaces.ICommunicatorListener;
-import core.interfaces.IServerResponseReceiver;
 
-import javax.imageio.spi.IIOServiceProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -20,23 +18,28 @@ public class ServerListener extends Thread {
         this.communicatorListener = communicatorListener;
     }
 
+    @Override
     public void run() {
         while (true) {
             String response;
 
             try {
                 response = inputReader.readLine();
-                if (response != null) {
-                    communicatorListener.responseFetched(response);
-                } else {
+                if (response == null) {
                     return;
+                } else {
+                    communicatorListener.responseFetched(response);
                 }
             } catch (IOException e) {
-                System.out.println("server out");
                 System.exit(0);
                 return;
             }
 
         }
+    }
+
+    public void stopThread() throws IOException {
+        interrupt();
+        inputReader.close();
     }
 }

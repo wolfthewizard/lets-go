@@ -14,9 +14,16 @@
             <version>2.8.5</version>
         </dependency>
         <dependency>
+<<<<<<< HEAD
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
+=======
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.4.0</version>
+            <scope>test</scope>
+>>>>>>> a6b05ba7c1676b0fa0e3698e4cba84de7a75653e
         </dependency>
     </dependencies>
 

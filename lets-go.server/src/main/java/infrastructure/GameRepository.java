@@ -16,10 +16,12 @@ public class GameRepository implements IGameRepository {
         notYetAssignedId = 0;
     }
 
+    @Override
     public void createGame(Game game) {
         games.add(game);
     }
 
+    @Override
     public void removeGame(int gameId) {
 
         Game game = getGame(gameId);
@@ -29,6 +31,7 @@ public class GameRepository implements IGameRepository {
         }
     }
 
+    @Override
     public Game getGame(int gameId) {
         for (Game game : games) {
             if (game.getId() == gameId) {
@@ -39,6 +42,7 @@ public class GameRepository implements IGameRepository {
         return null;
     }
 
+    @Override
     public int fetchId() {
         return notYetAssignedId++;
     }

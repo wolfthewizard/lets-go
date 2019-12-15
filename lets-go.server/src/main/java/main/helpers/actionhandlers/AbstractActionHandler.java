@@ -21,7 +21,7 @@ public abstract class AbstractActionHandler {
         this.commandDirector = commandDirector;
     }
 
-    public void HandleAction() {
+    public void handleAction() {
         if (gameInfo == null) {
 
             handleNullGameInfo();

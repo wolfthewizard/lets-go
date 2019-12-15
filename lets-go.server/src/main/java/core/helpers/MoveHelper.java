@@ -59,6 +59,7 @@ public class MoveHelper implements IMoveHelper {
         return !doesChainBorderWith(board, boardSizeValue, chain, Occupancy.EMPTY);
     }
 
+    @Override
     public List<Coordinates> getNeighbouringCords(Occupancy[][] board, int boardSizeValueValue, Coordinates coordinates, Occupancy occupancy) {
 
         List<Coordinates> neighbours = new ArrayList<>();
