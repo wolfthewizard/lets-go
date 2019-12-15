@@ -62,6 +62,10 @@ public class ServerResponseListener implements IServerResponseListener {
                 frontendManager.gameLost();
                 break;
 
+            case TIE:
+                frontendManager.tie();
+                break;
+
             case PLAYER_LEFT:
                 frontendManager.playerLeft();
         }

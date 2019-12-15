@@ -118,11 +118,15 @@ public class GameBoardWindow extends JFrame implements Game {
     }
 
     public void signalWin() {
-        JOptionPane.showMessageDialog(null, "You win!");
+        JOptionPane.showMessageDialog(this, "You win!");
     }
 
     public void signalLose() {
-        JOptionPane.showMessageDialog(null, "You lose.");
+        JOptionPane.showMessageDialog(this, "You lose.");
+    }
+
+    public void signalTie() {
+        JOptionPane.showMessageDialog(this, "It's a tie.");
     }
 
     public void openNewGameCreation() {

@@ -21,6 +21,9 @@ public class EndOfGameHandler implements IEndOfGameHandler {
             case GAMELOST:
                 System.out.println("Sorry boss :( He was better");
                 break;
+            case TIE:
+                System.out.println("Hope you know how to tie a tie");
+                break;
             case PLAYER_LEFT:
                 System.out.println("He gave up. He couldn't withstand my brilliant moves ;)");
                 break;

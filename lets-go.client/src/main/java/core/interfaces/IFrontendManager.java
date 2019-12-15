@@ -16,4 +16,5 @@ public interface IFrontendManager {
     void playerLeft();
     void gameWon();
     void gameLost();
+    void tie();
 }
