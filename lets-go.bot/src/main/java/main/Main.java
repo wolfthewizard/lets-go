@@ -21,27 +21,12 @@ public class Main {
         ServerResponseReceiver serverResponseReceiver = new ServerResponseReceiver(new MovesParser(boardManager, turnExecutor), new EndOfGameHandler(serverCommunicator), turnExecutor);
         serverCommunicator.setServerResponseReceiver(serverResponseReceiver);
         IGameInitializer gameInitializer = new GameInitializer(serverCommunicator, boardManager);
+        IArgumentProcesser argumentProcesser = new ArgumentsProcesser(gameInitializer);
 
-        switch (args[0]) {
-            case "-help":
-                System.out.println("-small to enable a bot for 9x9 board");
-                System.out.println("-medium to enable a bot for 13x13 board");
-                System.out.println("-hard to enable a bot for 19x19 board");
-                break;
-            case "-small":
-                gameInitializer.startSmallBoardGame();
-                break;
-            case "-medium":
-                gameInitializer.startMediumBoardGame();
-                break;
-            case "-large":
-                gameInitializer.startLargeBoardGame();
-                break;
-        }
+        argumentProcesser.processArgument(args[0]);
 
-        Scanner scanner = new Scanner(System.in);
-        while (!scanner.nextLine().equals("exit")) {
-        }
-        serverCommunicator.sendLeaveGameMessage();
+        IExitListener exitListener = new ExitListener(serverCommunicator, new Scanner(System.in));
+        exitListener.waitForExit();
+
     }
 }
