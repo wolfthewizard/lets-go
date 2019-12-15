@@ -6,6 +6,7 @@ public class ClientsManager implements IClientsManager {
 
     private ArrayList<ClientConnectionThread> clients = new ArrayList<>();
 
+    @Override
     public void addClient(ClientConnectionThread clientConnectionThread) {
         clients.add(clientConnectionThread);
     }
@@ -15,6 +16,7 @@ public class ClientsManager implements IClientsManager {
         return clients;
     }
 
+    @Override
     public ClientConnectionThread getClientWithId(int threadId) {
         for (ClientConnectionThread thread: clients) {
             if(thread.getThreadId() == threadId) {

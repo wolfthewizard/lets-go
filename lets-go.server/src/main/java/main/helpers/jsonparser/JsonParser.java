@@ -13,10 +13,12 @@ public class JsonParser implements IJsonParser {
         jsonParser = new Gson();
     }
 
+    @Override
     public ActionDTO parseJsonToAction(String json) {
         return jsonParser.fromJson(json, ActionDTO.class);
     }
 
+    @Override
     public String parseResponseToJson(ResponseDTO responseDTO) {
         return jsonParser.toJson(responseDTO);
     }

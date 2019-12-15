@@ -14,6 +14,7 @@ public class PlayerValidator implements IPlayerValidator {
     private ArrayList<GameWithPlayers> games = new ArrayList<>();
     private final HashMap<BoardSize, Integer> waitingPlayers = new HashMap<>();
 
+    @Override
     public void addNewGame(int whiteId, int blackId, int gameId) {
 
         games.add(new GameWithPlayers(whiteId, blackId, gameId));
@@ -26,11 +27,13 @@ public class PlayerValidator implements IPlayerValidator {
         }
     }
 
+    @Override
     public void removeGame(int gameId) {
 
         games.removeIf(gameWithPlayers -> gameWithPlayers.getGameId() == gameId);
     }
 
+    @Override
     public void playerLeft(int playerId) {
         for (BoardSize boardSize : waitingPlayers.keySet()) {
             if (waitingPlayers.get(boardSize) == playerId) {
@@ -40,6 +43,7 @@ public class PlayerValidator implements IPlayerValidator {
         }
     }
 
+    @Override
     public GameInfo getGameInfo(int playerId) {
 
         for (GameWithPlayers game : games) {
@@ -54,10 +58,12 @@ public class PlayerValidator implements IPlayerValidator {
         return null;
     }
 
+    @Override
     public Integer getWaitingPlayerId(BoardSize boardSize) {
         return waitingPlayers.get(boardSize);
     }
 
+    @Override
     public void addWaitingPlayer(BoardSize boardSize, int playerId) {
         waitingPlayers.put(boardSize, playerId);
     }

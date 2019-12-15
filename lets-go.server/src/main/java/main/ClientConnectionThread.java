@@ -29,6 +29,7 @@ public class ClientConnectionThread extends Thread {
         }
     }
 
+    @Override
     public void run() {
 
         while(true)
@@ -46,7 +47,7 @@ public class ClientConnectionThread extends Thread {
                 closeConnection();
                 return;
             }
-            actionProcesser.ProcessAction(message, id);
+            actionProcesser.processAction(message, id);
         }
     }
 
