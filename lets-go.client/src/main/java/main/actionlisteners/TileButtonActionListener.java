@@ -1,6 +1,7 @@
-package main;
+package main.actionlisteners;
 
 import core.serversender.ServerCommunicator;
+import main.TileButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

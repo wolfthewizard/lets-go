@@ -7,7 +7,6 @@ import main.ClientConnectionThread;
 import main.IClientsManager;
 import contract.ActionDTO;
 import main.helpers.jsonparser.IJsonParser;
-import main.helpers.jsonparser.JsonParser;
 import main.helpers.playervalidator.IPlayerValidator;
 import main.helpers.actionhandlers.*;
 import main.model.GameInfo;
@@ -29,7 +28,8 @@ public class ActionProcesser implements IActionProcesser {
         this.clientsManager = clientsManager;
     }
 
-    public void ProcessAction(String message, int threadId) {
+    @Override
+    public void processAction(String message, int threadId) {
 
         ActionDTO action = jsonParser.parseJsonToAction(message);
 
@@ -57,9 +57,10 @@ public class ActionProcesser implements IActionProcesser {
                 break;
         }
 
-        actionHandler.HandleAction();
+        actionHandler.handleAction();
     }
 
+    @Override
     public void closeAllConnections(){
         for (ClientConnectionThread thread : clientsManager.getAllClients()) {
             thread.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SERVER_ERROR)));

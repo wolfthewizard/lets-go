@@ -19,24 +19,28 @@ public class ServerCommunicator implements ICommunicatorListener, ICommunicatorS
 
     public void setServerResponseReceiver(IServerResponseReceiver serverResponseReceiver) {
         this.serverResponseReceiver = serverResponseReceiver;
-        serverConnector.StartListening(this);
+        serverConnector.startListening(this);
     }
 
+    @Override
     public void sendStartGameMessage(BoardSize boardSize) {
 
         sendMessage(new ActionDTO(boardSize));
     }
 
+    @Override
     public void sendMoveMessage(Coordinates coordinates) {
 
         sendMessage(new ActionDTO(coordinates));
     }
 
+    @Override
     public void sendMovePassMessage() {
 
         sendMessage(new ActionDTO(ActionType.PASSMOVE));
     }
 
+    @Override
     public void sendLeaveGameMessage() {
 
         sendMessage(new ActionDTO(ActionType.LEAVEGAME));

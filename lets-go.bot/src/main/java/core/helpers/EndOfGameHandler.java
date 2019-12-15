@@ -8,13 +8,14 @@ public class EndOfGameHandler implements IEndOfGameHandler {
 
     private final ICommunicatorSender communicatorSender;
 
-    public EndOfGameHandler(ICommunicatorSender communicatorSender){
+    public EndOfGameHandler(ICommunicatorSender communicatorSender) {
         this.communicatorSender = communicatorSender;
     }
 
+    @Override
     public void handleGameEnd(ResponseType endType) {
 
-        switch (endType){
+        switch (endType) {
             case GAMEWON:
                 System.out.println("Ha ! I won. As always ;)");
                 break;

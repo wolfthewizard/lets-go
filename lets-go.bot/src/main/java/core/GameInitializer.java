@@ -10,26 +10,25 @@ public class GameInitializer implements IGameInitializer {
     private final ICommunicatorSender communicatorSender;
     private final IBoardManager boardManager;
 
-    public GameInitializer(ICommunicatorSender communicatorSender, IBoardManager boardManager){
-        this.communicatorSender=communicatorSender;
+    public GameInitializer(ICommunicatorSender communicatorSender, IBoardManager boardManager) {
+        this.communicatorSender = communicatorSender;
         this.boardManager = boardManager;
     }
 
-    public void StartSmallBoardGame() {
+    public void startSmallBoardGame() {
         initializeGame(BoardSize.NINE);
     }
 
-    public void StartMediumBoardGame() {
+    public void startMediumBoardGame() {
         initializeGame(BoardSize.THIRTEEN);
     }
 
-    public void StartLargeBoardGame() {
+    public void startLargeBoardGame() {
         initializeGame(BoardSize.NINETEEN);
     }
 
-    private void initializeGame(BoardSize boardSize){
+    private void initializeGame(BoardSize boardSize) {
         communicatorSender.sendStartGameMessage(boardSize);
         boardManager.initializeBoard(boardSize);
     }
-
 }

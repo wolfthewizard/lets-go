@@ -1,9 +1,12 @@
-package main;
+package main.windows;
 
 import contract.Change;
 import contract.enums.BoardSize;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
+import main.BoardPanel;
+import main.Game;
+import main.actionlisteners.PassButtonActionListener;
 
 import javax.swing.*;
 import java.awt.*;

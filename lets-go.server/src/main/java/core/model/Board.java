@@ -1,6 +1,5 @@
 package core.model;
 
-import contract.ResponsePrisoners;
 import contract.enums.BoardSize;
 import contract.enums.Occupancy;
 

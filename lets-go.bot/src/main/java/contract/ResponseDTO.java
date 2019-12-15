@@ -17,7 +17,7 @@ public class ResponseDTO {
     }
 
     public ResponseDTO(ResponseType responseType) {
-            this.responseType =responseType;
+        this.responseType = responseType;
     }
 
 
