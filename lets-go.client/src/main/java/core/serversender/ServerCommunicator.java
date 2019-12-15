@@ -44,7 +44,7 @@ public class ServerCommunicator implements IServerCommunicator {
             }
         }
 
-        if(serverResponseListener != null){
+        if (serverResponseListener != null) {
             responseNumberCounter = new ResponseNumberCounter();
             serverResponseListener.setResponseNumberCounter(responseNumberCounter);
 
@@ -77,7 +77,7 @@ public class ServerCommunicator implements IServerCommunicator {
 
     private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {
 
-        if(responseNumberCounter.getNumberOfResponsesToRead() == 0) {
+        if (responseNumberCounter.getNumberOfResponsesToRead() == 0) {
             responseNumberCounter.addNumberOfResponsesToRead(numberOfResposnses);
             serverConnector.sendMessage(jsonParser.parseActionToJson(actionDTO));
         }

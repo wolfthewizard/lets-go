@@ -9,19 +9,19 @@ public class ActionDTO {
     private Coordinates coordinates;
 
 
-    public ActionDTO(BoardSize boardSize){
+    public ActionDTO(BoardSize boardSize) {
         actionType = ActionType.STARTGAME;
         this.boardSize = boardSize;
     }
 
-    public ActionDTO(Coordinates coordinates){
-        actionType=ActionType.DOMOVE;
-        this.coordinates=coordinates;
+    public ActionDTO(Coordinates coordinates) {
+        actionType = ActionType.DOMOVE;
+        this.coordinates = coordinates;
     }
 
-    public ActionDTO(ActionType actionType){
+    public ActionDTO(ActionType actionType) {
 
-            this.actionType = actionType;
+        this.actionType = actionType;
     }
 
     public Coordinates getCoordinates() {

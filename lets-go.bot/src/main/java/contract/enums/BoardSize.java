@@ -8,7 +8,7 @@ public enum BoardSize {
     private int value;
 
     BoardSize(int value) {
-        this.value=value;
+        this.value = value;
     }
 
     public int getValue() {

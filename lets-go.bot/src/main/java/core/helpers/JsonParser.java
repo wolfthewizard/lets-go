@@ -8,16 +8,18 @@ import core.interfaces.IJsonParser;
 
 public class JsonParser implements IJsonParser {
 
-    Gson jsonParser;
+    private Gson jsonParser;
 
     public JsonParser() {
         jsonParser = new Gson();
     }
 
+    @Override
     public ResponseDTO parseJsonToResponse(String json) {
         return jsonParser.fromJson(json, ResponseDTO.class);
     }
 
+    @Override
     public String parseActionToJson(ActionDTO actionDTO) {
         return jsonParser.toJson(actionDTO);
     }
