@@ -1,8 +1,8 @@
-package main.helpers.actionhandler;
+package main.helpers.actionhandlers;
 
 import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
-import main.helpers.IJsonParser;
+import main.helpers.jsonparser.IJsonParser;
 import main.model.GameInfo;
 
 public abstract class AbstractActionHandler {

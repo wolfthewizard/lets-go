@@ -3,6 +3,7 @@ package core.serversender;
 import com.google.gson.Gson;
 import contract.ActionDTO;
 import contract.ResponseDTO;
+import core.interfaces.IJsonParser;
 
 
 public class JsonParser implements IJsonParser {

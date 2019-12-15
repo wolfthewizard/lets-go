@@ -1,9 +1,7 @@
 package core.interfaces;
 
-import core.serversender.OnServerResponseListener;
-
 public interface IServerConnector {
-    void setServerResponseListener(OnServerResponseListener serverResponseListener);
+    void setServerResponseListener(IServerResponseListener serverResponseListener);
 
     void sendMessage(String message);
 

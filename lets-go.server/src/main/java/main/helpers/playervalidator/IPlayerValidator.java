@@ -1,4 +1,4 @@
-package main.helpers;
+package main.helpers.playervalidator;
 
 import contract.enums.BoardSize;
 import core.model.Color;

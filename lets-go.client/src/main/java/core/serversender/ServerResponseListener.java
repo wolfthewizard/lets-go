@@ -1,10 +1,12 @@
 package core.serversender;
 
 import contract.ResponseDTO;
-import core.IFrontendManager;
+import core.interfaces.IFrontendManager;
+import core.interfaces.IJsonParser;
 import core.interfaces.IResponseNumberCounter;
+import core.interfaces.IServerResponseListener;
 
-public class ServerResponseListener implements OnServerResponseListener {
+public class ServerResponseListener implements IServerResponseListener {
 
     private final IFrontendManager frontendManager;
     private final IJsonParser jsonParser;

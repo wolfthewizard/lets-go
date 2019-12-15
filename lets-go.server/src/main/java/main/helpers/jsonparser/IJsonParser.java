@@ -1,4 +1,4 @@
-package main.helpers;
+package main.helpers.jsonparser;
 
 
 import contract.ActionDTO;

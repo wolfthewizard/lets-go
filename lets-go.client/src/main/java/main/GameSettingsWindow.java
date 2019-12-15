@@ -1,7 +1,6 @@
 package main;
 
 import contract.enums.BoardSize;
-import core.FrontendManager;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
 import core.serversender.ServerResponseListener;

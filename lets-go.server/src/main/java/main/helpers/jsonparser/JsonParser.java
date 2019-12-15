@@ -1,9 +1,10 @@
-package main.helpers;
+package main.helpers.jsonparser;
 
 import com.google.gson.Gson;
 
 import contract.ActionDTO;
 import contract.ResponseDTO;
+import main.helpers.jsonparser.IJsonParser;
 
 public class JsonParser implements IJsonParser {
 

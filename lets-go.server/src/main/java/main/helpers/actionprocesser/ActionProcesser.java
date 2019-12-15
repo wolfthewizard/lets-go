@@ -1,15 +1,13 @@
-package main.helpers;
+package main.helpers.actionprocesser;
 
 import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
 import main.IClientsManager;
 import contract.ActionDTO;
-import contract.enums.BoardSize;
-import main.helpers.actionhandler.*;
+import main.helpers.jsonparser.IJsonParser;
+import main.helpers.playervalidator.IPlayerValidator;
+import main.helpers.actionhandlers.*;
 import main.model.GameInfo;
-
-import java.util.HashMap;
-import java.util.Random;
 
 public class ActionProcesser implements IActionProcesser {
 

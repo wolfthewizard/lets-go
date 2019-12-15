@@ -1,4 +1,4 @@
-package main.helpers.actionhandler;
+package main.helpers.actionhandlers;
 
 import contract.ResponsePrisoners;
 import contract.ResponseDTO;
@@ -7,8 +7,8 @@ import contract.enums.ResponseType;
 import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
 import main.IClientsManager;
-import main.helpers.IJsonParser;
-import main.helpers.IPlayerValidator;
+import main.helpers.jsonparser.IJsonParser;
+import main.helpers.playervalidator.IPlayerValidator;
 import main.model.GameInfo;
 
 import java.util.ArrayList;

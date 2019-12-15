@@ -1,8 +1,9 @@
-package main.helpers;
+package main.helpers.playervalidator;
 
 import contract.enums.BoardSize;
 import core.model.MoveIdentity;
 import core.model.Color;
+import main.helpers.playervalidator.IPlayerValidator;
 import main.model.GameInfo;
 import main.model.GameWithPlayers;
 
