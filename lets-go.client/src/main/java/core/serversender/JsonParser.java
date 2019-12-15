@@ -8,7 +8,7 @@ import core.interfaces.IJsonParser;
 
 public class JsonParser implements IJsonParser {
 
-    Gson jsonParser;
+    private Gson jsonParser;
 
     public JsonParser() {
         jsonParser = new Gson();

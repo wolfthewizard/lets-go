@@ -3,6 +3,7 @@ package main;
 import contract.Change;
 import contract.ResponsePrisoners;
 import core.interfaces.IFrontendManager;
+import main.windows.GameBoardWindow;
 
 import java.util.ArrayList;
 

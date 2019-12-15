@@ -1,4 +1,4 @@
-package main;
+package main.actionlisteners;
 
 import core.serversender.ServerCommunicator;
 

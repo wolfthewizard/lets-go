@@ -3,12 +3,13 @@ package main;
 
 import contract.Coordinates;
 import contract.enums.Occupancy;
+import main.actionlisteners.TileButtonActionListener;
 
 import javax.swing.*;
 
 public class TileButton extends JButton {
 
-    private static int ICON_SIZE = 35;
+    private final static int ICON_SIZE = 35;
 
     private Coordinates cords;
 
