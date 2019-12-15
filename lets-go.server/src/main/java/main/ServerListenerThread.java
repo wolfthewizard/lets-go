@@ -1,6 +1,9 @@
 package main;
 
+import contract.ResponseDTO;
+import contract.enums.ResponseType;
 import main.helpers.actionprocesser.IActionProcesser;
+import main.helpers.jsonparser.JsonParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -41,9 +44,7 @@ public class ServerListenerThread extends Thread{
     public void closeConnection() throws IOException {
 
         interrupt();
-        for (ClientConnectionThread thread : clientsManager.getAllClients()) {
-            thread.closeConnection();
-        }
+        actionProcesser.closeAllConnections();
         server.close();
     }
 }

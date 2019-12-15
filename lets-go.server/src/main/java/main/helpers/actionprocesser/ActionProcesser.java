@@ -1,10 +1,13 @@
 package main.helpers.actionprocesser;
 
+import contract.ResponseDTO;
+import contract.enums.ResponseType;
 import core.interfaces.ICommandDirector;
 import main.ClientConnectionThread;
 import main.IClientsManager;
 import contract.ActionDTO;
 import main.helpers.jsonparser.IJsonParser;
+import main.helpers.jsonparser.JsonParser;
 import main.helpers.playervalidator.IPlayerValidator;
 import main.helpers.actionhandlers.*;
 import main.model.GameInfo;
@@ -55,5 +58,12 @@ public class ActionProcesser implements IActionProcesser {
         }
 
         actionHandler.HandleAction();
+    }
+
+    public void closeAllConnections(){
+        for (ClientConnectionThread thread : clientsManager.getAllClients()) {
+            thread.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.SERVER_ERROR)));
+            thread.closeConnection();
+        }
     }
 }

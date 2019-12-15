@@ -25,16 +25,16 @@ public class Main {
         IClientsManager clientsManager = new ClientsManager();
         IGameRepository gameRepository = new GameRepository();
         IMoveHelper moveHelper = new MoveHelper();
-        ServerListenerThread serverListener = new ServerListenerThread(new ActionProcesser(jsonParser,
+        ServerListenerThread serverListenerThread = new ServerListenerThread(new ActionProcesser(jsonParser,
                 new PlayerValidator(),
                 new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(
                         gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), moveHelper)), clientsManager), clientsManager);
 
-        serverListener.start();
+        serverListenerThread.start();
 
         Scanner scanner = new Scanner(System.in);
         while (!scanner.nextLine().equals("exit")) {
         }
-        serverListener.closeConnection();
+        serverListenerThread.closeConnection();
     }
 }

@@ -32,9 +32,9 @@ public class ServerConnector implements IServerConnector {
     }
 
     public void shutDown(){
-        serverResponseRedirector.stopThread();
         outputWriter.close();
         try {
+            serverResponseRedirector.stopThread();
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();
