@@ -1,7 +1,7 @@
 package core.model;
 
 import contract.ResponsePrisoners;
-import core.model.Color;
+import core.model.enums.Color;
 
 public class Prisoners {
 

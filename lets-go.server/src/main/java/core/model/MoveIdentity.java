@@ -1,5 +1,7 @@
 package core.model;
 
+import core.model.enums.Color;
+
 public class MoveIdentity {
     private Color playerColor;
     private int gameId;
