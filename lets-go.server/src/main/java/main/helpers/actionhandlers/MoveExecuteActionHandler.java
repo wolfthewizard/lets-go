@@ -60,6 +60,10 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
                 currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
                 waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
                 break;
+
+            case TIE:
+                currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.TIE)));
+                waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.TIE)));
         }
     }
 }

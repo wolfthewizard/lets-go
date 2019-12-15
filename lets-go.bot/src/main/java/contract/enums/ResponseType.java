@@ -9,5 +9,6 @@ public enum ResponseType {
     SERVER_ERROR,
     PLAYER_LEFT,
     GAMEWON,
-    GAMELOST
+    GAMELOST,
+    TIE;
 }

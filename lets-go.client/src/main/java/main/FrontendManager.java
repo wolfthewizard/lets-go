@@ -72,6 +72,13 @@ public class FrontendManager implements IFrontendManager {
         gameBoardWindow.closeGame();
     }
 
+    public void tie() {
+
+        gameBoardWindow.signalTie();
+        gameBoardWindow.openNewGameCreation();
+        gameBoardWindow.closeGame();
+    }
+
     private void switchWhoseMove() {
 
         if(playersTurn) {
