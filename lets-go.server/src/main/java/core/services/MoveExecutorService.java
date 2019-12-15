@@ -8,6 +8,7 @@ import core.interfaces.IMoveExecutorService;
 import core.interfaces.IMoveValidator;
 import core.model.*;
 import core.model.enums.MoveResponseType;
+import core.model.enums.Winner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,22 @@ public class MoveExecutorService implements IMoveExecutorService {
 
             if (game.isLastTurnPassed()) {
 
-                //todo : handle basically the whole point counting mechanism
-                if (new Random().nextBoolean()) {
-                    return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON);
+                Winner winner = determineWinner();
+
+                if (winner == Winner.TIE) {
+                    return new MoveResponse(MoveResponseType.TIE);
+                } else if (winner == Winner.BLACK) {
+                    if (playerColor == Color.BLACK) {
+                        return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON);
+                    } else {
+                        return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON);
+                    }
                 } else {
-                    return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON);
+                    if (playerColor == Color.BLACK) {
+                        return new MoveResponse(MoveResponseType.OTHER_PLAYER_WON);
+                    } else {
+                        return new MoveResponse(MoveResponseType.CURRENT_PLAYER_WON);
+                    }
                 }
             } else {
 
@@ -81,6 +93,50 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution
                 (changes, prisoners.toResponsePrisoners(playerColor)));
+    }
+
+    private Winner determineWinner() {
+
+        int blacksPoints = 0;
+        int whitesPoints = 0;
+
+        List<List<Coordinates>> listOfUnoccupiedChains = new ArrayList<>();
+
+        for (int y = 0; y < boardSizeValue; y++) {
+            for (int x = 0; x < boardSizeValue; x++) {
+
+                boolean toAdd = true;
+
+                for (List<Coordinates> chain : listOfUnoccupiedChains) {
+
+                    if (chainContains(chain, new Coordinates(x, y))) {
+                        toAdd = false;
+                        break;
+                    }
+                }
+
+                if (toAdd) {
+                    listOfUnoccupiedChains.add(getChainStartingWithCords(new Coordinates(x, y), Occupancy.EMPTY));
+                }
+            }
+        }
+
+        for (List<Coordinates> chain : listOfUnoccupiedChains) {
+
+            if (doesChainBorderWith(chain, Occupancy.BLACK) && !doesChainBorderWith(chain, Occupancy.WHITE)) {
+                blacksPoints += chain.size();
+            } else if (!doesChainBorderWith(chain, Occupancy.BLACK) && doesChainBorderWith(chain, Occupancy.WHITE)) {
+                whitesPoints += chain.size();
+            }
+        }
+
+        if (blacksPoints > whitesPoints) {
+            return Winner.BLACK;
+        } else if (blacksPoints < whitesPoints) {
+            return Winner.WHITE;
+        } else {
+            return Winner.TIE;
+        }
     }
 
     private void initializePotentialData(Board board) {
@@ -153,14 +209,19 @@ public class MoveExecutorService implements IMoveExecutorService {
 
     private boolean isChainWithoutBreaths(List<Coordinates> chain) {
 
+        return !doesChainBorderWith(chain, Occupancy.EMPTY);
+    }
+
+    private boolean doesChainBorderWith(List<Coordinates> chain, Occupancy occupancy) {
+
         for (Coordinates coordinates : chain) {
 
-            if (!getNeighbouringCords(coordinates, Occupancy.EMPTY).isEmpty()) {
-                return false;
+            if (!getNeighbouringCords(coordinates, occupancy).isEmpty()) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -176,6 +237,10 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         List<Coordinates> chain = new ArrayList<>();
         chain.add(startingCords);
+
+        if (chain.isEmpty()) {
+            return chain;
+        }
 
         for (Coordinates cords : getNeighbouringCords(startingCords, occupancy)) {
             chainBuildingRecursive(cords, occupancy, chain);

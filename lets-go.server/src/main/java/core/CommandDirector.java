@@ -7,7 +7,6 @@ import core.interfaces.IMoveExecutorService;
 import core.model.Move;
 import core.model.MoveIdentity;
 import core.model.MoveResponse;
-import infrastructure.GameRepository;
 
 public class CommandDirector implements ICommandDirector {
 
