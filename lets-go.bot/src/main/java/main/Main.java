@@ -9,7 +9,6 @@ import core.interfaces.IGameInitializer;
 import core.interfaces.ITurnExecutor;
 import infrastructure.ServerConnector;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -30,13 +29,13 @@ public class Main {
                 System.out.println("-hard to enable a bot for 19x19 board");
                 break;
             case "-small":
-                gameInitializer.StartSmallBoardGame();
+                gameInitializer.startSmallBoardGame();
                 break;
             case "-medium":
-                gameInitializer.StartMediumBoardGame();
+                gameInitializer.startMediumBoardGame();
                 break;
             case "-large":
-                gameInitializer.StartLargeBoardGame();
+                gameInitializer.startLargeBoardGame();
                 break;
         }
 

@@ -23,6 +23,7 @@ public class ServerResponseReceiver implements IServerResponseReceiver {
             case GAMELOST:
             case GAMEWON:
             case PLAYER_LEFT:
+            case TIE:
                 endOfGameHandler.handleGameEnd(response.getResponseType());
                 break;
             case INVALID_MOVE:

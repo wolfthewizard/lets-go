@@ -27,8 +27,8 @@ public class ServerResponseListener implements IServerResponseListener {
         passResponseDTO(jsonParser.parseJsonToResponse(response));
     }
 
-    public void passResponseDTO(ResponseDTO responseDTO){
-        if(responseNumberCounter != null){
+    public void passResponseDTO(ResponseDTO responseDTO) {
+        if (responseNumberCounter != null) {
             responseNumberCounter.countResponse(responseDTO.getResponseType());
         }
 
@@ -68,6 +68,7 @@ public class ServerResponseListener implements IServerResponseListener {
 
             case PLAYER_LEFT:
                 frontendManager.playerLeft();
+                break;
         }
     }
 }

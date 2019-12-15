@@ -2,9 +2,9 @@ package core.interfaces;
 
 public interface IGameInitializer {
 
-    void StartSmallBoardGame();
+    void startSmallBoardGame();
 
-    void StartMediumBoardGame();
+    void startMediumBoardGame();
 
-    void StartLargeBoardGame();
+    void startLargeBoardGame();
 }

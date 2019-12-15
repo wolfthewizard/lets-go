@@ -26,17 +26,26 @@ public class ServerConnector implements IServerConnector {
         }
     }
 
-    public void StartListening(ICommunicatorListener communicatorListener){
+    public void startListening(ICommunicatorListener communicatorListener){
         serverListener.setCommunicatorListener(communicatorListener);
         serverListener.start();
     }
 
 
+    @Override
     public void sendAction(String action){
         serverSender.sendAction(action);
     }
 
+    @Override
     public void shutDown(){
 
+        serverSender.closeConnection();
+        try {
+            serverListener.stopThread();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

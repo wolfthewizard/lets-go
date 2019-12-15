@@ -15,7 +15,6 @@ public class ClientConnectionThread extends Thread {
     private BufferedReader inputReader;
     private PrintWriter outputWriter;
     private IActionProcesser actionProcesser;
-    private boolean isActionFinished = true;
 
     public ClientConnectionThread(Socket client, IActionProcesser actionProcesser, int id) {
 
@@ -30,6 +29,7 @@ public class ClientConnectionThread extends Thread {
         }
     }
 
+    @Override
     public void run() {
 
         while(true)
@@ -47,13 +47,8 @@ public class ClientConnectionThread extends Thread {
                 closeConnection();
                 return;
             }
-            isActionFinished=false;
-            actionProcesser.ProcessAction(message, id);
+            actionProcesser.processAction(message, id);
         }
-    }
-
-    public boolean isActionFinished() {
-        return isActionFinished;
     }
 
     public void beginAction(String firstResponse) {
@@ -61,7 +56,6 @@ public class ClientConnectionThread extends Thread {
     }
 
     public void completeAction(String secondResponse) {
-        isActionFinished = true;
         outputWriter.println(secondResponse);
     }
 
@@ -72,7 +66,6 @@ public class ClientConnectionThread extends Thread {
 
     public void closeConnection() {
 
-        isActionFinished = true;
         try {
             outputWriter.close();
             inputReader.close();

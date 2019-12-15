@@ -14,6 +14,7 @@ public class PlayerValidator implements IPlayerValidator {
     private ArrayList<GameWithPlayers> games = new ArrayList<>();
     private final HashMap<BoardSize, Integer> waitingPlayers = new HashMap<>();
 
+    @Override
     public void addNewGame(int whiteId, int blackId, int gameId) {
 
         games.add(new GameWithPlayers(whiteId, blackId, gameId));
@@ -26,12 +27,14 @@ public class PlayerValidator implements IPlayerValidator {
         }
     }
 
+    @Override
     public void removeGame(int gameId) {
 
         games.removeIf(gameWithPlayers -> gameWithPlayers.getGameId() == gameId);
     }
 
-    public void playerLeft(int playerId){
+    @Override
+    public void playerLeft(int playerId) {
         for (BoardSize boardSize : waitingPlayers.keySet()) {
             if (waitingPlayers.get(boardSize) == playerId) {
                 waitingPlayers.remove(boardSize);
@@ -40,24 +43,27 @@ public class PlayerValidator implements IPlayerValidator {
         }
     }
 
+    @Override
     public GameInfo getGameInfo(int playerId) {
 
         for (GameWithPlayers game : games) {
-            if (game.getBlackid() == playerId) {
+            if (game.getBlackId() == playerId) {
                 return new GameInfo(new MoveIdentity(Color.BLACK, game.getGameId()), game.getWhiteId());
             }
             if (game.getWhiteId() == playerId) {
-                return new GameInfo(new MoveIdentity(Color.WHITE, game.getGameId()), game.getBlackid());
+                return new GameInfo(new MoveIdentity(Color.WHITE, game.getGameId()), game.getBlackId());
             }
         }
 
         return null;
     }
 
+    @Override
     public Integer getWaitingPlayerId(BoardSize boardSize) {
         return waitingPlayers.get(boardSize);
     }
 
+    @Override
     public void addWaitingPlayer(BoardSize boardSize, int playerId) {
         waitingPlayers.put(boardSize, playerId);
     }
