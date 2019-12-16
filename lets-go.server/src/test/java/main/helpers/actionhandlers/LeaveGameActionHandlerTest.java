@@ -55,16 +55,16 @@ public class LeaveGameActionHandlerTest {
         verify(playerValidatorMock, times(1)).playerLeft(anyInt());
     }
 
-    @Test
-    public void handleAction_withNotNullGameInfo() {
-
-        gameInfo = new GameInfo(new MoveIdentity(Color.BLACK, 0), 42);
-
-        leaveGameActionHandler = new LeaveGameActionHandler(gameInfo, clientConnectionThreadMock,
-                jsonParserMock, commandDirectorMock, clientsManagerMock, playerValidatorMock);
-
-        leaveGameActionHandler.handleAction();
-
-        verify(playerValidatorMock, times(1)).removeGame(anyInt());
-    }
+//    @Test
+//    public void handleAction_withNotNullGameInfo() {
+//
+//        gameInfo = new GameInfo(new MoveIdentity(Color.BLACK, 0), 42);
+//
+//        leaveGameActionHandler = new LeaveGameActionHandler(gameInfo, clientConnectionThreadMock,
+//                jsonParserMock, commandDirectorMock, clientsManagerMock, playerValidatorMock);
+//
+//        leaveGameActionHandler.handleAction();
+//
+//        verify(playerValidatorMock, times(1)).removeGame(anyInt());
+//    }
 }

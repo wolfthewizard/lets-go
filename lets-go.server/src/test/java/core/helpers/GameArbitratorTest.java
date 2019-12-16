@@ -1,17 +1,14 @@
 package core.helpers;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 import contract.Coordinates;
 import contract.enums.Occupancy;
-import core.interfaces.IMoveHelper;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
 import core.model.enums.Winner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,10 @@ public class GameArbitratorTest {
 
     private GameArbitrator gameArbitrator;
 
-    private Occupancy[][] board;
+    private Occupancy[][] board1;
+    private Occupancy[][] board2;
+    private Occupancy[][] board3;
+
     private int boardSizeValue;
     private List<Coordinates> chain1;
     private List<Coordinates> chain2;
@@ -30,44 +30,72 @@ public class GameArbitratorTest {
 
         boardSizeValue = 9;
 
-        board = new Occupancy[boardSizeValue][];
+        board1 = new Occupancy[boardSizeValue][];
         for (int i = 0; i < boardSizeValue; i++) {
-            board[i] = new Occupancy[boardSizeValue];
+            board1[i] = new Occupancy[boardSizeValue];
             for (int j = 0; j < boardSizeValue; j++) {
-                board[i][j] = Occupancy.EMPTY;
+                board1[i][j] = Occupancy.EMPTY;
             }
         }
 
-        board[0][0] = Occupancy.BLACK;
-        board[0][1] = Occupancy.BLACK;
-        board[1][1] = Occupancy.BLACK;
-        board[2][1] = Occupancy.BLACK;
-        board[3][1] = Occupancy.BLACK;
-        board[3][0] = Occupancy.BLACK;
+        board1[0][0] = Occupancy.BLACK;
+        board1[0][1] = Occupancy.BLACK;
+        board1[1][1] = Occupancy.BLACK;
+        board1[2][1] = Occupancy.BLACK;
+        board1[3][1] = Occupancy.BLACK;
+        board1[3][0] = Occupancy.BLACK;
 
-        board[4][4] = Occupancy.WHITE;
+        board1[4][4] = Occupancy.WHITE;
 
-        chain1 = new ArrayList<>();
-        chain2 = new ArrayList<>();
+        board2 = new Occupancy[boardSizeValue][];
+        for (int i = 0; i < boardSizeValue; i++) {
+            board2[i] = new Occupancy[boardSizeValue];
+            for (int j = 0; j < boardSizeValue; j++) {
+                board2[i][j] = Occupancy.EMPTY;
+            }
+        }
 
-        IMoveHelper moveHelperMock = Mockito.mock(IMoveHelper.class);
+        board2[0][0] = Occupancy.WHITE;
+        board2[0][1] = Occupancy.WHITE;
+        board2[0][2] = Occupancy.WHITE;
+        board2[1][2] = Occupancy.WHITE;
+        board2[2][2] = Occupancy.WHITE;
+        board2[2][1] = Occupancy.WHITE;
+        board2[2][0] = Occupancy.WHITE;
+        board2[1][0] = Occupancy.WHITE;
 
-        Coordinates cords10 = new Coordinates(1, 0);
-        chain1.add(cords10);
-        chain1.add(new Coordinates(2, 0));
+        board2[4][4] = Occupancy.BLACK;
 
-        //when(moveHelperMock.chainContains(chain1, any())).thenReturn(true);
-        when(moveHelperMock.chainContains(chain1, cords10)).thenReturn(false);
+        board3 = new Occupancy[boardSizeValue][];
+        for (int i = 0; i < boardSizeValue; i++) {
+            board3[i] = new Occupancy[boardSizeValue];
+            for (int j = 0; j < boardSizeValue; j++) {
+                board3[i][j] = Occupancy.EMPTY;
+            }
+        }
 
-        //when(moveHelperMock.getChainStartingWithCords())
-        when(moveHelperMock.getChainStartingWithCords(board, 9, cords10, Occupancy.EMPTY)).thenReturn(chain1);
-
-        gameArbitrator = new GameArbitrator(moveHelperMock);
+        gameArbitrator = new GameArbitrator(new MoveHelper());
     }
 
     @Test
     public void determineWinner_returnsBlack_whenBlackHasMoreTerritory() {
 
+        Winner winner = gameArbitrator.determineWinner(board1, 9);
+        assertEquals(Winner.BLACK, winner);
+    }
+
+    @Test
+    public void determineWinner_returnsBlack_whenWhiteHasMoreTerritory() {
+
+        Winner winner = gameArbitrator.determineWinner(board2, 9);
+        assertEquals(Winner.WHITE, winner);
+    }
+
+    @Test
+    public void determineWinner_returnsBlack_whenItsTie() {
+
+        Winner winner = gameArbitrator.determineWinner(board3, 9);
+        assertEquals(Winner.TIE, winner);
     }
 
     @Test
