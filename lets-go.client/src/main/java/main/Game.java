@@ -3,7 +3,7 @@ package main;
 
 import contract.Change;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public interface Game {
@@ -23,5 +23,5 @@ public interface Game {
     void exitApp();
     void signalFailedToCreateGame();
     void signalServerFailed();
-    void enforceChanges(ArrayList<Change> changes);
+    void enforceChanges(List<Change> changes);
 }

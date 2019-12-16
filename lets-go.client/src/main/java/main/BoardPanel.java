@@ -7,7 +7,7 @@ import contract.enums.BoardSize;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class BoardPanel extends JPanel {
 
@@ -38,7 +38,7 @@ public class BoardPanel extends JPanel {
         return tiles[0].length * tiles[0][0].getDimension();
     }
 
-    public void enforceChanges(ArrayList<Change> changes) {
+    public void enforceChanges(List<Change> changes) {
 
         for(Change change : changes) {
             tiles[change.getCoordinates().getX()][change.getCoordinates().getY()]
