@@ -4,6 +4,7 @@ import contract.enums.BoardSize;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
 import core.serversender.ServerResponseListener;
+import main.BoardPanel;
 import main.FrontendManager;
 import main.actionlisteners.PassButtonActionListener;
 import main.actionlisteners.TileButtonActionListener;
@@ -73,15 +74,12 @@ public class GameSettingsWindow extends JFrame {
                 case "13x13":
                     boardSize = BoardSize.THIRTEEN;
                     break;
-                case "19x19":
-                    boardSize = BoardSize.NINETEEN;
-                    break;
                 default:
-                    boardSize = null;
+                    boardSize = BoardSize.NINETEEN;
             }
 
             ServerCommunicator serverCommunicator = new ServerCommunicator(new JsonParser(),
-                    new ServerResponseListener(new FrontendManager(new GameBoardWindow(boardSize)), new JsonParser()));
+                    new ServerResponseListener(new FrontendManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()));
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             serverCommunicator.sendStartGameMessage(boardSize);

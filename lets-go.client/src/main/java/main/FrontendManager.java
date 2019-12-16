@@ -3,9 +3,8 @@ package main;
 import contract.Change;
 import contract.ResponsePrisoners;
 import core.interfaces.IFrontendManager;
-import main.windows.GameBoardWindow;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class FrontendManager implements IFrontendManager {
@@ -13,12 +12,12 @@ public class FrontendManager implements IFrontendManager {
     private Game gameBoardWindow;
     private boolean playersTurn;
 
-    public FrontendManager(GameBoardWindow gameBoardWindow) {
+    public FrontendManager(Game gameBoardWindow) {
         this.gameBoardWindow = gameBoardWindow;
         playersTurn = false;
     }
 
-    public void moveExecuted(ArrayList<Change> changes, ResponsePrisoners prisoners) {
+    public void moveExecuted(List<Change> changes, ResponsePrisoners prisoners) {
 
         gameBoardWindow.clearServerResponse();
         gameBoardWindow.enforceChanges(changes);

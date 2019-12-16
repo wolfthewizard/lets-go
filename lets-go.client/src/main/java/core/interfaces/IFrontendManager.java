@@ -4,11 +4,11 @@ package core.interfaces;
 import contract.Change;
 import contract.ResponsePrisoners;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface IFrontendManager {
 
-    void moveExecuted(ArrayList<Change> changes, ResponsePrisoners prisoners);
+    void moveExecuted(List<Change> changes, ResponsePrisoners prisoners);
     void invalidMove();
     void cantCreateGame();
     void success();

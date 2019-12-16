@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.System.exit;
 
@@ -25,7 +25,7 @@ public class GameBoardWindow extends JFrame implements Game {
 
     private BoardPanel boardPanel;
 
-    public GameBoardWindow(BoardSize size) {
+    public GameBoardWindow(BoardPanel boardPanel) {
 
         super("Let's Go!");
 
@@ -50,7 +50,7 @@ public class GameBoardWindow extends JFrame implements Game {
         whoseMoveLabel = new JLabel(" ");
         opponentsCaptivesLabel = new JLabel(" ");
         playersCaptivesLabel = new JLabel(" ");
-        boardPanel = new BoardPanel(size);
+        this.boardPanel = boardPanel;
         JButton passButton = new JButton("Pass");
 
         setSize(boardPanel.getDimension(), boardPanel.getDimension() + 180);
@@ -153,7 +153,7 @@ public class GameBoardWindow extends JFrame implements Game {
         JOptionPane.showMessageDialog(null, "Server has crashed.");
     }
 
-    public void enforceChanges(ArrayList<Change> changes) {
+    public void enforceChanges(List<Change> changes) {
         boardPanel.enforceChanges(changes);
     }
 }
