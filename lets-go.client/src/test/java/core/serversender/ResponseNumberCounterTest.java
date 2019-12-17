@@ -45,4 +45,13 @@ public class ResponseNumberCounterTest {
 
         assertEquals(-1, responseNumberCounter.getNumberOfResponsesToRead());
     }
+
+    @Test
+    public void resetcounter_resetsCounter() {
+
+        responseNumberCounter.addNumberOfResponsesToRead(1);
+        responseNumberCounter.resetCounter();
+
+        assertEquals(0, responseNumberCounter.getNumberOfResponsesToRead());
+    }
 }

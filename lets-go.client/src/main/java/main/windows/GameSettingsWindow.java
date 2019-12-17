@@ -78,8 +78,9 @@ public class GameSettingsWindow extends JFrame {
                     boardSize = BoardSize.NINETEEN;
             }
 
-            ServerCommunicator serverCommunicator = new ServerCommunicator(new JsonParser(),
-                    new ServerResponseListener(new FrontendManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()));
+            ServerCommunicator serverCommunicator = ServerCommunicator.getInstance();
+            serverCommunicator.setServerResponseListener(new ServerResponseListener(
+                    new FrontendManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()));
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             serverCommunicator.sendStartGameMessage(boardSize);

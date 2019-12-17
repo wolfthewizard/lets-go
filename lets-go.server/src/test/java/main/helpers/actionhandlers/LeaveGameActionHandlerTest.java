@@ -3,6 +3,8 @@ package main.helpers.actionhandlers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import contract.ResponseDTO;
+import contract.enums.ResponseType;
 import core.interfaces.ICommandDirector;
 import core.model.MoveIdentity;
 import core.model.enums.Color;
@@ -22,7 +24,6 @@ public class LeaveGameActionHandlerTest {
     private IClientsManager clientsManagerMock;
     private IPlayerValidator playerValidatorMock;
 
-    private GameInfo gameInfo;
     private ClientConnectionThread clientConnectionThreadMock;
     private IJsonParser jsonParserMock;
     private ICommandDirector commandDirectorMock;
@@ -33,8 +34,6 @@ public class LeaveGameActionHandlerTest {
         clientsManagerMock = Mockito.mock(IClientsManager.class);
 
         playerValidatorMock = Mockito.mock(IPlayerValidator.class);
-
-        gameInfo = null;
 
         clientConnectionThreadMock = Mockito.mock(ClientConnectionThread.class);
 
@@ -47,24 +46,35 @@ public class LeaveGameActionHandlerTest {
     @Test
     public void handleAction_withNullGameInfo() {
 
+        GameInfo gameInfo = null;
+
         leaveGameActionHandler = new LeaveGameActionHandler(gameInfo, clientConnectionThreadMock,
                 jsonParserMock, commandDirectorMock, clientsManagerMock, playerValidatorMock);
 
         leaveGameActionHandler.handleAction();
 
         verify(playerValidatorMock, times(1)).playerLeft(anyInt());
+        verify(clientConnectionThreadMock, times(1)).closeConnection();
     }
 
-//    @Test
-//    public void handleAction_withNotNullGameInfo() {
-//
-//        gameInfo = new GameInfo(new MoveIdentity(Color.BLACK, 0), 42);
-//
-//        leaveGameActionHandler = new LeaveGameActionHandler(gameInfo, clientConnectionThreadMock,
-//                jsonParserMock, commandDirectorMock, clientsManagerMock, playerValidatorMock);
-//
-//        leaveGameActionHandler.handleAction();
-//
-//        verify(playerValidatorMock, times(1)).removeGame(anyInt());
-//    }
+    @Test
+    public void handleAction_withNotNullGameInfo() {
+
+        MoveIdentity moveIdentity = new MoveIdentity(Color.BLACK, 0);
+        GameInfo gameInfo = new GameInfo(moveIdentity, 42);
+        ClientConnectionThread clientConnectionThreadMock = Mockito.mock(ClientConnectionThread.class);
+        when(clientsManagerMock.getClientWithId(42)).thenReturn(clientConnectionThreadMock);
+
+        leaveGameActionHandler = new LeaveGameActionHandler(gameInfo, clientConnectionThreadMock,
+                jsonParserMock, commandDirectorMock, clientsManagerMock, playerValidatorMock);
+
+        leaveGameActionHandler.handleAction();
+
+        verify(clientsManagerMock, times(1)).getClientWithId(42);
+        verify(clientConnectionThreadMock, times(1)).completeAction(anyString());
+        verify(jsonParserMock, times(1)).parseResponseToJson(any(ResponseDTO.class));
+        verify(playerValidatorMock, times(1)).removeGame(anyInt());
+        verify(commandDirectorMock, times(1)).cancelGame(moveIdentity);
+        verify(clientConnectionThreadMock, times(1)).closeConnection();
+    }
 }

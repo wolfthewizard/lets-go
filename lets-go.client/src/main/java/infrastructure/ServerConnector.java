@@ -15,7 +15,11 @@ public class ServerConnector implements IServerConnector {
     private Socket socket;
     private ServerResponseRedirector serverResponseRedirector;
 
-    public ServerConnector() throws IOException {
+    public ServerConnector(){
+
+    }
+
+    public void resetConnection() throws IOException {
         socket = new Socket("localhost", 1337);
         outputWriter = new PrintWriter(socket.getOutputStream(), true);
         serverResponseRedirector = new ServerResponseRedirector(
