@@ -26,10 +26,15 @@ public class TurnExecutor implements ITurnExecutor {
     }
 
     @Override
-    public void executeTurn() {
-        Coordinates coordinates = movePerformer.performMove(boardManager.getBoard(), boardManager.getBoardSize(), myColor);
+    public void executeTurn(boolean lastTurnInvalid) {
+        Coordinates coordinates = movePerformer.performMove(boardManager.getBoard(), boardManager.getBoardSize(), myColor, lastTurnInvalid);
 
-        communicatorSender.sendMoveMessage(coordinates);
+        if(coordinates == null){
+            communicatorSender.sendMovePassMessage();
+        }
+        else{
+            communicatorSender.sendMoveMessage(coordinates);
+        }
     }
 
 }

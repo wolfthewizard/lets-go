@@ -1,0 +1,216 @@
+@startuml
+namespace main{
+    class ArgumentsProcesser implements IArgumentProcesser {
+
+            - final IGameInitializer gameInitializer;
+
+            + ArgumentsProcesser(IGameInitializer gameInitializer)
+
+            + void processArgument(String argument)
+
+        }
+        ArgumentsProcesser..>core.IGameInitializer
+
+        class ExitListener implements IExitListener {
+
+            - final ICommunicatorSender communicatorSender;
+            - final Scanner scanner;
+
+            + ExitListener(ICommunicatorSender communicatorSender, Scanner scanner)
+
+            + void waitForExit()
+        }
+        ExitListener..>core.ICommunicatorSender
+
+        interface IArgumentProcesser {
+
+            void processArgument(String argument);
+        }
+
+        interface IExitListener {
+
+            void waitForExit();
+        }
+
+        class Main {
+             static void main(String[] args);
+        }
+        Main..>IArgumentProcesser
+}
+
+namespace core{
+    namespace helpers{
+         class BoardManager implements IBoardManager {
+
+            - Occupancy[][] board;
+            - BoardSize boardSize;
+
+            + void initializeBoard(BoardSize boardSize)
+
+            + void saveMoves(ArrayList<Change> changes)
+
+            + Occupancy[][] getBoard()
+
+            + BoardSize getBoardSize()
+        }
+
+        class EndOfGameHandler implements IEndOfGameHandler {
+
+            - final ICommunicatorSender communicatorSender;
+
+            + EndOfGameHandler(ICommunicatorSender communicatorSender)
+
+            + void handleGameEnd(ResponseType endType)
+        }
+        EndOfGameHandler..>core.ICommunicatorSender
+
+        class JsonParser implements IJsonParser {
+
+            - Gson jsonParser;
+
+            + JsonParser()
+
+            + ResponseDTO parseJsonToResponse(String json)
+
+            + String parseActionToJson(ActionDTO actionDTO)
+        }
+
+         class MovePerformer implements IMovePerformer {
+
+            - Random random = new Random();
+            - boolean lastReturnedRand = false;
+
+            + Coordinates performMove(Occupancy[][] board, BoardSize boardSize, Color colorOfMovingPlayer,
+                                           boolean lastMoveInvalid)
+
+            -Coordinates checkIfEnemyHasOneBreath(Coordinates coordinates, Occupancy[][] board)
+        }
+    }
+
+     class GameInitializer implements IGameInitializer {
+
+        - final ICommunicatorSender communicatorSender;
+        - final IBoardManager boardManager;
+
+        + void startSmallBoardGame()
+
+        + void startMediumBoardGame()
+
+        + void startLargeBoardGame()
+
+        - void initializeGame(BoardSize boardSize)
+    }
+    GameInitializer..>core.ICommunicatorSender
+    GameInitializer..>IBoardManager
+
+    class MovesParser implements IMovesParser {
+
+        - final IBoardManager boardManager;
+        - final ITurnExecutor turnExecutor;
+        - boolean firstMove = true;
+        - boolean isMyMove = false;
+
+       + void parseMoves(ArrayList<Change> changes)
+    }
+    MovesParser..>IBoardManager
+    MovesParser..>ITurnExecutor
+
+    class ServerCommunicator implements ICommunicatorListener, ICommunicatorSender {
+
+        - final IServerConnector serverConnector;
+        - final IJsonParser jsonParser;
+        - IServerResponseReceiver serverResponseReceiver;
+
+        + ServerCommunicator(IServerConnector serverConnector, IJsonParser jsonParser)
+
+        + void setServerResponseReceiver(IServerResponseReceiver serverResponseReceiver)
+
+        + void sendStartGameMessage(BoardSize boardSize)
+
+        + void sendMoveMessage(Coordinates coordinates)
+
+        + void sendMovePassMessage() {
+
+        + void sendLeaveGameMessage() {
+
+        - void sendMessage(ActionDTO actionDTO) {
+
+        + void responseFetched(String response) {
+    }
+    ServerCommunicator..>IJsonParser
+    ServerCommunicator..>IServerConnector
+
+    class ServerResponseReceiver implements IServerResponseReceiver {
+
+        - final IMovesParser movesParser;
+        - final IEndOfGameHandler endOfGameHandler;
+        - final ITurnExecutor turnExecutor;
+
+        + void responseReceived(ResponseDTO response)
+    }
+    ServerResponseReceiver..>IMovesParser
+    ServerResponseReceiver..>IEndOfGameHandler
+    ServerResponseReceiver..>ITurnExecutor
+
+    class TurnExecutor implements ITurnExecutor {
+
+        - final ICommunicatorSender communicatorSender;
+        - final IMovePerformer movePerformer;
+        - final IBoardManager boardManager;
+        - Color myColor;
+
+        + TurnExecutor(ICommunicatorSender communicatorSender, IMovePerformer movePerformer, IBoardManager boardManager)
+
+        + void setMyColor(Color color)
+
+        + void executeTurn(boolean lastTurnInvalid)
+    }
+    TurnExecutor..>core.ICommunicatorSender
+    TurnExecutor..>IMovePerformer
+    TurnExecutor..>IBoardManager
+}
+
+namespace infrastructure{
+
+     class ServerConnector implements core.IServerConnector {
+
+        -static Socket socket;
+        - ServerListener serverListener;
+        - ServerSender serverSender;
+
+        + void startListening(ICommunicatorListener communicatorListener)
+
+
+        + void sendAction(String action)
+
+        + void shutDown()
+    }
+    ServerConnector..>ServerListener
+    ServerConnector..>ServerSender
+
+     class ServerListener extends Thread {
+
+        -final BufferedReader inputReader;
+        - ICommunicatorListener communicatorListener;
+
+        + ServerListener(BufferedReader inputReader)
+
+        + void setCommunicatorListener(ICommunicatorListener communicatorListener)
+
+        + void run()
+
+        + void stopThread()
+    }
+
+    class ServerSender {
+
+        - static PrintWriter outputWriter;
+
+        + ServerSender(PrintWriter outputWriter)
+
+        + void sendAction(String action)
+
+        + void closeConnection()
+    }
+}
+@enduml

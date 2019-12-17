@@ -4,7 +4,7 @@ import core.model.Color;
 
 public interface ITurnExecutor {
 
-    void executeTurn();
+    void executeTurn(boolean lastTurnInvalid);
 
     void setMyColor(Color color);
 }

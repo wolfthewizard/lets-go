@@ -35,7 +35,7 @@ public class MovesParser implements IMovesParser {
         boardManager.saveMoves(changes);
 
         if (isMyMove) {
-            turnExecutor.executeTurn();
+            turnExecutor.executeTurn(false);
             isMyMove = false;
         } else {
             isMyMove = true;
