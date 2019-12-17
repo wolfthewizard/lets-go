@@ -13,6 +13,4 @@ public interface IServerCommunicator {
     void sendMovePassMessage();
 
     void sendLeaveGameMessage();
-
-    void shutDownConnection();
 }

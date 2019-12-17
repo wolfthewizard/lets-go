@@ -13,46 +13,59 @@ import java.io.IOException;
 
 public class ServerCommunicator implements IServerCommunicator {
 
+    private static boolean initialized;
+    private static ServerCommunicator instance;
     private IJsonParser jsonParser;
-    private static boolean connectionClosed;
-    private static IServerConnector serverConnector;
-    private static IResponseNumberCounter responseNumberCounter;
+    private boolean connectionClosed = true;
+    private IServerConnector serverConnector;
+    private IResponseNumberCounter responseNumberCounter;
 
-    static {
-        connectionClosed = false;
+    private ServerCommunicator(IJsonParser jsonParser, IResponseNumberCounter responseNumberCounter,
+                               IServerConnector serverConnector) {
 
-        try {
-            restoreConnection();
-        } catch (IOException e) {
-            connectionClosed = true;
+        this.responseNumberCounter = responseNumberCounter;
+        this.jsonParser = jsonParser;
+        this.serverConnector = serverConnector;
+    }
+
+    public static void initialize(IJsonParser jsonParser, IResponseNumberCounter responseNumberCounter,
+                                  IServerConnector serverConnector) {
+
+        if (!initialized) {
+            instance = new ServerCommunicator(jsonParser, responseNumberCounter, serverConnector);
+            initialized = true;
         }
     }
 
-    private static void restoreConnection() throws IOException {
+    public static ServerCommunicator getInstance() {
 
-        serverConnector = new ServerConnector();
+        if (initialized) {
+            return instance;
+        }
+
+        throw new IllegalCallerException("ServerConnector need to be initialized before accessing");
     }
 
-    public ServerCommunicator(IJsonParser jsonParser, IServerResponseListener serverResponseListener) {
+    public void setServerResponseListener(IServerResponseListener serverResponseListener) {
 
         if (connectionClosed) {
             connectionClosed = false;
             try {
-                restoreConnection();
+                serverConnector.resetConnection();
             } catch (IOException e) {
                 serverResponseListener.passResponseDTO(new ResponseDTO(ResponseType.SERVER_ERROR));
+                return;
             }
         }
 
-        if (serverResponseListener != null) {
-            responseNumberCounter = new ResponseNumberCounter();
-            serverResponseListener.setResponseNumberCounter(responseNumberCounter);
+        responseNumberCounter.resetCounter();
+        serverResponseListener.setResponseNumberCounter(responseNumberCounter);
 
-            serverConnector.setServerResponseListener(serverResponseListener);
-        }
-
-        this.jsonParser = jsonParser;
+        serverConnector.setServerResponseListener(serverResponseListener);
     }
+
+
+
 
     public void sendStartGameMessage(BoardSize boardSize) {
 
@@ -83,7 +96,7 @@ public class ServerCommunicator implements IServerCommunicator {
         }
     }
 
-    public void shutDownConnection() {
+    private void shutDownConnection() {
 
         connectionClosed = true;
         serverConnector.shutDown();

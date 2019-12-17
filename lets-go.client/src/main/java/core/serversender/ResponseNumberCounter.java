@@ -22,4 +22,8 @@ public class ResponseNumberCounter implements IResponseNumberCounter {
             responsesToRead--;
         }
     }
+
+    public void resetCounter(){
+        responsesToRead = 0;
+    }
 }

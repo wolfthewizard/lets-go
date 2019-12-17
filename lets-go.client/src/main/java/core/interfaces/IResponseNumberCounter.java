@@ -9,4 +9,6 @@ public interface IResponseNumberCounter {
     void addNumberOfResponsesToRead(int add);
 
     void countResponse(ResponseType responseType);
+
+    void resetCounter();
 }
