@@ -17,18 +17,14 @@ public class MoveExecutorService implements IMoveExecutorService {
     private IGameRepository gameRepository;
     private IMoveValidator moveValidator;
     private IGameArbitrator gameArbitrator;
-    private IMoveHelper moveHelper;
+    private IMovePerformer movePerformer;
 
-    private Occupancy[][] potentialState;
-    private int boardSizeValue;
-    private List<Change> changes;
-
-    public MoveExecutorService(IGameRepository gameRepository, IMoveValidator moveValidator, IGameArbitrator gameArbitrator, IMoveHelper moveHelper) {
+    public MoveExecutorService(IGameRepository gameRepository, IMoveValidator moveValidator, IGameArbitrator gameArbitrator, IMovePerformer movePerformer) {
 
         this.gameRepository = gameRepository;
         this.moveValidator = moveValidator;
         this.gameArbitrator = gameArbitrator;
-        this.moveHelper = moveHelper;
+        this.movePerformer = movePerformer;
     }
 
     @Override
@@ -39,10 +35,15 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         Coordinates moveCoordinates = move.getCoordinates();
         Color playerColor = move.getPlayerColor();
-        boardSizeValue = game.getBoardSize().getValue();
+        int boardSizeValue = game.getBoardSize().getValue();
         Prisoners prisoners = board.getCurrentPrisoners();
 
-        initializePotentialData(board);
+        List<Change> changes = new ArrayList<>();
+
+        Occupancy[][] potentialState = new Occupancy[boardSizeValue][];
+        for (int i = 0; i < boardSizeValue; i++) {
+            potentialState[i] = board.getCurrentState()[i].clone();
+        }
 
         if (moveCoordinates == null) {
 
@@ -62,7 +63,7 @@ public class MoveExecutorService implements IMoveExecutorService {
             return new MoveResponse(MoveResponseType.INVALID_MOVE);
         }
 
-        int newPrisoners = doMove(moveCoordinates, playerColor);
+        int newPrisoners = movePerformer.performMove(moveCoordinates, playerColor, potentialState, boardSizeValue, changes);
 
         if (!postMoveValidation(boardSizeValue, potentialState, board.getPreviousTurnState(), changes)) {
             return new MoveResponse(MoveResponseType.INVALID_MOVE);
@@ -82,16 +83,6 @@ public class MoveExecutorService implements IMoveExecutorService {
                 (changes, prisoners.toResponsePrisoners(playerColor)));
     }
 
-    private void initializePotentialData(Board board) {
-
-        changes = new ArrayList<>();
-
-        potentialState = new Occupancy[boardSizeValue][];
-        for (int i = 0; i < boardSizeValue; i++) {
-            potentialState[i] = board.getCurrentState()[i].clone();
-        }
-    }
-
     private boolean preMoveValidation(Occupancy[][] board, Coordinates move) {
         return moveValidator.validateVacancy(board, move);
     }
@@ -100,60 +91,5 @@ public class MoveExecutorService implements IMoveExecutorService {
                                        Occupancy[][] previousTurnState, List<Change> changes) {
         return moveValidator.validateKO(boardSizeValue, potentialState, previousTurnState)
                 && moveValidator.validateSuicide(changes);
-    }
-
-    private int doMove(Coordinates moveCoordinates, Color playerColor) {
-
-        int killedEnemies = 0;
-
-        //1st phase
-        changeBoard(moveCoordinates, playerColor.toOccupancy());
-
-        //2nd phase
-        List<Coordinates> enemiesSurrounding = moveHelper.getNeighbouringCords(potentialState, boardSizeValue, moveCoordinates, playerColor.reverse().toOccupancy());
-
-        for (Coordinates enemy : enemiesSurrounding) {
-
-            List<Coordinates> chain = moveHelper.getChainStartingWithCords(potentialState, boardSizeValue, enemy, playerColor.reverse().toOccupancy());
-
-            if (moveHelper.isChainWithoutBreaths(potentialState, boardSizeValue, chain)) {
-
-                killedEnemies = removeChainFromBoard(chain);
-            }
-        }
-
-        if (killedEnemies != 0) {
-
-            return killedEnemies;
-        }
-
-        //3rd phase
-        List<Coordinates> chain = moveHelper.getChainStartingWithCords(potentialState, boardSizeValue, moveCoordinates, playerColor.toOccupancy());
-
-        if (moveHelper.isChainWithoutBreaths(potentialState, boardSizeValue, chain)) {
-
-            killedEnemies = -removeChainFromBoard(chain);
-        }
-
-        return killedEnemies;
-    }
-
-    private int removeChainFromBoard(List<Coordinates> chain) {
-
-        int amountOfRemovedStones = 0;
-
-        for (Coordinates coordinates : chain) {
-
-            changeBoard(coordinates, Occupancy.EMPTY);
-            amountOfRemovedStones++;
-        }
-
-        return amountOfRemovedStones;
-    }
-
-    private void changeBoard(Coordinates coordinates, Occupancy occupancy) {
-
-        potentialState[coordinates.getX()][coordinates.getY()] = occupancy;
-        changes.add(new Change(occupancy, coordinates));
     }
 }

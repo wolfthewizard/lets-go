@@ -48,6 +48,11 @@ namespace core {
             Winner determineWinner(Occupancy[][] board, int boardSizeValue);
             MoveResponseType toMoveResponseType(Winner winner, Color playerColor);
         }
+
+        interface IMovePerformer {
+
+            int performMove(Coordinates moveCoordinates, Color playerColor, Occupancy[][] potentialState, int boardSizeValue, List<Change> changes);
+        }
     }
 
     namespace helpers {
@@ -77,6 +82,16 @@ namespace core {
                  +boolean validateVacant(Board: board, Move: move)
                 ' mb more
         }
+
+        class MovePerformer implements core.interfaces.IMovePerformer {
+
+            - IMoveHelper moveHelper;
+
+            + int performMove(Coordinates moveCoordinates, Color playerColor, Occupancy[][] potentialState, int boardSizeValue, List<Change> changes)
+            - int removeChainFromBoard(Occupancy[][] potentialState, List<Change> changes, List<Coordinates> chain)
+            - void changeBoard(Occupancy[][] potentialState, List<Change> changes, Coordinates coordinates, Occupancy occupancy)
+        }
+        MovePerformer --> core.interfaces.IMoveHelper
     }
 
     namespace services {
@@ -88,17 +103,13 @@ namespace core {
             -gameArbitrator : IGameArbitrator
 
             +ResponseDTO executeMove(MoveDTO: moveDTO)
-            - void initializePotentialData(Board board);
             - boolean preMoveValidation(Occupancy[][] board, Coordinates move);
             - boolean postMoveValidation(int boardSizeValue, Occupancy[][] potentialState,
                                                Occupancy[][] previousTurnState, List<Change> changes);
-            - int doMove(Coordinates moveCoordinates, Color playerColor);
-            - int removeChainFromBoard(List<Coordinates> chain);
-            - void changeBoard(Coordinates coordinates, Occupancy occupancy);
         }
         MoveExecutorService --> core.interfaces.IGameRepository
         MoveExecutorService --> core.interfaces.IMoveValidator
-        MoveExecutorService --> core.interfaces.IMoveHelper
+        MoveExecutorService --> core.interfaces.IMovePerformer
         MoveExecutorService --> core.interfaces.IGameArbitrator
 
         class GameManagerService implements core.interfaces.IGameManagerService{
@@ -268,7 +279,7 @@ namespace main {
                 # void handleNotNullGameInfo()
             }
             LeaveGameActionHandler --> main.IClientsManager
-            LeaveGameActionHandler --> helpers.playervalidator.IPlayerValidator
+            LeaveGameActionHandler --> main.helpers.playervalidator.IPlayerValidator
 
             class MoveExecuteActionHandler extends AbstractActionHandler {
 
@@ -291,7 +302,7 @@ namespace main {
                 # void handleNullGameInfo()
                 # void handleNotNullGameInfo()
             }
-            StartGameActionHandler --> helpers.playervalidator.IPlayerValidator
+            StartGameActionHandler --> main.helpers.playervalidator.IPlayerValidator
             StartGameActionHandler --> main.IClientsManager
         }
 
@@ -316,7 +327,7 @@ namespace main {
                 + void closeAllConnections()
             }
             ActionProcesser --> main.helpers.jsonparser.IJsonParser
-            ActionProcesser --> helpers.playervalidator.IPlayerValidator
+            ActionProcesser --> main.helpers.playervalidator.IPlayerValidator
             ActionProcesser --> core.interfaces.ICommandDirector
             ActionProcesser --> main.IClientsManager
             ActionProcesser --> main.helpers.actionhandlers.AbstractActionHandler

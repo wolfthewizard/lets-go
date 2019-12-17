@@ -3,6 +3,7 @@ package main;
 import core.CommandDirector;
 import core.helpers.GameArbitrator;
 import core.helpers.MoveHelper;
+import core.helpers.MovePerformer;
 import core.helpers.MoveValidator;
 import core.interfaces.IGameRepository;
 import core.interfaces.IMoveHelper;
@@ -28,13 +29,12 @@ public class Main {
         ServerListenerThread serverListenerThread = new ServerListenerThread(new ActionProcesser(jsonParser,
                 new PlayerValidator(),
                 new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(
-                        gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), moveHelper)), clientsManager), clientsManager);
+                        gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), new MovePerformer(moveHelper))), clientsManager), clientsManager);
 
         serverListenerThread.start();
 
         Scanner scanner = new Scanner(System.in);
-        while (!scanner.nextLine().equals("exit")) {
-        }
+        while (!scanner.nextLine().equals("exit"));
         serverListenerThread.closeConnection();
     }
 }
