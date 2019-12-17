@@ -32,18 +32,74 @@ namespace core {
             Game getGame(int playerId)
             void updateGameBoard(int, List<Change>)
         }
+
+        interface IMoveHelper {
+
+            List<Coordinates> getChainStartingWithCords(Occupancy[][] board, int boardSizeValue, Coordinates startingCords, Occupancy occupancy);
+            List<Coordinates> getNeighbouringCords(Occupancy[][] board, int boardSizeValue, Coordinates coordinates, Occupancy occupancy);
+
+            boolean chainContains(List<Coordinates> chain, Coordinates coordinates);
+            boolean doesChainBorderWith(Occupancy[][] board, int boardSizeValue, List<Coordinates> chain, Occupancy occupancy);
+            boolean isChainWithoutBreaths(Occupancy[][] board, int boardSizeValue, List<Coordinates> chain);
+        }
+
+        interface IGameArbitrator {
+
+            Winner determineWinner(Occupancy[][] board, int boardSizeValue);
+            MoveResponseType toMoveResponseType(Winner winner, Color playerColor);
+        }
+    }
+
+    namespace helpers {
+
+        class MoveHelper implements core.interfaces.IMoveHelper {
+
+            + List<Coordinates> getChainStartingWithCords(Occupancy[][] board, int boardSizeValue, Coordinates startingCords, Occupancy occupancy);
+            + boolean chainContains(List<Coordinates> chain, Coordinates coordinates);
+            + boolean doesChainBorderWith(Occupancy[][] board, int boardSizeValue, List<Coordinates> chain, Occupancy occupancy);
+            + boolean isChainWithoutBreaths(Occupancy[][] board, int boardSizeValue, List<Coordinates> chain);
+            + List<Coordinates> getNeighbouringCords(Occupancy[][] board, int boardSizeValueValue, Coordinates coordinates, Occupancy occupancy);
+            - void chainBuildingRecursive(Occupancy[][] board, int boardSizeValue, Coordinates coordinates, Occupancy occupancy, List<Coordinates> chain);
+        }
+
+        class GameArbitrator implements core.interfaces.IGameArbitrator {
+
+            - IMoveHelper moveHelper;
+
+            + Winner determineWinner(Occupancy[][] board, int boardSizeValue);
+            +MoveResponseType toMoveResponseType(Winner winner, Color playerColor);
+        }
+        GameArbitrator --> core.interfaces.IMoveHelper
+
+        class MoveValidator implements core.interfaces.IMoveValidator {
+                 +boolean validateSuicide(Board: board, Move: move)
+                 +boolean validateKO(Board: oldBoard, Board: currentBoard, Move: move)
+                 +boolean validateVacant(Board: board, Move: move)
+                ' mb more
+        }
     }
 
     namespace services {
 
         class MoveExecutorService implements core.interfaces.IMoveExecutorService{
             -gameRepository : IGameRepository
-            -moveValidator : MoveValidator
+            -moveValidator : IMoveValidator
+            -moveHelper : IMoveHelper
+            -gameArbitrator : IGameArbitrator
 
             +ResponseDTO executeMove(MoveDTO: moveDTO)
+            - void initializePotentialData(Board board);
+            - boolean preMoveValidation(Occupancy[][] board, Coordinates move);
+            - boolean postMoveValidation(int boardSizeValue, Occupancy[][] potentialState,
+                                               Occupancy[][] previousTurnState, List<Change> changes);
+            - int doMove(Coordinates moveCoordinates, Color playerColor);
+            - int removeChainFromBoard(List<Coordinates> chain);
+            - void changeBoard(Coordinates coordinates, Occupancy occupancy);
         }
-        MoveExecutorService..>core.interfaces.IGameRepository
-        MoveExecutorService..>core.interfaces.IMoveValidator
+        MoveExecutorService --> core.interfaces.IGameRepository
+        MoveExecutorService --> core.interfaces.IMoveValidator
+        MoveExecutorService --> core.interfaces.IMoveHelper
+        MoveExecutorService --> core.interfaces.IGameArbitrator
 
         class GameManagerService implements core.interfaces.IGameManagerService{
             -IGameRepository: gameRepository
@@ -52,7 +108,7 @@ namespace core {
             +void CreateNewGame(int: firstPlayerId, int: secondPlayerId)
             +void CancelGame(int: leftPlayerId)
         }
-        GameManagerService..>core.interfaces.IGameRepository
+        GameManagerService --> core.interfaces.IGameRepository
     }
 
     class CommandDirector implements core.interfaces.ICommandDirector {
@@ -64,16 +120,11 @@ namespace core {
         +ResponseDTO TryToMove(MoveDTO: move)
         +void CancelGame(int: leftPlayerId)
     }
-    CommandDirector..>core.interfaces.IMoveExecutorService
-    CommandDirector..>core.interfaces.IGameManagerService
+    CommandDirector --> core.interfaces.IMoveExecutorService
+    CommandDirector --> core.interfaces.IGameManagerService
 
     ' moze zamiast dzielic na 2 metody podzielimy na dwie klasy wtedy dwie referencje w executorze, albo jeszcze jednak klasa ktora to razem sklada taka mini facada
-    class MoveValidator implements core.interfaces.IMoveValidator{
-         +boolean validateSuicide(Board: board, Move: move)
-         +boolean validateKO(Board: oldBoard, Board: currentBoard, Move: move)
-         +boolean validateVacant(Board: board, Move: move)
-        ' mb more
-    }
+
 
     namespace model {
         namespace enums {
@@ -187,18 +238,210 @@ namespace infrastructure {
 }
 
 namespace main {
-    interface ICommunicationBase {
 
-        +ResponseDTO orderMove(MoveDTO)
+    namespace helpers {
+
+        namespace actionhandlers {
+
+            abstract class AbstractActionHandler {
+
+                # GameInfo gameInfo;
+                # ClientConnectionThread currentClient;
+                # IJsonParser jsonParser;
+                # ICommandDirector commandDirector;
+
+                + void handleAction()
+
+                # abstract void handleNullGameInfo();
+                # abstract void handleNotNullGameInfo();
+            }
+            AbstractActionHandler --> main.ClientConnectionThread
+            AbstractActionHandler --> main.helpers.jsonparser.IJsonParser
+            AbstractActionHandler --> core.interfaces.ICommandDirector
+
+            class LeaveGameActionHandler extends AbstractActionHandler {
+
+                - IClientsManager clientsManager;
+                - IPlayerValidator playerValidator;
+
+                # void handleNullGameInfo()
+                # void handleNotNullGameInfo()
+            }
+            LeaveGameActionHandler --> main.IClientsManager
+            LeaveGameActionHandler --> helpers.playervalidator.IPlayerValidator
+
+            class MoveExecuteActionHandler extends AbstractActionHandler {
+
+                - IClientsManager clientsManager;
+                - Coordinates coordinates;
+
+                # void handleNullGameInfo()
+                # void handleNotNullGameInfo()
+            }
+            MoveExecuteActionHandler --> main.IClientsManager
+
+            class StartGameActionHandler extends AbstractActionHandler {
+
+                - int threadId;
+                - BoardSize boardSize;
+                - IPlayerValidator playerValidator;
+                - IClientsManager clientsManager;
+                - Random randomGenerator;
+
+                # void handleNullGameInfo()
+                # void handleNotNullGameInfo()
+            }
+            StartGameActionHandler --> helpers.playervalidator.IPlayerValidator
+            StartGameActionHandler --> main.IClientsManager
+        }
+
+        namespace actionprocesser {
+
+            interface IActionProcesser {
+
+                void processAction(String action, int id);
+
+                void closeAllConnections();
+            }
+
+            class ActionProcesser implements IActionProcesser {
+
+                - final IJsonParser jsonParser;
+                - final IPlayerValidator playerValidator;
+                - final ICommandDirector commandDirector;
+                - final IClientsManager clientsManager;
+                - AbstractActionHandler actionHandler;
+
+                + void processAction(String message, int threadId)
+                + void closeAllConnections()
+            }
+            ActionProcesser --> main.helpers.jsonparser.IJsonParser
+            ActionProcesser --> helpers.playervalidator.IPlayerValidator
+            ActionProcesser --> core.interfaces.ICommandDirector
+            ActionProcesser --> main.IClientsManager
+            ActionProcesser --> main.helpers.actionhandlers.AbstractActionHandler
+        }
+
+        namespace jsonparser {
+
+
+
+            class JsonParser implements main.helpers.playervalidator.IJsonParser {
+
+                - Gson jsonParser;
+
+                + ActionDTO parseJsonToAction(String json)
+                + String parseResponseToJson(ResponseDTO responseDTO)
+            }
+        }
+
+        namespace playervalidator {
+
+            interface IJsonParser {
+
+                ActionDTO parseJsonToAction(String json);
+
+                String parseResponseToJson(ResponseDTO responseDTO);
+            }
+
+            interface IPlayerValidator {
+                void addNewGame(int whiteId, int blackId, int gameId);
+
+                void removeGame(int gameId);
+
+                void playerLeft(int playerId);
+
+                GameInfo getGameInfo(int playerId);
+
+                Integer getWaitingPlayerId(BoardSize boardSize);
+
+                void addWaitingPlayer(BoardSize boardSize, int playerId);
+            }
+
+            class PlayerValidator implements main.helpers.playervalidator.IPlayerValidator {
+
+                - ArrayList<GameWithPlayers> games = new ArrayList<>();
+                - final HashMap<BoardSize, Integer> waitingPlayers = new HashMap<>();
+
+                + void addNewGame(int whiteId, int blackId, int gameId)
+                + void removeGame(int gameId)
+                + void playerLeft(int playerId)
+                + GameInfo getGameInfo(int playerId)
+                + Integer getWaitingPlayerId(BoardSize boardSize)
+                + void addWaitingPlayer(BoardSize boardSize, int playerId)
+            }
+        }
     }
 
-    class CommunicationBase implements ICommunicationBase {
+    namespace model {
 
-        -commandDirector : ICommandDirector
+        class GameInfo {
+            - MoveIdentity moveIdentity;
+            - int secondPlayerId;
 
-        +ResponseDTO orderMove(MoveDTO)
+            + int getSecondPlayerId()
+            + MoveIdentity getMoveIdentity()
+        }
+
+        class GameWithPlayers {
+            private final int whiteId;
+            private final int blackId;
+            private final int gameId;
+
+            public int getWhiteId()
+
+            public int getBlackId()
+
+            public int getGameId()
+        }
     }
-    CommunicationBase ..> core.interfaces.ICommandDirector
+
+    class ClientConnectionThread extends Thread {
+
+        - int id;
+        - Socket client;
+        - BufferedReader inputReader;
+        - PrintWriter outputWriter;
+        - IActionProcesser actionProcesser;
+
+        + void run()
+        + void beginAction(String firstResponse)
+        + void completeAction(String secondResponse)
+        + int getThreadId()
+        + void closeConnection()
+    }
+    ClientConnectionThread --> main.helpers.actionprocesser.IActionProcesser
+
+    interface IClientsManager {
+
+        void addClient(ClientConnectionThread clientConnectionThread);
+
+        ArrayList<ClientConnectionThread> getAllClients();
+
+        ClientConnectionThread getClientWithId(int threadId);
+    }
+
+    class ClientsManager implements IClientsManager {
+
+        - ArrayList<ClientConnectionThread> clients
+
+        + void addClient(ClientConnectionThread clientConnectionThread)
+        + ArrayList<ClientConnectionThread> getAllClients()
+        + ClientConnectionThread getClientWithId(int threadId)
+    }
+    ClientsManager --> "*" ClientConnectionThread
+
+    class ServerListenerThread extends Thread{
+
+        private ServerSocket server;
+        private IClientsManager clientsManager;
+        private IActionProcesser actionProcesser;
+
+        public void run()
+        public void closeConnection()
+    }
+    ServerListenerThread --> IClientsManager
+    ServerListenerThread --> main.helpers.actionprocesser.IActionProcesser
 }
 
 'CommunicationBase --> "receives" MoveDTO
