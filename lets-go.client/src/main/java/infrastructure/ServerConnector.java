@@ -27,6 +27,14 @@ public class ServerConnector implements IServerConnector {
         serverResponseRedirector.start();
     }
 
+    public void resetConnection(String connectionAddress) throws IOException {
+        socket = new Socket(connectionAddress, 1337);
+        outputWriter = new PrintWriter(socket.getOutputStream(), true);
+        serverResponseRedirector = new ServerResponseRedirector(
+                new BufferedReader(new InputStreamReader(socket.getInputStream())));
+        serverResponseRedirector.start();
+    }
+
     public void setServerResponseListener(IServerResponseListener serverResponseListener) {
         serverResponseRedirector.setServerResponseListener(serverResponseListener);
     }

@@ -23,6 +23,10 @@ public class GameSettingsWindow extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        JLabel connectionAddressLabel = new JLabel("Choose connection address:");
+
+        JTextField connectionAddressTextField = new JTextField("localhost", 10);
+
 //        JLabel opponentTypeLabel = new JLabel("Choose oppponent type:");
 
 //        ButtonGroup gameTypeRadios = new ButtonGroup();
@@ -47,6 +51,12 @@ public class GameSettingsWindow extends JFrame {
 //        radioGroupPanel.add(playerRadio);
 //        radioGroupPanel.add(botRadio);
 
+        JPanel connectionAddressPanel = new JPanel();
+        connectionAddressPanel.add(connectionAddressLabel);
+
+        JPanel connectionAddressSelectionPanel = new JPanel();
+        connectionAddressSelectionPanel.add(connectionAddressTextField);
+
         JPanel boardSizePanel = new JPanel();
         boardSizePanel.add(boardSizeLabel);
 
@@ -58,6 +68,8 @@ public class GameSettingsWindow extends JFrame {
 
 //        this.add(opponentTypePanel);
 //        this.add(radioGroupPanel);
+        this.add(connectionAddressPanel);
+        this.add(connectionAddressSelectionPanel);
         this.add(boardSizePanel);
         this.add(boardSizeComboPanel);
         this.add(startGamePanel);
@@ -80,7 +92,7 @@ public class GameSettingsWindow extends JFrame {
 
             ServerCommunicator serverCommunicator = ServerCommunicator.getInstance();
             serverCommunicator.setServerResponseListener(new ServerResponseListener(
-                    new FrontendManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()));
+                    new FrontendManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()), connectionAddressTextField.getText());
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             serverCommunicator.sendStartGameMessage(boardSize);

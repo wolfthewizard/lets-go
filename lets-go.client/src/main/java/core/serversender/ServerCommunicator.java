@@ -64,7 +64,23 @@ public class ServerCommunicator implements IServerCommunicator {
         serverConnector.setServerResponseListener(serverResponseListener);
     }
 
+    public void setServerResponseListener(IServerResponseListener serverResponseListener, String connectionAddress) {
 
+        if (connectionClosed) {
+            connectionClosed = false;
+            try {
+                serverConnector.resetConnection(connectionAddress);
+            } catch (IOException e) {
+                serverResponseListener.passResponseDTO(new ResponseDTO(ResponseType.SERVER_ERROR));
+                return;
+            }
+        }
+
+        responseNumberCounter.resetCounter();
+        serverResponseListener.setResponseNumberCounter(responseNumberCounter);
+
+        serverConnector.setServerResponseListener(serverResponseListener);
+    }
 
 
     public void sendStartGameMessage(BoardSize boardSize) {
