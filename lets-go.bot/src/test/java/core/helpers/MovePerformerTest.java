@@ -19,7 +19,7 @@ public class MovePerformerTest {
     }
 
     @Test
-    public void performMove() {
+    public void performMove_forNotrepeated() {
 
         Occupancy[][] board = new Occupancy[9][];
 
@@ -27,7 +27,22 @@ public class MovePerformerTest {
             board[i] = new Occupancy[9];
         }
 
-        Coordinates result = movePerformer.performMove(board, BoardSize.NINE, Color.BLACK);
+        Coordinates result = movePerformer.performMove(board, BoardSize.NINE, Color.BLACK, false);
+
+        assertTrue(result.getX()<9);
+        assertTrue(result.getY()<9);
+    }
+
+    @Test
+    public void performMove_forRepeated() {
+
+        Occupancy[][] board = new Occupancy[9][];
+
+        for (int i=0; i<9;i++){
+            board[i] = new Occupancy[9];
+        }
+
+        Coordinates result = movePerformer.performMove(board, BoardSize.NINE, Color.BLACK, true);
 
         assertTrue(result.getX()<9);
         assertTrue(result.getY()<9);

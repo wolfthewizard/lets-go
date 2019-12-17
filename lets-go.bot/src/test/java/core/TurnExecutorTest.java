@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import contract.Change;
 import contract.Coordinates;
+import contract.enums.BoardSize;
 import contract.enums.Occupancy;
 import contract.enums.ResponseType;
 import core.interfaces.IBoardManager;
@@ -50,11 +51,12 @@ public class TurnExecutorTest {
     @Test
     public void executeTurn_CallsRightMethodsWithRightParameters() {
 
-        turnExecutor.executeTurn();
+        when(movePerformer.performMove(any(), any(BoardSize.class), any(Color.class), anyBoolean())).thenReturn(new Coordinates(2,1));
+        turnExecutor.executeTurn(false);
 
         verify(boardManager, times(1)).getBoard();
         verify(boardManager, times(1)).getBoardSize();
-        verify(movePerformer, times(1)).performMove(null, null, null);
-        verify(communicatorSender, times(1)).sendMoveMessage(null);
+        verify(movePerformer, times(1)).performMove(eq(null), eq(null), eq(null), eq(false));
+        verify(communicatorSender, times(1)).sendMoveMessage(any(Coordinates.class));
     }
 }

@@ -23,6 +23,7 @@ public class ServerConnector implements IServerConnector {
                     new BufferedReader(new InputStreamReader(socket.getInputStream())));
         } catch (IOException e) {
             System.out.println("Critical server error !");
+            System.exit(-1);
         }
     }
 

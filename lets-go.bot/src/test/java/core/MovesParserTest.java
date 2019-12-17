@@ -72,7 +72,7 @@ public class MovesParserTest {
         movesParser.parseMoves(new ArrayList<>());
         movesParser.parseMoves(new ArrayList<>());
 
-        verify(turnExecutor, times(2)).executeTurn();
+        verify(turnExecutor, times(2)).executeTurn(false);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class MovesParserTest {
         movesParser.parseMoves(new ArrayList<>());
         movesParser.parseMoves(new ArrayList<>());
 
-        verify(turnExecutor, times(2)).executeTurn();
+        verify(turnExecutor, times(2)).executeTurn(false);
     }
 
     @Test

@@ -66,7 +66,7 @@ public class ServerResponseReceiverTest {
     public void responseReceived_SendExecuteTurn_ForInvalidMove() {
 
         serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.INVALID_MOVE));
-        verify(turnExecutor, times(1)).executeTurn();
+        verify(turnExecutor, times(1)).executeTurn(true);
 
     }
 

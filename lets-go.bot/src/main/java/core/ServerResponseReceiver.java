@@ -27,7 +27,7 @@ public class ServerResponseReceiver implements IServerResponseReceiver {
                 endOfGameHandler.handleGameEnd(response.getResponseType());
                 break;
             case INVALID_MOVE:
-                turnExecutor.executeTurn();
+                turnExecutor.executeTurn(true);
                 break;
             case MOVE_EXECUTED:
                 movesParser.parseMoves(response.getChanges());
