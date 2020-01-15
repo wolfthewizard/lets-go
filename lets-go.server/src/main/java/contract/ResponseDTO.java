@@ -1,6 +1,7 @@
 package contract;
 
 import contract.enums.ResponseType;
+import contract.gamerecord.GameRecord;
 
 import java.util.List;
 
@@ -8,12 +9,19 @@ public class ResponseDTO {
     private ResponseType responseType;
     private List<Change> changes;
     private ResponsePrisoners responsePrisoners;
+    private GameRecord gameRecord;
 
     public ResponseDTO(List<Change> changes, ResponsePrisoners responsePrisoners) {
 
         responseType = ResponseType.MOVE_EXECUTED;
         this.changes = changes;
         this.responsePrisoners = responsePrisoners;
+    }
+
+    public ResponseDTO(GameRecord gameRecord) {
+
+        responseType = ResponseType.GAME_GOT;
+        this.gameRecord = gameRecord;
     }
 
     public ResponseDTO(ResponseType responseType) {
@@ -31,5 +39,9 @@ public class ResponseDTO {
 
     public ResponsePrisoners getResponsePrisoners() {
         return responsePrisoners;
+    }
+
+    public GameRecord getGameRecord() {
+        return gameRecord;
     }
 }

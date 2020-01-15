@@ -3,6 +3,7 @@ package contract;
 import contract.enums.Occupancy;
 
 public class Change {
+
     private Occupancy occupancy;
     private Coordinates coordinates;
 

@@ -8,6 +8,7 @@ public class ActionDTO {
     private ActionType actionType;
     private BoardSize boardSize;
     private Coordinates coordinates;
+    private int gameId;
 
 
     public ActionDTO(BoardSize boardSize){
@@ -18,6 +19,11 @@ public class ActionDTO {
     public ActionDTO(Coordinates coordinates){
         actionType=ActionType.DOMOVE;
         this.coordinates=coordinates;
+    }
+
+    public ActionDTO(int gameId){
+        actionType=ActionType.GETGAME;
+        this.gameId = gameId;
     }
 
     public ActionDTO(ActionType actionType){
@@ -37,6 +43,10 @@ public class ActionDTO {
 
     public ActionType getActionType() {
         return actionType;
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }
 
