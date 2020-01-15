@@ -4,5 +4,6 @@ public enum ActionType {
     STARTGAME,
     LEAVEGAME,
     DOMOVE,
-    PASSMOVE
+    PASSMOVE,
+    GETGAME
 }
