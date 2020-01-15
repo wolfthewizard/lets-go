@@ -1,8 +1,6 @@
 package main.windows;
 
 import contract.Change;
-import contract.enums.BoardSize;
-import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
 import main.BoardPanel;
 import main.Game;
@@ -133,7 +131,7 @@ public class GameBoardWindow extends JFrame implements Game {
     }
 
     public void openNewGameCreation() {
-        new GameSettingsWindow();
+        new MenuWindow();
     }
 
     public void closeGame() {

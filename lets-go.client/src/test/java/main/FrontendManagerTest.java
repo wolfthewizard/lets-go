@@ -13,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 public class FrontendManagerTest {
 
-    private FrontendManager frontendManager;
+    private GameManager frontendManager;
 
     private Game game;
 
@@ -22,7 +22,7 @@ public class FrontendManagerTest {
 
         game = Mockito.mock(Game.class);
 
-        frontendManager = new FrontendManager(game);
+        frontendManager = new GameManager(game);
 
     }
 

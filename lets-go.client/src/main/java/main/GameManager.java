@@ -2,17 +2,17 @@ package main;
 
 import contract.Change;
 import contract.ResponsePrisoners;
-import core.interfaces.IFrontendManager;
+import core.interfaces.IGameManager;
 
 import java.util.List;
 
 
-public class FrontendManager implements IFrontendManager {
+public class GameManager implements IGameManager {
 
     private Game gameBoardWindow;
     private boolean playersTurn;
 
-    public FrontendManager(Game gameBoardWindow) {
+    public GameManager(Game gameBoardWindow) {
         this.gameBoardWindow = gameBoardWindow;
         playersTurn = false;
     }
