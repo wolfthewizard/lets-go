@@ -4,6 +4,7 @@ import java.io.IOException;
 
 public interface IServerConnector {
     void resetConnection() throws IOException;
+    void resetConnection(String connectionAddress) throws  IOException;
 
     void setServerResponseListener(IServerResponseListener serverResponseListener);
 
