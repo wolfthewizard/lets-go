@@ -7,6 +7,8 @@ import main.RewindPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 public class RewindBoardWindow extends JFrame implements Rewind {
@@ -22,7 +24,15 @@ public class RewindBoardWindow extends JFrame implements Rewind {
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setSize(rewindPanel.getDimension(), rewindPanel.getDimension() + 50);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                new MenuWindow();
+
+                setVisible(false);
+                dispose();
+            }
+        });
 
         this.rewindPanel = rewindPanel;
 

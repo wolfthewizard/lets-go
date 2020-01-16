@@ -20,6 +20,10 @@ public class RewindClock implements Runnable {
 
         for (TurnRecord turn : gameRecord.getTurns()) {
 
+            if (rewindBoardWindow == null) {
+                return;
+            }
+
             if (turn.getChanges().isEmpty()) {
                 rewindBoardWindow.signalPass();
             } else {
