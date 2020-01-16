@@ -1,6 +1,5 @@
 package main;
 
-import contract.enums.BoardSize;
 import contract.gamerecord.GameRecord;
 import core.interfaces.IRewindManager;
 import main.windows.MenuWindow;
@@ -17,8 +16,8 @@ public class RewindManager implements IRewindManager {
     }
 
     @Override
-    public void rewind(GameRecord gameRecord, BoardSize boardSize) {
-        Rewind rewindBoardWindow = new RewindBoardWindow(new RewindPanel(boardSize));
+    public void rewind(GameRecord gameRecord) {
+        Rewind rewindBoardWindow = new RewindBoardWindow(new RewindPanel(gameRecord.getBoardSize()));
 
         RewindClock rewindClock = new RewindClock(rewindBoardWindow, gameRecord, delay);
         rewindClock.run();

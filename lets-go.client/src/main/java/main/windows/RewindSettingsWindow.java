@@ -1,18 +1,11 @@
 package main.windows;
 
-import core.serversender.GameServerResponseListener;
 import core.serversender.JsonParser;
 import core.serversender.RewindServerResponseListener;
 import core.serversender.ServerCommunicator;
-import main.BoardPanel;
-import main.GameManager;
 import main.RewindManager;
-import main.actionlisteners.PassButtonActionListener;
-import main.actionlisteners.TileButtonActionListener;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class RewindSettingsWindow extends JFrame {
 
@@ -50,18 +43,15 @@ public class RewindSettingsWindow extends JFrame {
         startRewindPanel.add(startRewindButton);
         add(startRewindPanel);
 
-        startRewindButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+        startRewindButton.addActionListener(actionEvent -> {
 
-                ServerCommunicator serverCommunicator = ServerCommunicator.getInstance();
-                serverCommunicator.setServerResponseListener(new RewindServerResponseListener(
-                        new RewindManager(Integer.parseInt(rewindDelayTextField.getText())), new JsonParser())); // todo : handle exceptions
-                /* todo : send message to server */
+            ServerCommunicator serverCommunicator = ServerCommunicator.getInstance();
+            serverCommunicator.setServerResponseListener(new RewindServerResponseListener(
+                    new RewindManager(Integer.parseInt(rewindDelayTextField.getText())), new JsonParser())); // todo : handle exceptions
+            serverCommunicator.sendStartRewindMessage(Integer.parseInt(gameIdTextField.getText()));
 
-                setVisible(false);
-                dispose();
-            }
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);

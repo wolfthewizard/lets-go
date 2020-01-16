@@ -31,7 +31,13 @@ public class RewindServerResponseListener implements IServerResponseListener {
 
         switch (responseDTO.getResponseType()) {
 
-            /* todo : asdf*/
+            case GAME_GOT:
+                rewindManager.rewind(responseDTO.getGameRecord());
+                break;
+
+            case CANT_GET_GAME:
+                rewindManager.handleInvalidId();
+                break;
         }
     }
 }

@@ -7,7 +7,6 @@ import contract.enums.ActionType;
 import contract.enums.BoardSize;
 import contract.enums.ResponseType;
 import core.interfaces.*;
-import infrastructure.ServerConnector;
 
 import java.io.IOException;
 
@@ -102,6 +101,10 @@ public class ServerCommunicator implements IServerCommunicator {
 
         serverConnector.sendMessage(jsonParser.parseActionToJson(new ActionDTO(ActionType.LEAVEGAME)));
         shutDownConnection();
+    }
+
+    public void sendStartRewindMessage(int gameId) {
+        sendMessage(new ActionDTO(gameId), 1);
     }
 
     private void sendMessage(ActionDTO actionDTO, int numberOfResposnses) {

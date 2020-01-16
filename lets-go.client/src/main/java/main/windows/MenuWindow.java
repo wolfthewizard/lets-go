@@ -1,8 +1,6 @@
 package main.windows;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MenuWindow extends JFrame {
 
@@ -11,7 +9,7 @@ public class MenuWindow extends JFrame {
 
         setResizable(false);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setSize(300, 200);
+        setSize(210, 130);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -25,24 +23,18 @@ public class MenuWindow extends JFrame {
         rewindGameButtonPanel.add(rewindGameButton);
         add(rewindGameButtonPanel);
 
-        startGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                new GameSettingsWindow();
+        startGameButton.addActionListener(actionEvent -> {
+            new GameSettingsWindow();
 
-                setVisible(false);
-                dispose();
-            }
+            setVisible(false);
+            dispose();
         });
 
-        rewindGameButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                new RewindSettingsWindow();
+        rewindGameButton.addActionListener(actionEvent -> {
+            new RewindSettingsWindow();
 
-                setVisible(false);
-                dispose();
-            }
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);
