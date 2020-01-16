@@ -10,6 +10,7 @@ public class ResponseDTO {
     private List<Change> changes;
     private ResponsePrisoners responsePrisoners;
     private GameRecord gameRecord;
+    private int gameId;
 
     public ResponseDTO(List<Change> changes, ResponsePrisoners responsePrisoners) {
 
@@ -25,7 +26,12 @@ public class ResponseDTO {
     }
 
     public ResponseDTO(ResponseType responseType) {
-            this.responseType =responseType;
+        this.responseType = responseType;
+    }
+
+    public ResponseDTO(ResponseType responseType, int gameId) {
+        this.responseType = responseType;
+        this.gameId = gameId;
     }
 
 
@@ -43,5 +49,9 @@ public class ResponseDTO {
 
     public GameRecord getGameRecord() {
         return gameRecord;
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }

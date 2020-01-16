@@ -91,9 +91,9 @@ public class FrontendManagerTest {
     @Test
     public void gameWon_callsFunctions() {
 
-        frontendManager.gameWon();
+        frontendManager.gameWon(0);
 
-        verify(game, times(1)).signalWin();
+        verify(game, times(1)).signalWin(anyInt());
         verify(game, times(1)).openNewGameCreation();
         verify(game, times(1)).closeGame();
     }
@@ -101,9 +101,9 @@ public class FrontendManagerTest {
     @Test
     public void gameLost_callsFunctions() {
 
-        frontendManager.gameLost();
+        frontendManager.gameLost(0);
 
-        verify(game, times(1)).signalLose();
+        verify(game, times(1)).signalLose(anyInt());
         verify(game, times(1)).openNewGameCreation();
         verify(game, times(1)).closeGame();
     }
@@ -111,9 +111,9 @@ public class FrontendManagerTest {
     @Test
     public void tie_callsFunctions() {
 
-        frontendManager.tie();
+        frontendManager.tie(0);
 
-        verify(game, times(1)).signalTie();
+        verify(game, times(1)).signalTie(anyInt());
         verify(game, times(1)).openNewGameCreation();
         verify(game, times(1)).closeGame();
     }

@@ -53,17 +53,23 @@ public class MoveExecuteActionHandler extends AbstractActionHandler {
                 waitingClient.completeAction(jsonParser.parseResponseToJson(responseDTO));
                 break;
             case CURRENT_PLAYER_WON:
-                currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
-                waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
+                currentClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(ResponseType.GAMEWON, gameInfo.getMoveIdentity().getGameId())));
+                waitingClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(ResponseType.GAMELOST, gameInfo.getMoveIdentity().getGameId())));
                 break;
             case OTHER_PLAYER_WON:
-                currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMELOST)));
-                waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.GAMEWON)));
+                currentClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(ResponseType.GAMELOST, gameInfo.getMoveIdentity().getGameId())));
+                waitingClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(ResponseType.GAMEWON, gameInfo.getMoveIdentity().getGameId())));
                 break;
 
             case TIE:
-                currentClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.TIE)));
-                waitingClient.completeAction(jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.TIE)));
+                currentClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(ResponseType.TIE, gameInfo.getMoveIdentity().getGameId())));
+                waitingClient.completeAction(jsonParser.parseResponseToJson(
+                        new ResponseDTO(ResponseType.TIE, gameInfo.getMoveIdentity().getGameId())));
         }
     }
 }

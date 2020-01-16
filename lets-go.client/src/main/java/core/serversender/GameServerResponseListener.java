@@ -55,15 +55,15 @@ public class GameServerResponseListener implements IServerResponseListener {
                 break;
 
             case GAMEWON:
-                gameManager.gameWon();
+                gameManager.gameWon(responseDTO.getGameId());
                 break;
 
             case GAMELOST:
-                gameManager.gameLost();
+                gameManager.gameLost(responseDTO.getGameId());
                 break;
 
             case TIE:
-                gameManager.tie();
+                gameManager.tie(responseDTO.getGameId());
                 break;
 
             case PLAYER_LEFT:

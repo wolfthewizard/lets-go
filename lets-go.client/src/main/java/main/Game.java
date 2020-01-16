@@ -15,9 +15,9 @@ public interface Game {
     void signalOpponentsMove();
     void signalInvalidMove();
     void signalOpponentsLeave();
-    void signalWin();
-    void signalLose();
-    void signalTie();
+    void signalWin(int gameId);
+    void signalLose(int gameId);
+    void signalTie(int gameId);
     void openNewGameCreation();
     void closeGame();
     void exitApp();

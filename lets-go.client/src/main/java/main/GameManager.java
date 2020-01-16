@@ -58,23 +58,23 @@ public class GameManager implements IGameManager {
         gameBoardWindow.closeGame();
     }
 
-    public void gameWon() {
+    public void gameWon(int gameId) {
 
-        gameBoardWindow.signalWin();
+        gameBoardWindow.signalWin(gameId);
         gameBoardWindow.openNewGameCreation();
         gameBoardWindow.closeGame();
     }
 
-    public void gameLost() {
+    public void gameLost(int gameId) {
 
-        gameBoardWindow.signalLose();
+        gameBoardWindow.signalLose(gameId);
         gameBoardWindow.openNewGameCreation();
         gameBoardWindow.closeGame();
     }
 
-    public void tie() {
+    public void tie(int gameId) {
 
-        gameBoardWindow.signalTie();
+        gameBoardWindow.signalTie(gameId);
         gameBoardWindow.openNewGameCreation();
         gameBoardWindow.closeGame();
     }
