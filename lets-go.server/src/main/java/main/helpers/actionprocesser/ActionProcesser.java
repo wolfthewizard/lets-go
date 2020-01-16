@@ -55,6 +55,12 @@ public class ActionProcesser implements IActionProcesser {
                 actionHandler = new LeaveGameActionHandler(gameInfo, currentClient, jsonParser, commandDirector,
                         clientsManager, playerValidator);
                 break;
+
+            case GETGAME:
+
+                actionHandler = new GetGameActionHandler(gameInfo, currentClient, jsonParser,
+                        commandDirector, action.getGameId());
+                break;
         }
 
         actionHandler.handleAction();
