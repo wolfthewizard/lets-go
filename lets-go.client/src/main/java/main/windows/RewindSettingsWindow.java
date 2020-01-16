@@ -45,10 +45,24 @@ public class RewindSettingsWindow extends JFrame {
 
         startRewindButton.addActionListener(actionEvent -> {
 
+            int delay, gameId;
+            try {
+                delay = Integer.parseInt(rewindDelayTextField.getText());
+                gameId = Integer.parseInt(gameIdTextField.getText());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Input format was invalid");
+                return;
+            }
+
+            if (delay < 0 && gameId < 0) {
+                JOptionPane.showMessageDialog(null, "Delay and id must be positive numbers");
+                return;
+            }
+
             ServerCommunicator serverCommunicator = ServerCommunicator.getInstance();
             serverCommunicator.setServerResponseListener(new RewindServerResponseListener(
-                    new RewindManager(Integer.parseInt(rewindDelayTextField.getText())), new JsonParser())); // todo : handle exceptions
-            serverCommunicator.sendStartRewindMessage(Integer.parseInt(gameIdTextField.getText()));
+                    new RewindManager(delay), new JsonParser()));
+            serverCommunicator.sendStartRewindMessage(gameId);
 
             setVisible(false);
             dispose();
