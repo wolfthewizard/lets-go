@@ -3,9 +3,9 @@ package main.windows;
 import contract.enums.BoardSize;
 import core.serversender.JsonParser;
 import core.serversender.ServerCommunicator;
-import core.serversender.ServerResponseListener;
+import core.serversender.GameServerResponseListener;
 import main.BoardPanel;
-import main.FrontendManager;
+import main.GameManager;
 import main.actionlisteners.PassButtonActionListener;
 import main.actionlisteners.TileButtonActionListener;
 
@@ -91,8 +91,8 @@ public class GameSettingsWindow extends JFrame {
             }
 
             ServerCommunicator serverCommunicator = ServerCommunicator.getInstance();
-            serverCommunicator.setServerResponseListener(new ServerResponseListener(
-                    new FrontendManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()), connectionAddressTextField.getText());
+            serverCommunicator.setServerResponseListener(new GameServerResponseListener(
+                    new GameManager(new GameBoardWindow(new BoardPanel(boardSize))), new JsonParser()), connectionAddressTextField.getText());
             TileButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             PassButtonActionListener.getInstance().setServerCommunicator(serverCommunicator);
             serverCommunicator.sendStartGameMessage(boardSize);

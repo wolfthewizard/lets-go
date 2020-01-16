@@ -1,14 +1,14 @@
 package core.serversender;
 
 import contract.ResponseDTO;
-import core.interfaces.IFrontendManager;
+import core.interfaces.IGameManager;
 import core.interfaces.IJsonParser;
 import core.interfaces.IResponseNumberCounter;
 import core.interfaces.IServerResponseListener;
 
-public class ServerResponseListener implements IServerResponseListener {
+public class GameServerResponseListener implements IServerResponseListener {
 
-    private final IFrontendManager frontendManager;
+    private final IGameManager gameManager;
     private final IJsonParser jsonParser;
     private IResponseNumberCounter responseNumberCounter;
 
@@ -16,8 +16,8 @@ public class ServerResponseListener implements IServerResponseListener {
         this.responseNumberCounter = responseNumberCounter;
     }
 
-    public ServerResponseListener(IFrontendManager frontendManager, IJsonParser jsonParser) {
-        this.frontendManager = frontendManager;
+    public GameServerResponseListener(IGameManager gameManager, IJsonParser jsonParser) {
+        this.gameManager = gameManager;
         this.jsonParser = jsonParser;
     }
 
@@ -35,39 +35,39 @@ public class ServerResponseListener implements IServerResponseListener {
         switch (responseDTO.getResponseType()) {
 
             case MOVE_EXECUTED:
-                frontendManager.moveExecuted(responseDTO.getChanges(), responseDTO.getResponsePrisoners());
+                gameManager.moveExecuted(responseDTO.getChanges(), responseDTO.getResponsePrisoners());
                 break;
 
             case INVALID_MOVE:
-                frontendManager.invalidMove();
+                gameManager.invalidMove();
                 break;
 
             case CANT_CREATE_GAME:
-                frontendManager.cantCreateGame();
+                gameManager.cantCreateGame();
                 break;
 
             case SUCCESS:
-                frontendManager.success();
+                gameManager.success();
                 break;
 
             case SERVER_ERROR:
-                frontendManager.serverError();
+                gameManager.serverError();
                 break;
 
             case GAMEWON:
-                frontendManager.gameWon();
+                gameManager.gameWon();
                 break;
 
             case GAMELOST:
-                frontendManager.gameLost();
+                gameManager.gameLost();
                 break;
 
             case TIE:
-                frontendManager.tie();
+                gameManager.tie();
                 break;
 
             case PLAYER_LEFT:
-                frontendManager.playerLeft();
+                gameManager.playerLeft();
                 break;
         }
     }

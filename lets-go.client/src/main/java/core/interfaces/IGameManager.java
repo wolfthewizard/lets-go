@@ -6,7 +6,7 @@ import contract.ResponsePrisoners;
 
 import java.util.List;
 
-public interface IFrontendManager {
+public interface IGameManager {
 
     void moveExecuted(List<Change> changes, ResponsePrisoners prisoners);
     void invalidMove();

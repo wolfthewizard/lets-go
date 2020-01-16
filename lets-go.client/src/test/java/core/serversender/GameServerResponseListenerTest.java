@@ -2,7 +2,7 @@ package core.serversender;
 
 import contract.ResponseDTO;
 import contract.enums.ResponseType;
-import core.interfaces.IFrontendManager;
+import core.interfaces.IGameManager;
 import core.interfaces.IJsonParser;
 import core.interfaces.IResponseNumberCounter;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,32 +12,32 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ServerResponseListenerTest {
+public class GameServerResponseListenerTest {
 
-    private ServerResponseListener serverResponseListener;
+    private GameServerResponseListener gameServerResponseListener;
 
-    private IFrontendManager frontendManagerMock;
+    private IGameManager frontendManagerMock;
     private IJsonParser jsonParserMock;
     private IResponseNumberCounter responseNumberCounterMock;
 
     @BeforeEach
     void setup() {
 
-        frontendManagerMock = Mockito.mock(IFrontendManager.class);
+        frontendManagerMock = Mockito.mock(IGameManager.class);
 
         jsonParserMock = Mockito.mock(IJsonParser.class);
 
         responseNumberCounterMock = Mockito.mock(IResponseNumberCounter.class);
 
-        serverResponseListener = new ServerResponseListener(frontendManagerMock, jsonParserMock);
-        serverResponseListener.setResponseNumberCounter(responseNumberCounterMock);
+        gameServerResponseListener = new GameServerResponseListener(frontendManagerMock, jsonParserMock);
+        gameServerResponseListener.setResponseNumberCounter(responseNumberCounterMock);
     }
 
     @Test
     public void responseReceived_doesNotThrow() {
 
         when(jsonParserMock.parseJsonToResponse("")).thenReturn(new ResponseDTO(ResponseType.TIE));
-         assertDoesNotThrow(() -> serverResponseListener.responseReceived(""));
+         assertDoesNotThrow(() -> gameServerResponseListener.responseReceived(""));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(null, null);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).moveExecuted(any(), any());
     }
@@ -55,7 +55,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.INVALID_MOVE);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).invalidMove();
     }
@@ -65,7 +65,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.CANT_CREATE_GAME);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).cantCreateGame();
     }
@@ -75,7 +75,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.SUCCESS);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).success();
     }
@@ -85,7 +85,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.SERVER_ERROR);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).serverError();
     }
@@ -95,7 +95,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.GAMEWON);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).gameWon();
     }
@@ -105,7 +105,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.GAMELOST);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).gameLost();
     }
@@ -115,7 +115,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.TIE);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).tie();
     }
@@ -125,7 +125,7 @@ public class ServerResponseListenerTest {
 
         ResponseDTO responseDTO = new ResponseDTO(ResponseType.PLAYER_LEFT);
 
-        serverResponseListener.passResponseDTO(responseDTO);
+        gameServerResponseListener.passResponseDTO(responseDTO);
 
         verify(frontendManagerMock, times(1)).playerLeft();
     }
