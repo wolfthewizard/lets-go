@@ -97,7 +97,7 @@ public class GameServerResponseListenerTest {
 
         gameServerResponseListener.passResponseDTO(responseDTO);
 
-        verify(frontendManagerMock, times(1)).gameWon();
+        verify(frontendManagerMock, times(1)).gameWon(anyInt());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class GameServerResponseListenerTest {
 
         gameServerResponseListener.passResponseDTO(responseDTO);
 
-        verify(frontendManagerMock, times(1)).gameLost();
+        verify(frontendManagerMock, times(1)).gameLost(anyInt());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class GameServerResponseListenerTest {
 
         gameServerResponseListener.passResponseDTO(responseDTO);
 
-        verify(frontendManagerMock, times(1)).tie();
+        verify(frontendManagerMock, times(1)).tie(anyInt());
     }
 
     @Test

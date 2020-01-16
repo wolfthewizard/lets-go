@@ -14,7 +14,7 @@ public interface IGameManager {
     void success();
     void serverError();
     void playerLeft();
-    void gameWon();
-    void gameLost();
-    void tie();
+    void gameWon(int gameId);
+    void gameLost(int gameId);
+    void tie(int gameId);
 }
