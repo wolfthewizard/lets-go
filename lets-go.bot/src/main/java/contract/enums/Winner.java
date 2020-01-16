@@ -1,4 +1,4 @@
-package core.model.enums;
+package contract.enums;
 
 public enum Winner {
 

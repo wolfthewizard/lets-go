@@ -3,7 +3,7 @@ package core.interfaces;
 import contract.enums.Occupancy;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
-import core.model.enums.Winner;
+import contract.enums.Winner;
 
 public interface IGameArbitrator {
 

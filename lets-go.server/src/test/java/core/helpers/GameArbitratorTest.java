@@ -6,11 +6,10 @@ import contract.Coordinates;
 import contract.enums.Occupancy;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
-import core.model.enums.Winner;
+import contract.enums.Winner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameArbitratorTest {

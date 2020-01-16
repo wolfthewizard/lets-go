@@ -14,7 +14,7 @@ import core.interfaces.IMoveValidator;
 import core.model.*;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
-import core.model.enums.Winner;
+import contract.enums.Winner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

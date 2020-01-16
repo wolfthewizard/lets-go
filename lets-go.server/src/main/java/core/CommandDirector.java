@@ -1,6 +1,7 @@
 package core;
 
 import contract.enums.BoardSize;
+import contract.gamerecord.GameRecord;
 import core.interfaces.ICommandDirector;
 import core.interfaces.IGameManagerService;
 import core.interfaces.IMoveExecutorService;
@@ -32,5 +33,10 @@ public class CommandDirector implements ICommandDirector {
     @Override
     public void cancelGame(MoveIdentity leftIdentity) {
         gameManagerService.cancelGame(leftIdentity.getGameId());
+    }
+
+    @Override
+    public GameRecord getGameData(int gameId) {
+        return null;
     }
 }

@@ -10,5 +10,7 @@ public enum ResponseType {
     PLAYER_LEFT,
     GAMEWON,
     GAMELOST,
-    TIE;
+    TIE,
+    GAME_GOT,
+    CANT_GET_GAME
 }

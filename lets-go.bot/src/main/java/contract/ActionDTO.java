@@ -4,24 +4,33 @@ import contract.enums.BoardSize;
 import contract.enums.ActionType;
 
 public class ActionDTO {
+
     private ActionType actionType;
     private BoardSize boardSize;
     private Coordinates coordinates;
+    private int gameId;
 
 
-    public ActionDTO(BoardSize boardSize) {
+    public ActionDTO(BoardSize boardSize){
         actionType = ActionType.STARTGAME;
         this.boardSize = boardSize;
     }
 
-    public ActionDTO(Coordinates coordinates) {
-        actionType = ActionType.DOMOVE;
-        this.coordinates = coordinates;
+    public ActionDTO(Coordinates coordinates){
+        actionType=ActionType.DOMOVE;
+        this.coordinates=coordinates;
     }
 
-    public ActionDTO(ActionType actionType) {
+    public ActionDTO(int gameId){
+        actionType=ActionType.GETGAME;
+        this.gameId = gameId;
+    }
 
-        this.actionType = actionType;
+    public ActionDTO(ActionType actionType){
+
+        if (actionType==ActionType.LEAVEGAME || actionType==ActionType.PASSMOVE) {
+            this.actionType = actionType;
+        }
     }
 
     public Coordinates getCoordinates() {
@@ -34,6 +43,10 @@ public class ActionDTO {
 
     public ActionType getActionType() {
         return actionType;
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }
 
