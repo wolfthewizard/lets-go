@@ -6,7 +6,7 @@ use LetsGoDB;
 create table Games (
     id int not null,
     boardSize int not null,
-    winner int not null,
+    winner int,
     gameDate date not null,
     
     primary key (id)
