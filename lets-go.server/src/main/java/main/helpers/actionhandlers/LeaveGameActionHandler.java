@@ -34,7 +34,7 @@ public class LeaveGameActionHandler extends AbstractActionHandler {
     protected void handleNotNullGameInfo() {
 
         clientsManager.getClientWithId(gameInfo.getSecondPlayerId()).completeAction(
-                jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.PLAYER_LEFT)));
+                jsonParser.parseResponseToJson(new ResponseDTO(ResponseType.PLAYER_LEFT, gameInfo.getMoveIdentity().getGameId())));
 
         playerValidator.removeGame(gameInfo.getMoveIdentity().getGameId());
 
