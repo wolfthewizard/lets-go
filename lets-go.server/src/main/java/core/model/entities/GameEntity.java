@@ -3,16 +3,23 @@ package core.model.entities;
 import contract.enums.BoardSize;
 import contract.enums.Winner;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 
+@Entity
 public class GameEntity {
-    private int Id;
+    private int id;
     private BoardSize boardSize;
     private Winner winner;
     private Date gameDate;
 
+    private ArrayList<TurnEntity> turnEntities;
+
+    @Id
+    @GeneratedValue
     public int getId() {
-        return Id;
+        return id;
     }
 
     public Winner getWinner() {
@@ -27,6 +34,11 @@ public class GameEntity {
         return boardSize;
     }
 
+    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)
+    public ArrayList<TurnEntity> getTurnEntities() {
+        return turnEntities;
+    }
+
     public void setBoardSize(BoardSize boardSize) {
         this.boardSize = boardSize;
     }
@@ -36,10 +48,14 @@ public class GameEntity {
     }
 
     public void setId(int id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public void setWinner(Winner winner) {
         this.winner = winner;
+    }
+
+    public void setTurnEntities(ArrayList<TurnEntity> turnEntities) {
+        this.turnEntities = turnEntities;
     }
 }

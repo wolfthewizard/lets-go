@@ -1,31 +1,51 @@
 package core.model.entities;
 
+
+import javax.persistence.*;
+import java.util.ArrayList;
+
+@Entity
 public class TurnEntity {
-    private int gameId;
-    private int Id;
+    private int id;
     private int turnNumber;
 
-    public int getGameId() {
-        return gameId;
-    }
+    private GameEntity gameEntity;
+    private ArrayList<ChangeEntity> changeEntities;
 
+    @Id
+    @GeneratedValue
     public int getId() {
-        return Id;
+        return id;
     }
 
     public int getTurnNumber() {
         return turnNumber;
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+    @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL)
+    public ArrayList<ChangeEntity> getChangeEntities() {
+        return changeEntities;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    public GameEntity getGameEntity() {
+        return gameEntity;
     }
 
     public void setId(int id) {
-        this.Id = id;
+        this.id = id;
     }
 
     public void setTurnNumber(int turnNumber) {
         this.turnNumber = turnNumber;
+    }
+
+    public void setChangeEntities(ArrayList<ChangeEntity> changeEntities) {
+        this.changeEntities = changeEntities;
+    }
+
+    public void setGameEntity(GameEntity gameEntity) {
+        this.gameEntity = gameEntity;
     }
 }
