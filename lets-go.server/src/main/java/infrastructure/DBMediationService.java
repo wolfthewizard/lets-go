@@ -50,7 +50,6 @@ public class DBMediationService implements IDBMediationService {
     public GameRecord getGame(int gameId) {
         GameEntity gameEntity = queryExecutionService.getGameFromDB(gameId);
 
-        return null;
-        // todo : finish
+        return entityMapper.gameEntityToGameRecord(gameEntity);
     }
 }

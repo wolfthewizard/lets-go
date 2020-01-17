@@ -67,12 +67,20 @@ public class EntityMapper implements IEntityMapper {
 
     @Override
     public TurnRecord turnEntityToTurnRecord(TurnEntity turnEntity) {
-        return null;
+        List<Change> changes = new ArrayList<>();
+        for (ChangeEntity changeEntity : turnEntity.getChangeEntities()) {
+            changes.add(changeEntityToChange(changeEntity));
+        }
+
+        return new TurnRecord(
+                turnEntity.getTurnNumber(),
+                changes
+        );
     }
 
     @Override
     public Change changeEntityToChange(ChangeEntity changeEntity) {
-        return null;
+        return new Change(changeEntity.getOccupancy(), changeEntity.getCoordinates());
     }
 
     @Override
