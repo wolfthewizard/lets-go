@@ -12,16 +12,11 @@ public class ChangeEntity {
     private Occupancy occupancy;
     private Coordinates coordinates;
 
-    private int turnId;
     private TurnEntity turnEntity;
 
 
     public Coordinates getCoordinates() {
         return coordinates;
-    }
-
-    public int getTurnId() {
-        return turnId;
     }
 
     public Occupancy getOccupancy() {
@@ -40,10 +35,6 @@ public class ChangeEntity {
 
     public void setOccupancy(Occupancy occupancy) {
         this.occupancy = occupancy;
-    }
-
-    public void setTurnId(int turnId) {
-        this.turnId = turnId;
     }
 
     public void setTurnEntity(TurnEntity turnEntity) {

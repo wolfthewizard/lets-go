@@ -4,8 +4,8 @@ import contract.enums.BoardSize;
 import contract.enums.Winner;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class GameEntity {
@@ -14,7 +14,7 @@ public class GameEntity {
     private Winner winner;
     private Date gameDate;
 
-    private ArrayList<TurnEntity> turnEntities;
+    private List<TurnEntity> turnEntities;
 
     @Id
     @GeneratedValue
@@ -34,8 +34,8 @@ public class GameEntity {
         return boardSize;
     }
 
-    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)
-    public ArrayList<TurnEntity> getTurnEntities() {
+    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)          // todo : mapped by? join column?
+    public List<TurnEntity> getTurnEntities() {
         return turnEntities;
     }
 
@@ -55,7 +55,7 @@ public class GameEntity {
         this.winner = winner;
     }
 
-    public void setTurnEntities(ArrayList<TurnEntity> turnEntities) {
+    public void setTurnEntities(List<TurnEntity> turnEntities) {
         this.turnEntities = turnEntities;
     }
 }

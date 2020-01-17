@@ -2,7 +2,7 @@ package core.model.entities;
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class TurnEntity {
@@ -10,7 +10,7 @@ public class TurnEntity {
     private int turnNumber;
 
     private GameEntity gameEntity;
-    private ArrayList<ChangeEntity> changeEntities;
+    private List<ChangeEntity> changeEntities;
 
     @Id
     @GeneratedValue
@@ -23,7 +23,7 @@ public class TurnEntity {
     }
 
     @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL)
-    public ArrayList<ChangeEntity> getChangeEntities() {
+    public List<ChangeEntity> getChangeEntities() {
         return changeEntities;
     }
 
@@ -41,7 +41,7 @@ public class TurnEntity {
         this.turnNumber = turnNumber;
     }
 
-    public void setChangeEntities(ArrayList<ChangeEntity> changeEntities) {
+    public void setChangeEntities(List<ChangeEntity> changeEntities) {
         this.changeEntities = changeEntities;
     }
 

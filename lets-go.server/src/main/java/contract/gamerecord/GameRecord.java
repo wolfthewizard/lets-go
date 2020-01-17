@@ -3,17 +3,17 @@ package contract.gamerecord;
 import contract.enums.BoardSize;
 import contract.enums.Winner;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class GameRecord {
     private BoardSize boardSize;
     private Winner winner;
     private Date gameDate;
-    private ArrayList<TurnRecord> turns;
+    private List<TurnRecord> turns;
 
     public GameRecord(BoardSize boardSize, Winner winner,
-                      Date gameDate, ArrayList<TurnRecord> turns)
+                      Date gameDate, List<TurnRecord> turns)
     {
         this.boardSize = boardSize;
         this.winner = winner;
@@ -25,7 +25,7 @@ public class GameRecord {
         return boardSize;
     }
 
-    public ArrayList<TurnRecord> getTurns() {
+    public List<TurnRecord> getTurns() {
         return turns;
     }
 
