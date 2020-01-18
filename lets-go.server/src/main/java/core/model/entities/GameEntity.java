@@ -8,16 +8,24 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "Games")
 public class GameEntity {
-    private int id;
-    private BoardSize boardSize;
-    private Winner winner;
-    private Date gameDate;
-
-    private List<TurnEntity> turnEntities;
 
     @Id
     @GeneratedValue
+    private int id;
+
+    @Enumerated(EnumType.ORDINAL)
+    private BoardSize boardSize;
+
+    @Enumerated(EnumType.ORDINAL)
+    private Winner winner;
+
+    private Date gameDate;
+
+    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)
+    private List<TurnEntity> turnEntities;
+
     public int getId() {
         return id;
     }
@@ -34,7 +42,6 @@ public class GameEntity {
         return boardSize;
     }
 
-    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)          // todo : mapped by? join column?
     public List<TurnEntity> getTurnEntities() {
         return turnEntities;
     }

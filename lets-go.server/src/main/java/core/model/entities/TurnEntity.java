@@ -5,15 +5,22 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "Turns")
 public class TurnEntity {
-    private int id;
-    private int turnNumber;
-
-    private GameEntity gameEntity;
-    private List<ChangeEntity> changeEntities;
 
     @Id
     @GeneratedValue
+    private int id;
+
+    private int turnNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "gameId")
+    private GameEntity gameEntity;
+
+    @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL)
+    private List<ChangeEntity> changeEntities;
+
     public int getId() {
         return id;
     }
@@ -22,13 +29,10 @@ public class TurnEntity {
         return turnNumber;
     }
 
-    @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL)
     public List<ChangeEntity> getChangeEntities() {
         return changeEntities;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id")
     public GameEntity getGameEntity() {
         return gameEntity;
     }

@@ -1,10 +1,15 @@
 package infrastructure;
 
+import core.model.entities.ChangeEntity;
 import core.model.entities.GameEntity;
+import core.model.entities.TurnEntity;
 import infrastructure.services.IDBQueryExecutionService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
 
 public class DBQueryExecutionService implements IDBQueryExecutionService {
 
@@ -30,8 +35,20 @@ public class DBQueryExecutionService implements IDBQueryExecutionService {
 //                .applySettings(configuration.getProperties()).build();
 //        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
+        /*
         sessionFactory =  new AnnotationConfiguration().configure()
                 .buildSessionFactory();
+        */
+        Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(GameEntity.class);
+        configuration.addAnnotatedClass(TurnEntity.class);
+        configuration.addAnnotatedClass(ChangeEntity.class);
+        configuration.configure();
+
+        ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties()).build();
+
+        sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
 //        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
 //                .configure() // configures settings from hibernate.cfg.xml
@@ -69,7 +86,7 @@ public class DBQueryExecutionService implements IDBQueryExecutionService {
 
         Session session = sessionFactory.openSession();
 
-        GameEntity gameEntity = (GameEntity)session.get(GameEntity.class, gameId);
+        GameEntity gameEntity = session.get(GameEntity.class, gameId);
 
         session.close();
 

@@ -1,7 +1,12 @@
 drop database if exists LetsGoDB;
 
+drop user if exists "hib"@"localhost";
+
 create database LetsGoDB;
 use LetsGoDB;
+
+create user "hib"@"localhost" identified by "hib";
+grant all privileges on * to "hib"@"localhost";
 
 create table Games (
     id int not null,
@@ -22,9 +27,12 @@ create table Turns (
 );
 
 create table Changes (
+    id int not null,
     turnId int not null,
-    occupancy int not null,
+    x int not null,
+    y int not null,
     coordinates int not null,
     
+    primary key (id),
     foreign key fk_Changes_turnId (turnId) references Turns (id)
 );

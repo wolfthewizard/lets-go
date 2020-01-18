@@ -1,6 +1,7 @@
 package infrastructure;
 
 import contract.Change;
+import contract.Coordinates;
 import contract.gamerecord.GameRecord;
 import contract.gamerecord.TurnRecord;
 import core.model.Game;
@@ -44,7 +45,8 @@ public class EntityMapper implements IEntityMapper {
     public ChangeEntity changeToChangeEntity(Change change) {
         ChangeEntity changeEntity = new ChangeEntity();
 
-        changeEntity.setCoordinates(change.getCoordinates());
+        changeEntity.setX(change.getCoordinates().getX());
+        changeEntity.setY(change.getCoordinates().getY());
         changeEntity.setOccupancy(change.getOccupancy());
 
         return changeEntity;
@@ -80,7 +82,7 @@ public class EntityMapper implements IEntityMapper {
 
     @Override
     public Change changeEntityToChange(ChangeEntity changeEntity) {
-        return new Change(changeEntity.getOccupancy(), changeEntity.getCoordinates());
+        return new Change(changeEntity.getOccupancy(), new Coordinates(changeEntity.getX(), changeEntity.getY()));
     }
 
     @Override
