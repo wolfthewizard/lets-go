@@ -43,23 +43,23 @@ public class ServerResponseReceiverTest {
     @Test
     public void responseReceived_SendEndGame_ForEndOfGame() {
 
-        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.CANT_CREATE_GAME));
-        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.CANT_CREATE_GAME);
+        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.CANT_CREATE_GAME,1));
+        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.CANT_CREATE_GAME,1);
 
-        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR));
-        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.SERVER_ERROR);
+        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.SERVER_ERROR,1));
+        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.SERVER_ERROR,1);
 
-        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.GAMELOST));
-        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.GAMELOST);
+        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.GAMELOST,1));
+        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.GAMELOST,1);
 
-        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.GAMEWON));
-        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.GAMEWON);
+        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.GAMEWON,1));
+        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.GAMEWON,1);
 
-        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.PLAYER_LEFT));
-        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.PLAYER_LEFT);
+        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.PLAYER_LEFT,1));
+        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.PLAYER_LEFT,1);
 
-        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.TIE));
-        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.TIE);
+        serverResponseReceiver.responseReceived(new ResponseDTO(ResponseType.TIE,1));
+        verify(endOfGameHandler, times(1)).handleGameEnd(ResponseType.TIE,1);
     }
 
     @Test

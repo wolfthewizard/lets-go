@@ -2,19 +2,19 @@ package contract.gamerecord;
 
 import contract.Change;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TurnRecord {
     private int turnNumber;
-    private ArrayList<Change> changes;
+    private List<Change> changes;
 
-    public TurnRecord(int turnNumber, ArrayList<Change> changes)
+    public TurnRecord(int turnNumber, List<Change> changes)
     {
         this.turnNumber = turnNumber;
         this.changes = changes;
     }
 
-    public ArrayList<Change> getChanges() {
+    public List<Change> getChanges() {
         return changes;
     }
 

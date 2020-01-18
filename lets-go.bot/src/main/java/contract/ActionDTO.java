@@ -8,7 +8,7 @@ public class ActionDTO {
     private ActionType actionType;
     private BoardSize boardSize;
     private Coordinates coordinates;
-    private int gameId;
+    private Integer gameId=null;
 
 
     public ActionDTO(BoardSize boardSize){

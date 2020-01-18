@@ -13,7 +13,7 @@ public class EndOfGameHandler implements IEndOfGameHandler {
     }
 
     @Override
-    public void handleGameEnd(ResponseType endType) {
+    public void handleGameEnd(ResponseType endType, int gameId) {
 
         switch (endType) {
             case GAMEWON:
@@ -38,6 +38,8 @@ public class EndOfGameHandler implements IEndOfGameHandler {
                 System.out.println("Somthing broke...");
                 break;
         }
+
+        System.out.println("My game id was: "+ gameId);
 
         communicatorSender.sendLeaveGameMessage();
         System.exit(0);

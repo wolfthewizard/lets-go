@@ -7,6 +7,7 @@ import core.interfaces.ITurnExecutor;
 import core.model.Color;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovesParser implements IMovesParser {
 
@@ -21,7 +22,7 @@ public class MovesParser implements IMovesParser {
     }
 
     @Override
-    public void parseMoves(ArrayList<Change> changes) {
+    public void parseMoves(List<Change> changes) {
         if (firstMove) {
             firstMove = false;
             isMyMove = true;

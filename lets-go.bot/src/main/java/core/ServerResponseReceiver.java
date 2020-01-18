@@ -24,7 +24,7 @@ public class ServerResponseReceiver implements IServerResponseReceiver {
             case GAMEWON:
             case PLAYER_LEFT:
             case TIE:
-                endOfGameHandler.handleGameEnd(response.getResponseType());
+                endOfGameHandler.handleGameEnd(response.getResponseType(), response.getGameId());
                 break;
             case INVALID_MOVE:
                 turnExecutor.executeTurn(true);

@@ -6,6 +6,7 @@ import contract.enums.Occupancy;
 import core.interfaces.IBoardManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BoardManager implements IBoardManager {
 
@@ -26,7 +27,7 @@ public class BoardManager implements IBoardManager {
     }
 
     @Override
-    public void saveMoves(ArrayList<Change> changes) {
+    public void saveMoves(List<Change> changes) {
         for (Change change : changes) {
             board[change.getCoordinates().getX()][change.getCoordinates().getY()] = change.getOccupancy();
         }

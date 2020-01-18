@@ -9,7 +9,11 @@ import core.interfaces.IGameRepository;
 import core.interfaces.IMoveHelper;
 import core.services.GameManagerService;
 import core.services.MoveExecutorService;
+import infrastructure.DBMediationService;
+import infrastructure.DBQueryExecutionService;
+import infrastructure.EntityMapper;
 import infrastructure.GameRepository;
+import infrastructure.services.IDBMediationService;
 import main.helpers.actionprocesser.ActionProcesser;
 import main.helpers.jsonparser.IJsonParser;
 import main.helpers.jsonparser.JsonParser;
@@ -25,10 +29,11 @@ public class Main {
         IJsonParser jsonParser = new JsonParser();
         IClientsManager clientsManager = new ClientsManager();
         IGameRepository gameRepository = new GameRepository();
+        IDBMediationService dbMediationService = new DBMediationService(new EntityMapper(), new DBQueryExecutionService());
         IMoveHelper moveHelper = new MoveHelper();
         ServerListenerThread serverListenerThread = new ServerListenerThread(new ActionProcesser(jsonParser,
                 new PlayerValidator(),
-                new CommandDirector(new GameManagerService(gameRepository), new MoveExecutorService(
+                new CommandDirector(new GameManagerService(gameRepository, dbMediationService), new MoveExecutorService(
                         gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), new MovePerformer(moveHelper))), clientsManager), clientsManager);
 
         serverListenerThread.start();

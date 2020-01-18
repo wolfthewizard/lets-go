@@ -2,6 +2,7 @@ package core.services;
 
 import contract.enums.BoardSize;
 import core.interfaces.IGameRepository;
+import infrastructure.services.IDBMediationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,14 +14,16 @@ public class GameManagerServiceTest {
 
     private GameManagerService gameManagerService;
     private IGameRepository gameRepositoryMock;
+    private IDBMediationService dbMediationService;
 
     @BeforeEach
     void setup() {
 
         gameRepositoryMock = Mockito.mock(IGameRepository.class);
+        dbMediationService = Mockito.mock(IDBMediationService.class);
         when(gameRepositoryMock.fetchId()).thenReturn(0);
 
-        gameManagerService = new GameManagerService(gameRepositoryMock);
+        gameManagerService = new GameManagerService(gameRepositoryMock, dbMediationService);
     }
 
     @Test
