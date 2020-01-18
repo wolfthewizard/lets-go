@@ -8,6 +8,7 @@ import core.model.*;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
 import contract.enums.Winner;
+import infrastructure.services.IDBMediationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,17 @@ public class MoveExecutorService implements IMoveExecutorService {
     private IMoveValidator moveValidator;
     private IGameArbitrator gameArbitrator;
     private IMovePerformer movePerformer;
+    private IDBMediationService dbMediationService;
 
-    public MoveExecutorService(IGameRepository gameRepository, IMoveValidator moveValidator, IGameArbitrator gameArbitrator, IMovePerformer movePerformer) {
+    public MoveExecutorService(IGameRepository gameRepository, IMoveValidator moveValidator,
+                               IGameArbitrator gameArbitrator, IMovePerformer movePerformer,
+                               IDBMediationService dbMediationService) {
 
         this.gameRepository = gameRepository;
         this.moveValidator = moveValidator;
         this.gameArbitrator = gameArbitrator;
         this.movePerformer = movePerformer;
+        this.dbMediationService = dbMediationService;
     }
 
     @Override
@@ -47,6 +52,9 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         if (moveCoordinates == null) {
 
+            dbMediationService.insertTurn(game.getId(), game.getTurnCount(),new ArrayList<Change>());
+            game.setTurnCount(game.getTurnCount()+1);
+            
             if (game.isLastTurnPassed()) {
 
                 Winner winner = gameArbitrator.determineWinner(potentialState, boardSizeValue);
@@ -62,6 +70,10 @@ public class MoveExecutorService implements IMoveExecutorService {
         if (!preMoveValidation(board.getCurrentState(), moveCoordinates)) {
             return new MoveResponse(MoveResponseType.INVALID_MOVE);
         }
+
+        dbMediationService.insertTurn(game.getId(), game.getTurnCount(),changes);
+
+        game.setTurnCount(game.getTurnCount()+1);
 
         int newPrisoners = movePerformer.performMove(moveCoordinates, playerColor, potentialState, boardSizeValue, changes);
 

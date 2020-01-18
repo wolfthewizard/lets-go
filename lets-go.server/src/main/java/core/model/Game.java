@@ -9,6 +9,7 @@ public class Game {
     private Board board;
     private BoardSize boardSize;
     private Color playersTurn;
+    private int turnCount=1;
     private boolean lastTurnPassed;
 
     public Game(int id, Board board, BoardSize boardSize) {
@@ -40,7 +41,15 @@ public class Game {
         return lastTurnPassed;
     }
 
+    public int getTurnCount() {
+        return turnCount;
+    }
+
     public void setLastTurnPassed(boolean passed) {
         lastTurnPassed = passed;
+    }
+
+    public void setTurnCount(int turnCount) {
+        this.turnCount = turnCount;
     }
 }
