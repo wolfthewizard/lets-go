@@ -6,7 +6,7 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost/LetsGoDB?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost/LetsGoDB<!--?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC--></property>
         <property name="hibernate.connection.username">hib</property>
         <property name="hibernate.connection.password">hib</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
