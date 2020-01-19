@@ -92,7 +92,11 @@ public class DBQueryExecutionService implements IDBQueryExecutionService {
 
         Session session = sessionFactory.openSession();
 
+        session.getTransaction().begin();
+
         GameEntity gameEntity = session.get(GameEntity.class, gameId);
+
+        session.getTransaction().commit();
 
         session.close();
 

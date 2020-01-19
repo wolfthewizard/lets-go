@@ -27,11 +27,11 @@ create table Turns (
 );
 
 create table Changes (
-    id int not null,
+    id int not null auto_increment,
     turnId int not null,
     x int not null,
     y int not null,
-    coordinates int not null,
+    occupancy int not null,
     
     primary key (id),
     foreign key fk_Changes_turnId (turnId) references Turns (id)

@@ -8,16 +8,21 @@ import core.interfaces.IMoveExecutorService;
 import core.model.Move;
 import core.model.MoveIdentity;
 import core.model.MoveResponse;
+import infrastructure.services.IDBMediationService;
 
 public class CommandDirector implements ICommandDirector {
 
     private IGameManagerService gameManagerService;
     private IMoveExecutorService moveExecutorService;
+    private IDBMediationService mediationService;
 
-    public CommandDirector(IGameManagerService gameManagerService, IMoveExecutorService moveExecutorService) {
+    public CommandDirector(IGameManagerService gameManagerService,
+                           IMoveExecutorService moveExecutorService,
+                           IDBMediationService mediationService) {
 
         this.gameManagerService = gameManagerService;
         this.moveExecutorService = moveExecutorService;
+        this.mediationService = mediationService;
     }
 
     @Override
@@ -37,6 +42,6 @@ public class CommandDirector implements ICommandDirector {
 
     @Override
     public GameRecord getGameData(int gameId) {
-        return null;
+        return mediationService.getGame(gameId);
     }
 }

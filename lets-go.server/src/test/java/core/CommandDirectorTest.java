@@ -29,7 +29,7 @@ public class CommandDirectorTest {
         moveExecutorService = Mockito.mock(IMoveExecutorService.class);
         when(moveExecutorService.executeMove(any())).thenReturn(new MoveResponse(MoveResponseType.GAME_GOES_ON));
 
-        commandDirector = new CommandDirector(gameManagerService, moveExecutorService);
+        commandDirector = new CommandDirector(gameManagerService, moveExecutorService, null);       // todo : implement test or sth
     }
 
     @Test

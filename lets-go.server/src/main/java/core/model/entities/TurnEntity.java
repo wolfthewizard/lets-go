@@ -22,7 +22,7 @@ public class TurnEntity {
     @JoinColumn(name = "gameId")
     private GameEntity gameEntity;
 
-    @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ChangeEntity> changeEntities = new ArrayList<>();
 
     public int getId() {

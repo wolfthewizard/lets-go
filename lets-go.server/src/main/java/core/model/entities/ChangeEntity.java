@@ -9,6 +9,7 @@ import javax.persistence.*;
 public class ChangeEntity {
 
     @Id
+    @GeneratedValue
     @Column(name="id")
     private int id;
 
@@ -19,6 +20,7 @@ public class ChangeEntity {
     private int y;
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "occupancy")
     private Occupancy occupancy;
 
     @ManyToOne

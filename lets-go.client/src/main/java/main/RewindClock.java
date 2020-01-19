@@ -30,10 +30,10 @@ public class RewindClock implements Runnable {
                 rewindBoardWindow.enforceChanges(turn.getChanges());
             }
 
-            rewindBoardWindow.clearMoveNote();
+            //rewindBoardWindow.clearMoveNote();
 
             try {
-                wait(delay);
+                Thread.sleep(delay);
             } catch (InterruptedException ex) {
                 System.out.println("I was interrupted.");
             }

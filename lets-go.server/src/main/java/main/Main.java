@@ -34,7 +34,7 @@ public class Main {
         ServerListenerThread serverListenerThread = new ServerListenerThread(new ActionProcesser(jsonParser,
                 new PlayerValidator(),
                 new CommandDirector(new GameManagerService(gameRepository, dbMediationService), new MoveExecutorService(
-                        gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), new MovePerformer(moveHelper), dbMediationService))
+                        gameRepository, new MoveValidator(), new GameArbitrator(moveHelper), new MovePerformer(moveHelper), dbMediationService), dbMediationService)
                 , clientsManager), clientsManager);
 
         serverListenerThread.start();

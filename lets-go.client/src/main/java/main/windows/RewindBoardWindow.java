@@ -6,7 +6,6 @@ import main.Rewind;
 import main.RewindPanel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -22,7 +21,7 @@ public class RewindBoardWindow extends JFrame implements Rewind {
 
         setResizable(false);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        setSize(rewindPanel.getDimension(), rewindPanel.getDimension() + 50);
+        setSize(rewindPanel.getDimension(), rewindPanel.getDimension() + 70);
         setLocationRelativeTo(null);
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -36,11 +35,12 @@ public class RewindBoardWindow extends JFrame implements Rewind {
 
         this.rewindPanel = rewindPanel;
 
-        moveNoteLabel = new JLabel();
+        moveNoteLabel = new JLabel(" ");
         JPanel moveNotePanel = new JPanel();
-        moveNotePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         moveNotePanel.add(moveNoteLabel);
         add(moveNotePanel);
+
+        add(rewindPanel);
 
         setVisible(true);
     }
@@ -52,6 +52,12 @@ public class RewindBoardWindow extends JFrame implements Rewind {
 
     @Override
     public void signalWinner(Winner winner) {
+
+        if (winner == null) {
+            moveNoteLabel.setText("There was an error in determining the winner");
+            return;
+        }
+
         switch (winner) {
             case BLACK:
                 moveNoteLabel.setText("Black has won.");
@@ -69,7 +75,7 @@ public class RewindBoardWindow extends JFrame implements Rewind {
 
     @Override
     public void clearMoveNote() {
-        moveNoteLabel.setText("");
+        moveNoteLabel.setText(" ");
     }
 
     @Override

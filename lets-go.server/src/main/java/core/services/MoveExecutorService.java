@@ -71,9 +71,7 @@ public class MoveExecutorService implements IMoveExecutorService {
             return new MoveResponse(MoveResponseType.INVALID_MOVE);
         }
 
-        dbMediationService.insertTurn(game.getId(), game.getTurnCount(),changes);
 
-        game.setTurnCount(game.getTurnCount()+1);
 
         int newPrisoners = movePerformer.performMove(moveCoordinates, playerColor, potentialState, boardSizeValue, changes);
 
@@ -90,6 +88,8 @@ public class MoveExecutorService implements IMoveExecutorService {
         }
 
         board.insertState(potentialState);
+        game.setTurnCount(game.getTurnCount()+1);
+        dbMediationService.insertTurn(game.getId(), game.getTurnCount(), changes);
 
         return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution
                 (changes, prisoners.toResponsePrisoners(playerColor)));

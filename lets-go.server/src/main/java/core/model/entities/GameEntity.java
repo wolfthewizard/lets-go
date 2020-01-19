@@ -28,7 +28,7 @@ public class GameEntity {
     @Column(name="gameDate")
     private Date gameDate;
 
-    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<TurnEntity> turnEntities = new ArrayList<>();
 
     public int getId() {
