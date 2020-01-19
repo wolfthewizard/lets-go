@@ -52,4 +52,8 @@ public class Game {
     public void setTurnCount(int turnCount) {
         this.turnCount = turnCount;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

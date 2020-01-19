@@ -27,7 +27,7 @@ public class DBMediationService implements IDBMediationService {
     public void addGame(Game game) {
 
         GameEntity gameEntity = entityMapper.gameToGameEntity(game);
-        queryExecutionService.addGameToDB(gameEntity);
+        game.setId(queryExecutionService.addGameToDB(gameEntity));
     }
 
     @Override

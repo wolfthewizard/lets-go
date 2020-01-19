@@ -15,6 +15,7 @@ import core.model.*;
 import core.model.enums.Color;
 import core.model.enums.MoveResponseType;
 import contract.enums.Winner;
+import infrastructure.services.IDBMediationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,6 +28,7 @@ public class MoveExecutorServiceTest {
     private IMoveValidator moveValidatorMock;
     private IGameArbitrator gameArbitratorMock;
     private IMovePerformer movePerformerMock;
+    private IDBMediationService dbMediationService;
 
     private Game game;
     private Board board;
@@ -74,7 +76,10 @@ public class MoveExecutorServiceTest {
 
         movePerformerMock = Mockito.mock(IMovePerformer.class);
 
-        moveExecutorService = new MoveExecutorService(gameRepositoryMock, moveValidatorMock, gameArbitratorMock, movePerformerMock);
+        dbMediationService = Mockito.mock(IDBMediationService.class);
+
+
+        moveExecutorService = new MoveExecutorService(gameRepositoryMock, moveValidatorMock, gameArbitratorMock, movePerformerMock, dbMediationService);
     }
 
     @Test

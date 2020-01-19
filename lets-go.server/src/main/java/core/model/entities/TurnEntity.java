@@ -2,6 +2,7 @@ package core.model.entities;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,8 +11,11 @@ public class TurnEntity {
 
     @Id
     @GeneratedValue
+    @Column(name="id")
     private int id;
 
+
+    @Column(name="turnNumber")
     private int turnNumber;
 
     @ManyToOne
@@ -19,7 +23,7 @@ public class TurnEntity {
     private GameEntity gameEntity;
 
     @OneToMany(mappedBy = "turnEntity", cascade = CascadeType.ALL)
-    private List<ChangeEntity> changeEntities;
+    private List<ChangeEntity> changeEntities = new ArrayList<>();
 
     public int getId() {
         return id;

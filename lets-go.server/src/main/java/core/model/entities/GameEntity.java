@@ -4,6 +4,7 @@ import contract.enums.BoardSize;
 import contract.enums.Winner;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,18 +14,22 @@ public class GameEntity {
 
     @Id
     @GeneratedValue
+    @Column(name="id")
     private int id;
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(name="boardSize")
     private BoardSize boardSize;
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(name="winner")
     private Winner winner;
 
+    @Column(name="gameDate")
     private Date gameDate;
 
     @OneToMany(mappedBy = "gameEntity", cascade = CascadeType.ALL)
-    private List<TurnEntity> turnEntities;
+    private List<TurnEntity> turnEntities = new ArrayList<>();
 
     public int getId() {
         return id;

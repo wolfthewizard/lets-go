@@ -58,21 +58,27 @@ public class DBQueryExecutionService implements IDBQueryExecutionService {
     }
 
     @Override
-    public void addGameToDB(GameEntity gameEntity) {
+    public int addGameToDB(GameEntity gameEntity) {
 
         Session session = sessionFactory.openSession();
+
+        session.getTransaction().begin();
 
         session.save(gameEntity);
 
         session.getTransaction().commit();
 
         session.close();
+
+        return gameEntity.getId();
     }
 
     @Override
     public void updateGameInDB(GameEntity gameEntity) {
 
         Session session = sessionFactory.openSession();
+
+        session.getTransaction().begin();
 
         session.update(gameEntity);
 

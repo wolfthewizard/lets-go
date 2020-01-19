@@ -9,10 +9,13 @@ import javax.persistence.*;
 public class ChangeEntity {
 
     @Id
+    @Column(name="id")
     private int id;
 
+    @Column(name="x")
     private int x;
 
+    @Column(name="y")
     private int y;
 
     @Enumerated(EnumType.ORDINAL)
