@@ -30,7 +30,7 @@ public class RewindClock implements Runnable {
                 rewindBoardWindow.enforceChanges(turn.getChanges());
             }
 
-            //rewindBoardWindow.clearMoveNote();
+            rewindBoardWindow.clearMoveNote();
 
             try {
                 Thread.sleep(delay);

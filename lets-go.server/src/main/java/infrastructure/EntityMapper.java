@@ -2,6 +2,7 @@ package infrastructure;
 
 import contract.Change;
 import contract.Coordinates;
+import contract.enums.Winner;
 import contract.gamerecord.GameRecord;
 import contract.gamerecord.TurnRecord;
 import core.model.Game;
@@ -90,5 +91,10 @@ public class EntityMapper implements IEntityMapper {
 
         gameEntity.getTurnEntities().add(turnEntity);
         turnEntity.setGameEntity(gameEntity);
+    }
+
+    @Override
+    public void setWinnerInGame(GameEntity gameEntity, Winner winner) {
+        gameEntity.setWinner(winner);
     }
 }

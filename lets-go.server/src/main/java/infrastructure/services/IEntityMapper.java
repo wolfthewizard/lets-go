@@ -1,6 +1,7 @@
 package infrastructure.services;
 
 import contract.Change;
+import contract.enums.Winner;
 import contract.gamerecord.GameRecord;
 import contract.gamerecord.TurnRecord;
 import core.model.Game;
@@ -21,4 +22,5 @@ public interface IEntityMapper {
     Change changeEntityToChange(ChangeEntity changeEntity);
 
     void addTurnToGame(GameEntity gameEntity, TurnEntity turnEntity);
+    void setWinnerInGame(GameEntity gameEntity, Winner winner);
 }

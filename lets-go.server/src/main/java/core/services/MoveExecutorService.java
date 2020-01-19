@@ -52,13 +52,15 @@ public class MoveExecutorService implements IMoveExecutorService {
 
         if (moveCoordinates == null) {
 
-            dbMediationService.insertTurn(game.getId(), game.getTurnCount(),new ArrayList<Change>());
-            game.setTurnCount(game.getTurnCount()+1);
-            
+            dbMediationService.insertTurn(game.getId(), game.getTurnCount(), changes);
+            game.setTurnCount(game.getTurnCount() + 1);
+
             if (game.isLastTurnPassed()) {
 
                 Winner winner = gameArbitrator.determineWinner(potentialState, boardSizeValue);
+                dbMediationService.setWinner(game.getId(), winner);
                 return new MoveResponse(gameArbitrator.toMoveResponseType(winner, playerColor));
+
             } else {
 
                 game.setLastTurnPassed(true);
@@ -70,7 +72,6 @@ public class MoveExecutorService implements IMoveExecutorService {
         if (!preMoveValidation(board.getCurrentState(), moveCoordinates)) {
             return new MoveResponse(MoveResponseType.INVALID_MOVE);
         }
-
 
 
         int newPrisoners = movePerformer.performMove(moveCoordinates, playerColor, potentialState, boardSizeValue, changes);
@@ -88,7 +89,7 @@ public class MoveExecutorService implements IMoveExecutorService {
         }
 
         board.insertState(potentialState);
-        game.setTurnCount(game.getTurnCount()+1);
+        game.setTurnCount(game.getTurnCount() + 1);
         dbMediationService.insertTurn(game.getId(), game.getTurnCount(), changes);
 
         return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution

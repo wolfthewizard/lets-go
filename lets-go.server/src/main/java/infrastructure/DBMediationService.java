@@ -1,6 +1,7 @@
 package infrastructure;
 
 import contract.Change;
+import contract.enums.Winner;
 import contract.gamerecord.GameRecord;
 import core.model.Game;
 import core.model.entities.ChangeEntity;
@@ -42,6 +43,15 @@ public class DBMediationService implements IDBMediationService {
 
         GameEntity gameEntity = queryExecutionService.getGameFromDB(gameId);
         entityMapper.addTurnToGame(gameEntity, turnEntity);
+
+        queryExecutionService.updateGameInDB(gameEntity);
+    }
+
+    @Override
+    public void setWinner(int gameId, Winner winner) {
+
+        GameEntity gameEntity = queryExecutionService.getGameFromDB(gameId);
+        entityMapper.setWinnerInGame(gameEntity, winner);
 
         queryExecutionService.updateGameInDB(gameEntity);
     }

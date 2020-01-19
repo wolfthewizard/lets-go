@@ -33,7 +33,7 @@ public class RewindSettingsWindow extends JFrame {
         delayPanel.add(delayLabel);
         add(delayPanel);
 
-        JTextField rewindDelayTextField = new JTextField(10);
+        JTextField rewindDelayTextField = new JTextField("500", 10);
         JPanel rewindDelayPanel = new JPanel();
         rewindDelayPanel.add(rewindDelayTextField);
         add(rewindDelayPanel);
