@@ -21,10 +21,9 @@ public class GameManagerService implements IGameManagerService {
     @Override
     public int createNewGame(BoardSize boardSize) {
 
-        int id = gameRepository.fetchId();
-        Game newGame = new Game(id, new Board(boardSize), boardSize);
-        gameRepository.createGame(newGame);
+        Game newGame = new Game(new Board(boardSize), boardSize);
         dbMediationService.addGame(newGame);
+        gameRepository.createGame(newGame);
         return newGame.getId();
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 public class TurnEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
 

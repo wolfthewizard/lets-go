@@ -9,7 +9,7 @@ create user "hib"@"localhost" identified by "hib";
 grant all privileges on * to "hib"@"localhost";
 
 create table Games (
-    id int not null,
+    id int not null auto_increment,
     boardSize int not null,
     winner int,
     gameDate date not null,

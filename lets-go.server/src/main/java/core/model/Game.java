@@ -21,6 +21,14 @@ public class Game {
         lastTurnPassed = false;
     }
 
+    public Game(Board board, BoardSize boardSize) {
+
+        this.boardSize = boardSize;
+        this.playersTurn = Color.BLACK;
+        this.board = board;
+        lastTurnPassed = false;
+    }
+
     public int getId() {
         return id;
     }
