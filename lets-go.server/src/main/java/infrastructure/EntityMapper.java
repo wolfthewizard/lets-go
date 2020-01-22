@@ -55,9 +55,16 @@ public class EntityMapper implements IEntityMapper {
 
     @Override
     public GameRecord gameEntityToGameRecord(GameEntity gameEntity) {
+        if(gameEntity==null){
+            return null;
+        }
         List<TurnRecord> turnRecords = new ArrayList<>();
+        int lastAddedId=0;
         for (TurnEntity turnEntity : gameEntity.getTurnEntities()) {
-            turnRecords.add(turnEntityToTurnRecord(turnEntity));
+            if(lastAddedId!=turnEntity.getTurnNumber()){
+                turnRecords.add(turnEntityToTurnRecord(turnEntity));
+                lastAddedId = turnEntity.getTurnNumber();
+            }
         }
 
         return new GameRecord(
