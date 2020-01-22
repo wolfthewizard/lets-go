@@ -89,8 +89,8 @@ public class MoveExecutorService implements IMoveExecutorService {
         }
 
         board.insertState(potentialState);
-        game.setTurnCount(game.getTurnCount() + 1);
         dbMediationService.insertTurn(game.getId(), game.getTurnCount(), changes);
+        game.setTurnCount(game.getTurnCount() + 1);
 
         return new MoveResponse(MoveResponseType.GAME_GOES_ON, new MoveExecution
                 (changes, prisoners.toResponsePrisoners(playerColor)));
